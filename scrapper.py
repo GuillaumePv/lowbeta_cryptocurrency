@@ -1,6 +1,7 @@
 #Basic Utilities
 import pandas
 from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 
 #Data fetchers
 import san
@@ -25,10 +26,11 @@ def getMarketcap(crypto="bitcoin"):
 #finds all crypto names
 #cryptoName = san.get("projects/all").name
 
-#get date
-today_raw = date.today()
-today = today_raw.strftime("%Y-%m-%d")
-
+#get dates
+today = date.today()
+stop_date = today.strftime("%Y-%m-%d")
+start_date_raw = today - relativedelta(years=3)
+start_date = start_date_raw.strftime("%Y-%m-%d")
 
 
 """
