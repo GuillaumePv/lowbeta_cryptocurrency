@@ -25,7 +25,10 @@ def getMarketcap(crypto="bitcoin"):
         from_date=start_date,
         to_date=stop_date
         )
-    return mktcap.value[-1]
+    if len(mktcap) > 0:
+        return mktcap.value[-1]
+    else:
+        return 0
 
 def getDf(crypto, start, end):
     df = san.get(
@@ -68,17 +71,18 @@ length = 0
 total_length = len(cryptoName)
 for crypto in cryptoName:
     print(f"{length} out of {total_length}")
-    df = getDf(f'{crypto}', start_date, stop_date)
-    if len(df) > 0:
-        mktcap = getMarketcap(f'{crypto}')
-    else:
-        mktcap = 0
+    length += 1
 
-    if len(df) == delta_days and mktcap >= MARKET_CAP_LIMIT:
+    mktcap = getMarketcap(f'{crypto}')
+    if mktcap <= MARKET_CAP_LIMIT:
+        continue
+
+    df = getDf(f'{crypto}', start_date, stop_date)
+    if len(df) == delta_days:
         list_crypto.append(crypto)
         df.to_pickle(f"data/{crypto}_ohlc.pkl")
         print(f"Successfully stored {crypto}")
-    length += 1
+
 
 with open("data/crypto_list.dat", "wb") as f: #save list of cryptos selected as an object
     pickle.dump(list_crypto, f)
