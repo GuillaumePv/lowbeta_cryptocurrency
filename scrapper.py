@@ -12,21 +12,21 @@ import glob
 import san
 
 #Environment vars
-NUMBER_YEARS_CUTOFF = 4
-MARKET_CAP_LIMIT = 100000000
+MARKET_CAP_LIMIT = 1000000000000
 
 #################
 #Functions
 ################
 
-def getMarketcap(crypto="bitcoin"):
+def getMarketcap(crypto, start_date, stop_date):
     mktcap = san.get(
         f"marketcap_usd/{crypto}",
         from_date=start_date,
-        to_date=stop_date
+        to_date=stop_date,
+        interval="1d"
         )
     if len(mktcap) > 0:
-        return mktcap.value[-1]
+        return mktcap
     else:
         return 0
 
@@ -58,30 +58,32 @@ if y == "y":
 cryptoName = san.get("projects/all").slug
 
 #get dates
-today = date.today()
-stop_date = today.strftime("%Y-%m-%d")
-start_date_raw = today - relativedelta(years=NUMBER_YEARS_CUTOFF)
-start_date = start_date_raw.strftime("%Y-%m-%d")
-delta = today - start_date_raw
-delta_days = delta.days + 1
+def init_date():
+    today = date.today()
+    stop_date = today.strftime("%Y-%m-%d")
+    start_date_raw = today - timedelta(days=1000)
+    start_date = start_date_raw.strftime("%Y-%m-%d")
+    return (start_date,stop_date)
 
-#get pandas df and filter/save
+#get pandas df and merge dat
 list_crypto = []
 length = 0
 total_length = len(cryptoName)
 for crypto in cryptoName:
     print(f"{length} out of {total_length}")
     length += 1
+    lenDf = 1000
+    start_date = init_date()[0]
+    stop_date = init_date()[1]
 
-    mktcap = getMarketcap(f'{crypto}')
-    if mktcap <= MARKET_CAP_LIMIT:
-        continue
 
-    df = getDf(f'{crypto}', start_date, stop_date)
-    if len(df) == delta_days:
-        list_crypto.append(crypto)
-        df.to_pickle(f"data/{crypto}_ohlc.pkl")
-        print(f"Successfully stored {crypto}")
+    while(1000 == lenDf):
+        df = getDf(f'{crypto}', start_date, stop_date)
+        lenDf = len(df)
+
+    list_crypto.append(crypto)
+    df.to_pickle(f"data/{crypto}_ohlc.pkl")
+    print(f"Successfully stored {crypto}")
 
 
 with open("data/crypto_list.dat", "wb") as f: #save list of cryptos selected as an object
