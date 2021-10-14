@@ -16,7 +16,7 @@ import san
 ################
 def getDf(crypto, start, end):
     df = san.get(
-        f"ohlc/{crypto}",
+        f"ohlcv/{crypto}",
         from_date=start,
         to_date=end,
         interval="1d"
