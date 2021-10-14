@@ -11,9 +11,6 @@ import glob
 #Data fetchers
 import san
 
-#Environment vars
-MARKET_CAP_LIMIT = 1000000000000
-
 #################
 #Functions
 ################
@@ -39,6 +36,14 @@ def getDf(crypto, start, end):
     )
     return df
 
+#get dates
+def init_date(days_delta=0):
+    today = date.today() - timedelta(days=days_delta)
+    stop_date = today.strftime("%Y-%m-%d")
+    start_date_raw = today - timedelta(days=1000) - timedelta(days=days_delta) #1000 days is the limit for ohlc requests
+    start_date = start_date_raw.strftime("%Y-%m-%d")
+    return (start_date,stop_date)
+
 
 #################
 #Script
@@ -57,29 +62,28 @@ if y == "y":
 #finds all crypto names
 cryptoName = san.get("projects/all").slug
 
-#get dates
-def init_date():
-    today = date.today()
-    stop_date = today.strftime("%Y-%m-%d")
-    start_date_raw = today - timedelta(days=1000)
-    start_date = start_date_raw.strftime("%Y-%m-%d")
-    return (start_date,stop_date)
+
 
 #get pandas df and merge dat
 list_crypto = []
 length = 0
 total_length = len(cryptoName)
+start_date, stop_date = init_date()
+lenDf = 1000
+
 for crypto in cryptoName:
     print(f"{length} out of {total_length}")
     length += 1
-    lenDf = 1000
-    start_date = init_date()[0]
-    stop_date = init_date()[1]
-
+    start_date_mod = start_date
+    stop_date_mod = stop_date
+    loop_number = 0
 
     while(1000 == lenDf):
-        df = getDf(f'{crypto}', start_date, stop_date)
+        start_date_mod, stop_date_mod = init_date(days_delta = loop_number*1000)
+        df = getDf(f'{crypto}', start_date_mod, stop_date_mod)
         lenDf = len(df)
+        loop_number += 1
+
 
     list_crypto.append(crypto)
     df.to_pickle(f"data/{crypto}_ohlc.pkl")
