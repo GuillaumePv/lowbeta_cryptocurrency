@@ -1,5 +1,5 @@
 #Basic Utilities
-import pandas
+import pandas as pd
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
@@ -55,7 +55,7 @@ list_crypto = []
 length = 0
 total_length = len(cryptoName)
 start_date, stop_date = init_date()
-lenDf = 1000
+
 
 for crypto in cryptoName:
     print(f"{length} out of {total_length}")
@@ -64,6 +64,7 @@ for crypto in cryptoName:
     stop_date_mod = stop_date
     loop_number = 0
     dfAll = pd.DataFrame()
+    lenDf = 1000
 
     while(1000 == lenDf):
         start_date_mod, stop_date_mod = init_date(days_delta = loop_number*1000)
@@ -75,7 +76,8 @@ for crypto in cryptoName:
 
 
     list_crypto.append(crypto)
-    dfAll.to_pickle(f"data/{crypto}_ohlc.pkl")
+    print(dfAll)
+    dfAll.to_pickle(f"data/{crypto}.pkl")
     print(f"Successfully stored {crypto}")
 
 
