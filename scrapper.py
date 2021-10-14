@@ -14,19 +14,6 @@ import san
 #################
 #Functions
 ################
-
-def getMarketcap(crypto, start_date, stop_date):
-    mktcap = san.get(
-        f"marketcap_usd/{crypto}",
-        from_date=start_date,
-        to_date=stop_date,
-        interval="1d"
-        )
-    if len(mktcap) > 0:
-        return mktcap
-    else:
-        return 0
-
 def getDf(crypto, start, end):
     df = san.get(
         f"ohlc/{crypto}",
@@ -61,7 +48,6 @@ if y == "y":
 
 #finds all crypto names
 cryptoName = san.get("projects/all").slug
-
 
 
 #get pandas df and merge dat
