@@ -77,16 +77,19 @@ for crypto in cryptoName:
     start_date_mod = start_date
     stop_date_mod = stop_date
     loop_number = 0
+    dfAll = pd.DataFrame()
 
     while(1000 == lenDf):
         start_date_mod, stop_date_mod = init_date(days_delta = loop_number*1000)
         df = getDf(f'{crypto}', start_date_mod, stop_date_mod)
         lenDf = len(df)
+        if lenDf > 0:
+            dfAll = dfAll.append(df)
         loop_number += 1
 
 
     list_crypto.append(crypto)
-    df.to_pickle(f"data/{crypto}_ohlc.pkl")
+    dfAll.to_pickle(f"data/{crypto}_ohlc.pkl")
     print(f"Successfully stored {crypto}")
 
 
