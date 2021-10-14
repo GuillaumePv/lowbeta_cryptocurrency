@@ -14,3 +14,4 @@
 
 - https://coinmarketexpert.com/how-we-developed-a-cryptocurrency-portfolio-that-beats-bitcoin/
 - https://www.econstor.eu/bitstream/10419/158007/1/887992064.pdf
+- https://www.solactive.com/wp-content/uploads/2019/04/Solactive-Index-Guideline-CMC200.pdf
