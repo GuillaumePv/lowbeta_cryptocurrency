@@ -25,9 +25,10 @@ def getDf(crypto, start, end):
 
 #get dates
 def init_date(days_delta=0):
-    today = date.today() - timedelta(days=days_delta)
-    stop_date = today.strftime("%Y-%m-%d")
-    start_date_raw = today - timedelta(days=1000) - timedelta(days=days_delta) #1000 days is the limit for ohlc requests
+    today = date.today()
+    stop_date_raw = today - timedelta(days=days_delta)
+    stop_date = stop_date_raw.strftime("%Y-%m-%d")
+    start_date_raw = today - timedelta(days=999) - timedelta(days=days_delta) #1000 days is the limit for ohlc requests
     start_date = start_date_raw.strftime("%Y-%m-%d")
     return (start_date,stop_date)
 
@@ -76,8 +77,9 @@ for crypto in cryptoName:
 
 
     list_crypto.append(crypto)
-    print(dfAll)
+    dfAll.sort_index(inplace=True)
     dfAll.to_pickle(f"data/{crypto}.pkl")
+    print(dfAll.tail())
     print(f"Successfully stored {crypto}")
 
 
