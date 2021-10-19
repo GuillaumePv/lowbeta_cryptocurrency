@@ -28,17 +28,16 @@ for i in range(len(df_index.index)):
     list_index.append(v)
 
 list_index = np.array(list_index)
-# print(list_index)
+
 last_date = pd.to_datetime(last_date)
-# print(last_date)
 
 index = np.where(list_index == last_date)[0][0]
-# print(index)
+
 df_final_index = df_index.iloc[index:,:]
 df_close_price = df_close_price[columns]
 df_close_price_index = df_close_price.iloc[index:,:]
 
-#print(df_final_index.head(5))
+
 ########################
 ## cap weighted index ##
 ########################
@@ -60,6 +59,9 @@ for column in df_cap_weighted.columns[:-1]:
 df_cap_weighted = df_cap_weighted.iloc[:,:-1]
         #print(str(e))
 
+## Cap-weigthed Index
+#####################
+
 cap_weighted_index = np.sum(np.multiply(df_close_price_index.values,df_cap_weighted.values), 1)
 portfolio_cap_weigthed_index = pd.DataFrame({'cap_weighted_index': cap_weighted_index})
 portfolio_cap_weigthed_index.to_csv(f'./data/processed/{number_of_crypto}_portfolio_cap_weighted.csv')
@@ -67,13 +69,12 @@ portfolio_cap_weigthed_index.to_csv(f'./data/processed/{number_of_crypto}_portfo
 #plt.show()
 
 
-## Cap-weigthed Index
-#####################
-# print(df_cap_weighted['litecoin'])
-
 ###############################
 ## ponderated index weigthed ##
 ###############################
+
+## Weigths
+##########
 
 df_ponderated = pd.DataFrame(columns=df_final_index.columns[:-1], index= df_final_index.index)
 ponderated_values = []
@@ -83,6 +84,8 @@ for i in range(len(df_ponderated)):
 for column in df_ponderated:
     df_ponderated[column] = ponderated_values
 
+## Ponderated Index
+#####################
 
 ponderated_index = np.sum(np.multiply(df_close_price_index.values,df_ponderated.values), 1)
 portfolio_ponderated_index = pd.DataFrame({'ponderated_index': ponderated_index})
