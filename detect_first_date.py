@@ -1,5 +1,6 @@
 import pandas as pd
 from datetime import datetime
+from datetime import timedelta
 import os
 from tqdm import tqdm
 
@@ -34,15 +35,64 @@ def create_file():
 if is_create_file == 'y':
     create_file()
 
-df = pd.read_csv('./data/processed/first_date_crypto.csv')
+df = pd.read_pickle('./data/raw/bitcoin.pkl')
 
-bitcoin = df[(df['crypto_name'] == 'bitcoin')]
-bitcoin_date = bitcoin['first_date']
+df_date = pd.read_csv('./data/processed/first_date_crypto.csv')
+
+bitcoin = df.index[0]
+
+#need to string to compare with csv
+bitcoin_date = datetime.date(df.index[0])
+bitcoin_end = datetime.date(df.index[-1])
 
 #modif here to first newvalue
 # create loop inside a with file to find the best matching with first date after bitcoin
-other_crypto = df[(df['first_date'] == bitcoin_date.values[0])]
-other_crypto.to_csv('./data/processed/crypto_begin_with_bitcoin.csv')
-print(bitcoin)
-print(bitcoin_date.values[0])
-print(other_crypto.head(5))
+
+## change to obtain first 20 and 100
+print(bitcoin_date,bitcoin_end)
+other_crypto = df_date[(df_date['first_date'] == str(bitcoin_date))]
+print("Crypto number: ",len(other_crypto))
+
+
+print(len(other_crypto))
+print(bitcoin_date)
+
+i = 0
+number_of_crypto = 100
+while len(other_crypto) < number_of_crypto:
+
+    df_test = df_date[(df_date['first_date'] == str(bitcoin_date))]
+    #print(len(df_test))
+    for value in df_test['crypto_name']:
+        df_crypto = pd.read_pickle(f'./data/raw/{value}.pkl')
+        date = str(datetime.date(df_crypto.index[-1]))
+
+        if date == str(bitcoin_end):
+            if value == 'bitcoin':
+                continue
+            else:
+                data = {
+                    'crypto_name':value,
+                    'first_date': datetime.date(df_crypto.index[0])
+                }
+                other_crypto = other_crypto.append(data, ignore_index=True)
+#         print(value)
+    bitcoin_date = bitcoin_date + timedelta(days=1)
+    #print(len(other_crypto))
+
+other_crypto.to_csv(f'./data/processed/crypto_index_{number_of_crypto}.csv')
+
+
+## select only data from the last
+# for value in other_crypto['crypto_name']:
+#     df_crypto = pd.read_pickle(f'./data/raw/{value}.pkl')
+#     date = str(datetime.date(df_crypto.index[-1]))
+
+#     if date == str(bitcoin_end):
+#         print(value)
+
+# print(other_crypto)
+# #other_crypto.to_csv('./data/processed/crypto_begin_with_bitcoin.csv')
+# print(bitcoin)
+# print(bitcoin_date)
+# print(other_crypto.head(5))

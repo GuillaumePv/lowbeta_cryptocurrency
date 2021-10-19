@@ -37,7 +37,7 @@ for f in tqdm(files[1:]):
 #fill na => see impact on 
 df_base.columns = list_crypto
 df_base = df_base.fillna(0)
-df_base['total_market_cap'] = df_base.sum(axis=1)
+# df_base['total_market_cap'] = df_base.sum(axis=1)
 df_base_price.columns = list_crypto
 df_base_price = df_base_price.fillna(0)
 # print(df_base.head(4))
