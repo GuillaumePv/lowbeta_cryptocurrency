@@ -58,7 +58,7 @@ print(len(other_crypto))
 print(bitcoin_date)
 
 i = 0
-number_of_crypto = 100
+number_of_crypto = 20
 while len(other_crypto) < number_of_crypto:
 
     df_test = df_date[(df_date['first_date'] == str(bitcoin_date))]
@@ -68,7 +68,7 @@ while len(other_crypto) < number_of_crypto:
         date = str(datetime.date(df_crypto.index[-1]))
 
         if date == str(bitcoin_end):
-            if value == 'bitcoin':
+            if value == 'bitcoin' or value == 'litecoin' or value == 'namecoin':
                 continue
             else:
                 data = {
