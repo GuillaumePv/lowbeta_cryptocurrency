@@ -43,7 +43,7 @@ print("Starting script...")
 print('Do you want to remove old files? (Type y if yes)')
 y = input()
 if y == "y":
-    files = glob.glob('data/*')
+    files = glob.glob('data/raw/*')
     for f in files:
         os.remove(f)
 
@@ -78,10 +78,10 @@ for crypto in cryptoName:
 
     list_crypto.append(crypto)
     dfAll.sort_index(inplace=True)
-    dfAll.to_pickle(f"data/{crypto}.pkl")
+    dfAll.to_pickle(f"data/raw/{crypto}.pkl")
     print(dfAll.tail())
     print(f"Successfully stored {crypto}")
 
 
-with open("data/crypto_list.dat", "wb") as f: #save list of cryptos selected as an object
+with open("data/raw/crypto_list.dat", "wb") as f: #save list of cryptos selected as an object
     pickle.dump(list_crypto, f)
