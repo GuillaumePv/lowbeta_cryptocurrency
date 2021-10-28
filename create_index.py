@@ -13,8 +13,6 @@ df_close_price = pd.read_csv('./data/processed/close_price_crypto.csv', index_co
 data = {}
 
 last_date = df_name_index['first_date'].values[-1]
-# print(last_date)
-# print(df_name_index.head(5))
 
 columns = df_name_index['crypto_name']
 print(columns)
