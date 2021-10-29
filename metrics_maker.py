@@ -19,6 +19,7 @@ EW = pd.read_csv(f"data/processed/EW_{NUMBER_OF_CRYPTOS}_price.csv", index_col=0
 
 df_list = [CW, EW]
 
+
 #First some simple metrics
 ##########################
 
@@ -36,14 +37,17 @@ for idx_metric,df in enumerate(df_list):
 
     #Total return
     first_date = df.index[0] + relativedelta(day=31)
-    df = df.loc[first_date:]
-    number_of_months = int((df.index[-1] - first_date)/np.timedelta64(1,'M'))
+    df_trunc = df.loc[first_date:]
+    number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
-    df_month = df.loc[last_day_months, :]
-    df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df.iloc[:, 0]
+    df_month = df_trunc.loc[last_day_months, :]
+    df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
     df_metrics.iloc[idx_metric, 0] = df_month['returns'].mean()
+    #Excess returns over benchmark
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
+    else:
+        df_metrics.iloc[idx_metric, 3] = 0
 
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -54,15 +58,21 @@ for idx_metric,df in enumerate(df_list):
     rf_monthly = pow(rf/100 + 1, 1/12) - 1
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
-print(df_metrics)
+    #beta
+    bench_returns = CW.cap_weighted_index.pct_change()
+    df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
+    df_cov.dropna(inplace=True)
+    cov = df_cov.cov().iloc[0,1]
+    beta = cov/pow(df.iloc[:, 0].pct_change().std(),2)
+    df_metrics.iloc[idx_metric, 4] = beta
 
-#Excess returns over benchmark
+    #Information ratio
 
-#Tracking error
+    #One-Way Turnover
 
-#Information ratio
+    #Max drawdown
 
-#One-Way Turnover
+    #hit_ratio
 
 
 #Then some factor analysis
