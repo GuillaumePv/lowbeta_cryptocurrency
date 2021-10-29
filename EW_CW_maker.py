@@ -37,7 +37,6 @@ df_final_index = df_index.iloc[index:,:]
 df_close_price = df_close_price[columns]
 df_close_price_index = df_close_price.iloc[index:,:]
 
-
 ########################
 ## cap weighted index ##
 ########################
@@ -63,7 +62,8 @@ df_cap_weighted = df_cap_weighted.iloc[:,:-1]
 #####################
 
 cap_weighted_index = np.sum(np.multiply(df_close_price_index.values,df_cap_weighted.values), 1)
-portfolio_cap_weigthed_index = pd.DataFrame({'cap_weighted_index': cap_weighted_index})
+date_index = pd.date_range(start=last_date, periods=len(cap_weighted_index), freq='D') #creates the date as index
+portfolio_cap_weigthed_index = pd.DataFrame({'cap_weighted_index': cap_weighted_index}, index=date_index)
 portfolio_cap_weigthed_index.to_csv(f'./data/processed/CW_{number_of_crypto}_price.csv')
 #plt.plot(df_cap_weighted.index, cap_weighted_index)
 #plt.show()
@@ -88,7 +88,8 @@ for column in df_ponderated:
 #####################
 
 ponderated_index = np.sum(np.multiply(df_close_price_index.values,df_ponderated.values), 1)
-portfolio_ponderated_index = pd.DataFrame({'ponderated_index': ponderated_index})
+date_index = pd.date_range(start=last_date, periods=len(ponderated_index), freq='D') #creates the date as index
+portfolio_ponderated_index = pd.DataFrame({'ponderated_index': ponderated_index}, index=date_index)
 portfolio_ponderated_index.to_csv(f'./data/processed/EW_{number_of_crypto}_price.csv')
 # plt.plot(df_ponderated.index, ponderated_index)
 # plt.show()
