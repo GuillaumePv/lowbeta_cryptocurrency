@@ -2,21 +2,25 @@
 
 - [x] scrap data
 - [ ] read articles about low-beta and low-vol
-- [ ] create overleaf
+- [x] create overleaf
 - [ ] do planning
 - [ ] recuperate do for performance
-- [ ] ERC / ...
+- [x] ERC / ...
+- [ ] process data
 
 ## Ideas
 - low beta => buy low beta and sell high beta
 - low vol => buy low vol and sell high beta
 - use volume to create index
 - dashboard: https://github.com/plotly/dash-sample-apps/tree/main/apps/dash-financial-report
+- https://stackoverflow.com/questions/58749930/low-volatility-portfolio-construction
 
 Examples of dashboard:
 https://github.com/plotly/dash-sample-apps/tree/main/apps
 
 https://fr.tradingview.com/markets/cryptocurrencies/global-charts/
+
+Examples of github: https://github.com/sakex/qarmII
 
 ## Bibliography
 
@@ -32,3 +36,11 @@ https://fr.tradingview.com/markets/cryptocurrencies/global-charts/
 
 - besoin d'un MRC, min variance ?
 - how to compute vol ? daily ? Monthly ? (14 day / Monthly / Annual) => depend on the universe
+
+## Indicators
+- Beta
+- Max drawdown
+- Hit ratio
+- Skewness
+- Kurtosis
+- Sharpe Ratio

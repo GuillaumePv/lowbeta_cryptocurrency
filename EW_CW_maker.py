@@ -61,8 +61,15 @@ df_cap_weighted = df_cap_weighted.iloc[:,:-1]
 #####################
 
 cap_weighted_index = np.sum(np.multiply(df_close_price_index.values,df_cap_weighted.values), 1)
-portfolio_cap_weigthed_index = pd.DataFrame({'cap_weighted_index': cap_weighted_index})
+portfolio_cap_weigthed_index = pd.DataFrame({'cap_weighted_index': cap_weighted_index},index=df_cap_weighted.index)
+portfolio_cap_weigthed_index['date'] = pd.to_datetime(portfolio_cap_weigthed_index.index)
+portfolio_cap_weigthed_index['date'] = portfolio_cap_weigthed_index['date'].dt.date
+portfolio_cap_weigthed_index.index = portfolio_cap_weigthed_index['date']
+del portfolio_cap_weigthed_index['date']
+
 portfolio_cap_weigthed_index.to_csv(f'./data/processed/CW_{number_of_crypto}_price.csv')
+perf_cap_weigthed = np.log(portfolio_cap_weigthed_index/portfolio_cap_weigthed_index.shift(1)).dropna()
+perf_cap_weigthed.to_csv(f'./data/processed/perf_CW_{number_of_crypto}_price.csv',index=True)
 #plt.plot(df_cap_weighted.index, cap_weighted_index)
 #plt.show()
 
@@ -74,19 +81,26 @@ portfolio_cap_weigthed_index.to_csv(f'./data/processed/CW_{number_of_crypto}_pri
 ## Weigths
 ##########
 
-df_ponderated = pd.DataFrame(columns=df_final_index.columns[:-1], index= df_final_index.index)
-ponderated_values = []
-for i in range(len(df_ponderated)):
-    ponderated_values.append(1/number_of_crypto)
+df_equal_weigthed = pd.DataFrame(columns=df_final_index.columns[:-1], index= df_final_index.index)
+equal_weigthed_values = []
+for i in range(len(df_equal_weigthed)):
+    equal_weigthed_values.append(1/number_of_crypto)
 
-for column in df_ponderated:
-    df_ponderated[column] = ponderated_values
+for column in df_equal_weigthed:
+    df_equal_weigthed[column] = equal_weigthed_values
 
 ## Ponderated Index
 #####################
 
-ponderated_index = np.sum(np.multiply(df_close_price_index.values,df_ponderated.values), 1)
-portfolio_ponderated_index = pd.DataFrame({'ponderated_index': ponderated_index})
-portfolio_ponderated_index.to_csv(f'./data/processed/EW_{number_of_crypto}_price.csv')
+equal_weigthed_index = np.sum(np.multiply(df_close_price_index.values,df_equal_weigthed.values), 1)
+portfolio_equal_weigthed_index = pd.DataFrame({'ponderated_index': equal_weigthed_index},index=df_equal_weigthed.index)
+portfolio_equal_weigthed_index['date'] = pd.to_datetime(portfolio_equal_weigthed_index.index)
+portfolio_equal_weigthed_index['date'] = portfolio_equal_weigthed_index['date'].dt.date
+portfolio_equal_weigthed_index.index = portfolio_equal_weigthed_index['date']
+del portfolio_equal_weigthed_index['date']
+
+portfolio_equal_weigthed_index.to_csv(f'./data/processed/EW_{number_of_crypto}_price.csv')
+perf_equally_weighted = np.log(portfolio_equal_weigthed_index/portfolio_equal_weigthed_index.shift(1)).dropna()
+perf_equally_weighted.to_csv(f'./data/processed/perf_EW_{number_of_crypto}_price.csv',index=True)
 # plt.plot(df_ponderated.index, ponderated_index)
-# plt.show()
+
