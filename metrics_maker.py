@@ -22,28 +22,30 @@ df_list = [CW, EW]
 ##########################
 
 df_metrics = pd.DataFrame(
-    columns=['monthly_returns', 'vol', 'sharpe', 'excReturns', 'beta', 'TE', 'IR', 'OWTurnover', 'max_drawdown', 'hit_ratio'],
+    columns=['monthly_returns', 'vol_roll_120', 'sharpe', 'excReturns', 'beta', 'TE', 'IR', 'OWTurnover', 'max_drawdown', 'hit_ratio'],
     index=['CW', 'EW'])
 
 #if REBALANCING_TIME == 'daily':
-#Total return
 for idx_metric,df in enumerate(df_list):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
+    #Rolling Volatility
+    df['rol_vol_120'] = df.pct_change().rolling(120).std()
+    df.dropna(inplace=True)
+    df_metrics.iloc[idx_metric, 1] = df['rol_vol_120'].mean()
+
+    #Total return
     first_date = df.index[0] + relativedelta(day=31)
     df = df.loc[first_date:]
     number_of_months = int((df.index[-1] - first_date)/np.timedelta64(1,'M'))
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
-    df = df.loc[last_day_months, :]
-    df['returns'] = (df.iloc[:, 0] - df.iloc[:, 0].shift(1))/df.iloc[:, 0]
-    df_metrics.iloc[idx_metric, 0] = df['returns'].mean()
+    df_month = df.loc[last_day_months, :]
+    df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df.iloc[:, 0]
+    df_metrics.iloc[idx_metric, 0] = df_month['returns'].mean()
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
+        
+    #sharpe
 
-print(df_metrics)
-
-#Volatility
-
-#Sharpe ratio
 
 #Excess returns over benchmark
 
