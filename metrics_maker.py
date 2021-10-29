@@ -24,7 +24,7 @@ df_list = [CW, EW]
 ##########################
 
 df_metrics = pd.DataFrame(
-    columns=['monthly_returns', 'vol_roll_120', 'sharpe', 'excReturns', 'beta', 'TE', 'IR', 'OWTurnover', 'max_drawdown', 'hit_ratio'],
+    columns=['monthly_returns', 'vol_roll_120', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'hit_ratio', 'TE', 'IR', 'OWTurnover'],
     index=['CW', 'EW'])
 
 #if REBALANCING_TIME == 'daily':
@@ -66,14 +66,15 @@ for idx_metric,df in enumerate(df_list):
     beta = cov/pow(df.iloc[:, 0].pct_change().std(),2)
     df_metrics.iloc[idx_metric, 4] = beta
 
-    #Information ratio
-
-    #One-Way Turnover
-
     #Max drawdown
+    max_drawdown=min(df.iloc[:,0].pct_change().dropna().values)
+    df_metrics.iloc[idx_metric, 5] = max_drawdown
 
     #hit_ratio
-
+    #Tracking error
+    #Information ratio
+    #One-Way Turnover
+print(df_metrics)
 
 #Then some factor analysis
 ##########################
