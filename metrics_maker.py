@@ -7,6 +7,7 @@
 import pandas as pd
 import numpy as np
 from dateutil.relativedelta import relativedelta
+from yahoo_fin.stock_info import get_data
 
 #environment vars
 NUMBER_OF_CRYPTOS = 20
@@ -43,9 +44,17 @@ for idx_metric,df in enumerate(df_list):
     df_metrics.iloc[idx_metric, 0] = df_month['returns'].mean()
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
-        
-    #sharpe
 
+    #sharpe
+    last_date=df.index[-1].strftime("%Y-%m-%d")
+    rf = get_data("^TNX", start_date=last_date).adjclose.dropna()[0]
+    if rf == 0: #if rf is not available
+        last_date=df.index[-20].strftime("%Y-%m-%d") #get the 20 last days and it will be
+        rf = get_data("^TNX", start_date=last_date).adjclose.dropna()[0]
+    rf_monthly = pow(rf/100 + 1, 1/12) - 1
+    df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
+
+print(df_metrics)
 
 #Excess returns over benchmark
 
