@@ -35,7 +35,6 @@ df_final_index = df_index.iloc[index:,:]
 df_close_price = df_close_price[columns]
 df_close_price_index = df_close_price.iloc[index:,:]
 
-
 ########################
 ## cap weighted index ##
 ########################
@@ -61,6 +60,7 @@ df_cap_weighted = df_cap_weighted.iloc[:,:-1]
 #####################
 
 cap_weighted_index = np.sum(np.multiply(df_close_price_index.values,df_cap_weighted.values), 1)
+
 portfolio_cap_weigthed_index = pd.DataFrame({'cap_weighted_index': cap_weighted_index},index=df_cap_weighted.index)
 portfolio_cap_weigthed_index['date'] = pd.to_datetime(portfolio_cap_weigthed_index.index)
 portfolio_cap_weigthed_index['date'] = portfolio_cap_weigthed_index['date'].dt.date
@@ -91,6 +91,7 @@ for column in df_equal_weigthed:
 
 ## Ponderated Index
 #####################
+
 
 equal_weigthed_index = np.sum(np.multiply(df_close_price_index.values,df_equal_weigthed.values), 1)
 portfolio_equal_weigthed_index = pd.DataFrame({'ponderated_index': equal_weigthed_index},index=df_equal_weigthed.index)
