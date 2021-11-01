@@ -4,6 +4,7 @@
 ############################################################################
 
 #utilities
+import math
 import pandas as pd
 import numpy as np
 from dateutil.relativedelta import relativedelta
@@ -33,7 +34,7 @@ for idx_metric,df in enumerate(df_list):
     #Rolling Volatility
     df['rol_vol_120'] = df.pct_change().rolling(120).std()
     df.dropna(inplace=True)
-    df_metrics.iloc[idx_metric, 1] = df['rol_vol_120'].mean()
+    df_metrics.iloc[idx_metric, 1] = df['rol_vol_120'].mean() * math.sqrt(365/12)
 
     #Total return
     first_date = df.index[0] + relativedelta(day=31)
@@ -74,7 +75,8 @@ for idx_metric,df in enumerate(df_list):
     #Tracking error
     #Information ratio
     #One-Way Turnover
-print(df_metrics)
+    print(df_metrics)
+    df_metrics.to_csv(f'data/processed/df_metrics_{NUMBER_OF_CRYPTOS}.csv')
 
 #Then some factor analysis
 ##########################
