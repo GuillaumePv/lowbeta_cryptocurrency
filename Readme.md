@@ -6,7 +6,15 @@
 - [ ] do planning
 - [ ] recuperate do for performance
 - [x] ERC / ...
-- [ ] process data
+- [x] process data
+- [ ] split code for each strategies
+- [ ] create dashboard
+- [ ] make minimum variance portfolio
+- [ ] order first date
+- [ ] create a excess return
+- [ ] create % of reduction of portfolio compared to index
+- [ ] debug optimizer
+- [ ] do algo market cap selection (1$ mio)
 
 ## Ideas
 - low beta => buy low beta and sell high beta
@@ -14,6 +22,7 @@
 - use volume to create index
 - dashboard: https://github.com/plotly/dash-sample-apps/tree/main/apps/dash-financial-report
 - https://stackoverflow.com/questions/58749930/low-volatility-portfolio-construction
+- rolling covariance: https://stackoverflow.com/questions/45062622/create-rolling-covariance-matrix-in-pandas
 
 Examples of dashboard:
 https://github.com/plotly/dash-sample-apps/tree/main/apps
@@ -21,6 +30,8 @@ https://github.com/plotly/dash-sample-apps/tree/main/apps
 https://fr.tradingview.com/markets/cryptocurrencies/global-charts/
 
 Examples of github: https://github.com/sakex/qarmII
+
+- first code => monacoin bug
 
 ## Bibliography
 
