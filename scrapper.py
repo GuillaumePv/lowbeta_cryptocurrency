@@ -54,33 +54,82 @@ cryptoName = san.get("projects/all").slug
 #get pandas df and merge dat
 list_crypto = []
 length = 0
-total_length = len(cryptoName)
 start_date, stop_date = init_date()
 
+#https://app.santiment.net/stablecoins#top-exchanges
+#https://api.santiment.net/graphiql?query=%7B%0A%20%20allProjects%20%7B%0A%20%20%20%20slug%0A%20%20%20%20name%0A%20%20%20%20ticker%0A%20%20%20%20infrastructure%0A%20%20%20%20mainContractAddress%0A%20%20%7D%0A%7D%0A
+
+
+stablecoins = ['tether',
+               'binance-usd',
+               'aave-busd',
+               'aave-usdc',
+               'compound-usd-coin',
+               'p-usd-coin',
+               'usdc-b',
+               'usd-coin',
+               'compound-dai',
+               'dai',
+               'multi-collateral-dai',
+               'xdai',
+               'terrausd',
+               'trueusd',
+               'paxos-standard',
+               'liquity-usd',
+               'frax',
+               'neutrino-dollar',
+               'fei-protocol',
+               'husd',
+               'gemini-dollar',
+               'vai',
+               'stasis-euro',
+               'susd',
+               'steem-dollars',
+               'terra-krw',
+               'empty-set-dollar',
+               'anchor',
+               'usdx-stablecoin',
+               'bitcny',
+               'just-stablecoin',
+               'digix-gold-token',
+               'eosdt',
+               'cryptofranc',
+               'basis-cash',
+               'nubits',
+               'stableusd',
+               'dynamic-set-dollar',
+               'midas-dollar',
+               'tether-gold',
+               'mith-cash',
+               'one-cash',
+               'brz']
+               
+total_length = len(cryptoName) - len(stablecoins)
 
 for crypto in cryptoName:
-    print(f"{length} out of {total_length}")
-    length += 1
-    start_date_mod = start_date
-    stop_date_mod = stop_date
-    loop_number = 0
-    dfAll = pd.DataFrame()
-    lenDf = 1000
+    if crypto not in stablecoins:
+        print(f"{length} out of {total_length}")
+        length += 1
+        start_date_mod = start_date
+        stop_date_mod = stop_date
+        loop_number = 0
+        dfAll = pd.DataFrame()
+        lenDf = 1000
 
-    while(1000 == lenDf):
-        start_date_mod, stop_date_mod = init_date(days_delta = loop_number*1000)
-        df = getDf(f'{crypto}', start_date_mod, stop_date_mod)
-        lenDf = len(df)
-        if lenDf > 0:
-            dfAll = dfAll.append(df)
-        loop_number += 1
+        while(1000 == lenDf):
+            start_date_mod, stop_date_mod = init_date(days_delta = loop_number*1000)
+            df = getDf(f'{crypto}', start_date_mod, stop_date_mod)
+            lenDf = len(df)
+            if lenDf > 0:
+                dfAll = dfAll.append(df)
+            loop_number += 1
 
 
-    list_crypto.append(crypto)
-    dfAll.sort_index(inplace=True)
-    dfAll.to_pickle(f"data/raw/{crypto}.pkl")
-    print(dfAll.tail())
-    print(f"Successfully stored {crypto}")
+        list_crypto.append(crypto)
+        dfAll.sort_index(inplace=True)
+        dfAll.to_pickle(f"data/raw/{crypto}.pkl")
+        print(dfAll.tail())
+        print(f"Successfully stored {crypto}")
 
 
 with open("data/raw/crypto_list.dat", "wb") as f: #save list of cryptos selected as an object
