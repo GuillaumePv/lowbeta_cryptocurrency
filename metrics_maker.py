@@ -78,6 +78,8 @@ for idx_metric,df in enumerate(df_list):
     print(df_metrics)
     df_metrics.to_csv(f'data/processed/df_metrics_{NUMBER_OF_CRYPTOS}.csv')
 
+
+print()
 #Then some factor analysis
 ##########################
 
