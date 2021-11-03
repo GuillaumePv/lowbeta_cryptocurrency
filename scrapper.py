@@ -23,7 +23,7 @@ def getDf(crypto, start, end):
             interval="1d"
         )
         return df
-    except e:
+    except Exception as e:
         print(e)
 
 #get dates
@@ -126,7 +126,6 @@ for crypto in cryptoName:
             if lenDf > 0:
                 dfAll = dfAll.append(df)
             loop_number += 1
-
 
         list_crypto.append(crypto)
         dfAll.sort_index(inplace=True)

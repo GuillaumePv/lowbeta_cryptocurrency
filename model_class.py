@@ -9,7 +9,13 @@ class Model:
     def __init__(self, number_cryptos=20, rebalance='daily'):
         self.number_cryptos = number_cryptos
         self.rebalance = rebalance
-        self.index = pd.read_csv(f'./data/processed/CV_{self.number_of_crypto}_price.csv')
+        self.index = pd.read_csv(f'./data/processed/CV_{self.number_cryptos}_price.csv')
+        self.EW = pd.DataFrame()
+        self.MVP = pd.DataFrame()
+        self.LowBeta = pd.DataFrame()
+        self.crypto_name = pd.read_csv(f"./data/processed/first_{self.number_cryptos}_crypto_list.csv", index_col=0)
+        self.df_marketcap = pd.read_csv("./data/processed/market_cap_crypto.csv", index_col=0)
+        self.df_close_price = pd.read_csv('./data/processed/close_price_crypto.csv', index_col=0)
 
     def create_EW(self):
         equal_weigthed_index = np.sum(np.multiply(df_close_price_index.values,df_equal_weigthed.values), 1)
