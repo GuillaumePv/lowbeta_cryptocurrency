@@ -6,14 +6,14 @@
 - [ ] do planning
 - [x] ERC / ...
 - [x] process data
-- [ ] split code for each strategies (Dimitri)
+- [x] split code for each strategies (Dimitri)
 - [ ] create dashboard (Nico)
 - [x] make minimum variance portfolio
-- [ ] order first date
+- [x] order first date
 - [ ] create a excess return
 - [ ] create % of reduction of portfolio compared to index
 - [x] debug optimizer
-- [ ] do algo market cap selection (1$ mio)
+- [x] do algo market cap selection (1$ mio)
 
 ## Ideas
 - low beta => buy low beta and sell high beta
