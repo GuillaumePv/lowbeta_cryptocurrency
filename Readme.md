@@ -4,16 +4,15 @@
 - [ ] read articles about low-beta and low-vol
 - [x] create overleaf
 - [ ] do planning
-- [ ] recuperate do for performance
 - [x] ERC / ...
 - [x] process data
-- [ ] split code for each strategies
-- [ ] create dashboard
-- [ ] make minimum variance portfolio
+- [ ] split code for each strategies (Dimitri)
+- [ ] create dashboard (Nico)
+- [x] make minimum variance portfolio
 - [ ] order first date
 - [ ] create a excess return
 - [ ] create % of reduction of portfolio compared to index
-- [ ] debug optimizer
+- [x] debug optimizer
 - [ ] do algo market cap selection (1$ mio)
 
 ## Ideas
