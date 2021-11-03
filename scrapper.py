@@ -15,13 +15,16 @@ import san
 #Functions
 ################
 def getDf(crypto, start, end):
-    df = san.get(
-        f"ohlcv/{crypto}",
-        from_date=start,
-        to_date=end,
-        interval="1d"
-    )
-    return df
+    try:
+        df = san.get(
+            f"ohlcv/{crypto}",
+            from_date=start,
+            to_date=end,
+            interval="1d"
+        )
+        return df
+    except e:
+        print(e)
 
 #get dates
 def init_date(days_delta=0):
@@ -127,9 +130,10 @@ for crypto in cryptoName:
 
         list_crypto.append(crypto)
         dfAll.sort_index(inplace=True)
-        dfAll.to_pickle(f"data/raw/{crypto}.pkl")
-        print(dfAll.tail())
-        print(f"Successfully stored {crypto}")
+        if len(dfAll) > 0:
+            dfAll.to_pickle(f"data/raw/{crypto}.pkl")
+            print(dfAll.tail())
+            print(f"Successfully stored {crypto}")
 
 
 with open("data/raw/crypto_list.dat", "wb") as f: #save list of cryptos selected as an object
