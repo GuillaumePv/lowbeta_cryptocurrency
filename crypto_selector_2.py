@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 import os
 from tqdm import tqdm
+import config as c
 
 ## create file to know first date of crypto ##
 crypto = []
@@ -40,7 +41,7 @@ df.to_csv('./data/processed/first_date_crypto_list_sorted.csv')
 # # code to find market cap 1 mio$ date
 
 # %%
-test_marketcap = 1e9 #paper ruben
+test_marketcap = c.market_cap #paper ruben
 
 list_market_1mio = []
 list_crypto = []

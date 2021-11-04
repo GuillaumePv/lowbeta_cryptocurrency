@@ -1,19 +1,6 @@
-## To-do
+# Presentation Project
 
-- [x] scrap data
-- [ ] read articles about low-beta and low-vol
-- [x] create overleaf
-- [ ] do planning
-- [x] ERC / ...
-- [x] process data
-- [x] split code for each strategies (Dimitri)
-- [ ] create dashboard (Nico)
-- [x] make minimum variance portfolio
-- [x] order first date
-- [ ] create a excess return
-- [ ] create % of reduction of portfolio compared to index
-- [x] debug optimizer
-- [x] do algo market cap selection (1$ mio)
+Low Beta / low vol strategies in crypto market
 
 ## Ideas
 - low beta => buy low beta and sell high beta
