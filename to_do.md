@@ -9,6 +9,9 @@
 - [ ] create separate file for each strategies
 - [ ] clean project
 - [ ] add comments 
+- [ ] faire graph pour comparer les perf avec (https://towardsdatascience.com/modeling-your-stock-portfolio-performance-with-python-fbba4ef2ef11) fin de la page
+- [ ] creér low-beta strategy
+- [ ] fix bug inf à partir de 2018 dans le cumprod()
 
 ## question prof
 
