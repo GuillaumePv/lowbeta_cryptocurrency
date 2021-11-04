@@ -9,3 +9,7 @@
 - [ ] create separate file for each strategies
 - [ ] clean project
 - [ ] add comments 
+
+## question prof
+
+- [ ] faire la variance du portefeuille jour par joru par rolling (ERC, Min-variance)
