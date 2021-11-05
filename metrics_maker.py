@@ -79,9 +79,11 @@ for idx_metric,df in enumerate(df_list):
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 7] = df['excess_returns'].sum()/df_metrics.iloc[idx_metric, 6]
 
-    #One-Way Turnover
+    #Turnover
 
-print(df_metrics)
+    df_metrics.to_csv(f"df_metrics_{number_cryptos}")
+
+
 #Then some factor analysis
 ##########################
 
