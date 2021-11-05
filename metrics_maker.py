@@ -3,20 +3,18 @@
 #it uses the cap-weighted as a market portfolio
 ############################################################################
 
-#utilities
+# utilities
 import math
 import pandas as pd
 import numpy as np
 from dateutil.relativedelta import relativedelta
 from yahoo_fin.stock_info import get_data
-
-#environment vars
-NUMBER_OF_CRYPTOS = 20
-REBALANCING_TIME = 'daily' #can be either daily, monthly, quarterly
+from config import windows, number_cryptos, rebalancing
+from matplotlib import pyplot as plt
 
 #create the dataframes
-CW = pd.read_csv(f"data/processed/CW_{NUMBER_OF_CRYPTOS}_price.csv", index_col=0)
-EW = pd.read_csv(f"data/processed/EW_{NUMBER_OF_CRYPTOS}_price.csv", index_col=0)
+CW = pd.read_csv(f"data/processed/CW_{number_cryptos}_price.csv", index_col=0)
+EW = pd.read_csv(f"data/processed/EW_{number_cryptos}_price.csv", index_col=0)
 
 df_list = [CW, EW]
 
@@ -25,16 +23,16 @@ df_list = [CW, EW]
 ##########################
 
 df_metrics = pd.DataFrame(
-    columns=['monthly_returns', 'vol_roll_120', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'hit_ratio', 'TE', 'IR', 'OWTurnover'],
+    columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'Turnover'],
     index=['CW', 'EW'])
 
-#if REBALANCING_TIME == 'daily':
+#if rebalance == 'daily':
 for idx_metric,df in enumerate(df_list):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
     #Rolling Volatility
-    df['rol_vol_120'] = df.pct_change().rolling(120).std()
+    df['volatility'] = df.pct_change().rolling(120).std()
     df.dropna(inplace=True)
-    df_metrics.iloc[idx_metric, 1] = df['rol_vol_120'].mean() * math.sqrt(365/12)
+    df_metrics.iloc[idx_metric, 1] = df['volatility'].mean() * math.sqrt(365/12)
 
     #Total return
     first_date = df.index[0] + relativedelta(day=31)
@@ -68,18 +66,22 @@ for idx_metric,df in enumerate(df_list):
     df_metrics.iloc[idx_metric, 4] = beta
 
     #Max drawdown
-    max_drawdown=min(df.iloc[:,0].pct_change().dropna().values)
+    max_drawdown=min(df_month['returns'].dropna().values)
     df_metrics.iloc[idx_metric, 5] = max_drawdown
 
-    #hit_ratio
     #Tracking error
+    df['returns'] = df.iloc[:, 0].pct_change()
+    CW['returns'] = CW.iloc[:, 0].pct_change()
+    df['excess_returns'] = df['returns'] - CW['returns']
+    df_metrics.iloc[idx_metric, 6] = df['excess_returns'].std()
+
     #Information ratio
+    if idx_metric != 0:
+        df_metrics.iloc[idx_metric, 7] = df['excess_returns'].sum()/df_metrics.iloc[idx_metric, 6]
+
     #One-Way Turnover
-    print(df_metrics)
-    df_metrics.to_csv(f'data/processed/df_metrics_{NUMBER_OF_CRYPTOS}.csv')
 
-
-print()
+print(df_metrics)
 #Then some factor analysis
 ##########################
 
