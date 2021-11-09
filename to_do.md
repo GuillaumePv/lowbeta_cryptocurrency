@@ -11,8 +11,9 @@
 - [ ] add comments 
 - [ ] faire graph pour comparer les perf avec (https://towardsdatascience.com/modeling-your-stock-portfolio-performance-with-python-fbba4ef2ef11) fin de la page
 - [ ] creér low-beta strategy
-- [ ] fix bug inf à partir de 2018 dans le cumprod()
+- [x] fix bug inf à partir de 2018 dans le cumprod()
+- [ ] refaire strategy low vol
 
 ## question prof
 
-- [ ] faire la variance du portefeuille jour par joru par rolling (ERC, Min-variance)
+- [ ] faire la variance du portefeuille par jour ou par rolling (ERC, Min-variance)
