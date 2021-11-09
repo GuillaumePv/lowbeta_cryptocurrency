@@ -24,6 +24,8 @@ Examples of github:
 
 - returns are computed with logarithmic first difference
 - we select cryptocurrencies based on their past 3, 6, 9, and 12 month volatility (voir avec le nombre de jour)
+- Moreover, since it is possible to trade cryptos every day of the week, N
+amounts to 7.
 
 ## Bibliography
 
@@ -48,3 +50,4 @@ Examples of github:
 - Skewness
 - Kurtosis
 - Sharpe Ratio
+- Excess return
