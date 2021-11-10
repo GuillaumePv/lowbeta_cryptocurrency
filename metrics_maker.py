@@ -82,13 +82,3 @@ for idx_metric,df in enumerate(df_list):
     #Turnover
 
     df_metrics.to_csv(f"df_metrics_{number_cryptos}")
-
-
-#Then some factor analysis
-##########################
-
-#Size
-
-#Low-Volatility
-
-#Dividends

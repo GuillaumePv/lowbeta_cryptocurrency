@@ -105,8 +105,9 @@ stablecoins = ['tether',
                'tether-gold',
                'mith-cash',
                'one-cash',
-               'brz']
-               
+               'brz',
+               'augur']
+
 total_length = len(cryptoName) - len(stablecoins)
 
 for crypto in cryptoName:
