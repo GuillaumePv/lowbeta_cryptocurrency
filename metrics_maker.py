@@ -15,8 +15,13 @@ from matplotlib import pyplot as plt
 #create the dataframes
 CW = pd.read_csv(f"data/processed/CW_{number_cryptos}_price.csv", index_col=0)
 EW = pd.read_csv(f"data/processed/EW_{number_cryptos}_price.csv", index_col=0)
+MV = pd.read_csv(f"data/processed/MV_{number_cryptos}_price.csv", index_col=0)
+Low_Vol = pd.read_csv(f"data/processed/Low_Vol_{number_cryptos}_price.csv", index_col=0)
+High_Vol = pd.read_csv(f"data/processed/High_Vol_{number_cryptos}_price.csv", index_col=0)
+Low_Vol = pd.read_csv(f"data/processed/MV_{number_cryptos}_price.csv", index_col=0)
 
-df_list = [CW, EW]
+
+df_list = [CW, EW, MV, Low_Vol, High_Vol]
 
 
 #First some simple metrics

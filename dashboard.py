@@ -1,11 +1,12 @@
 import dash  # use Dash version 1.16.0 or higher for this app to work
-import dash_core_components as dcc
+from dash import dcc
+from dash import html
 import dash_bootstrap_components as dbc
-import dash_html_components as html
 from dash.dependencies import Output, Input
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
+print(dcc.__version__)
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
@@ -21,7 +22,13 @@ app.layout = html.Div([
     html.Div([
     dcc.Checklist(
         id='check',
-        options=[{'label': 'Cap Weighted', 'value': 'cap_weighted_index'},{'label': 'Equal Weighted', 'value': 'ponderated_index'}],
+        options=[{'label': 'Cap Weighted', 'value': 'cap_weighted_index'},
+                 {'label': 'Equal Weighted', 'value': 'ponderated_index'},
+                 {'label': 'Minimum variance', 'value': 'MV'},
+                 {'label': 'High Volatility', 'value': 'HV'},
+                 {'label': 'Low Volatility', 'value': 'LV'},
+                 {'label': 'Risk parity', 'value': 'RP'},
+                 ],
         value=['cap_weighted_index', 'ponderated_index'],
         labelStyle={'display': 'block'}
                   )],style={
@@ -55,18 +62,26 @@ app.layout = html.Div([
 )
 
 def update_figure(value):
-    dfCW  = pd.read_csv(r'CW_20_price.csv')
-    dfEW = pd.read_csv(r'EW_20_price.csv')
+    dfCW  = pd.read_csv(r'data/processed/CW_20_price.csv')
+    dfEW = pd.read_csv(r'data/processed/EW_20_price.csv')
     df = dfCW.merge(dfEW, on='date')
+    dfMV = pd.read_csv(r'data/processed/MV_20_price.csv')
+    df = df.merge(dfMV, on='date')
+    dfLow_Vol = pd.read_csv(r'data/processed/Low_Vol_20_price.csv')
+    df = df.merge(dfLow_Vol, on='date')
+    dfHigh_Vol = pd.read_csv(r'data/processed/High_Vol_20_price.csv')
+    df = df.merge(dfHigh_Vol, on='date')
+    dfRP = pd.read_csv(r'data/processed/RP_20_price.csv')
+    df = df.merge(dfRP, on='date')
     df.set_index('date', inplace=True)
-    print(df)
+    df.columns = ("cap_weighted_index", "ponderated_index", "MV", "LV", "HV", "RP")
     if len(value) > 0:
         fig = go.Figure()
         for val in value:
             df = df[value]
             fig.update_layout(font_color="White",
                 margin=dict(l=50, r=20, t=20, b=20),
-                paper_bgcolor="rgb(0,0,0,0)", plot_bgcolor="rgb(0,0,0,0)", colorway=['#0AF047', '#0AEEF0'], xaxis=dict(showgrid=False),
+                paper_bgcolor="rgb(0,0,0,0)", plot_bgcolor="rgb(0,0,0,0)", colorway=['#0AF047', '#0EEEF0','#ffbf00','#cd9575','#4b5320', '#0EEEF0'], xaxis=dict(showgrid=False),
      yaxis=dict(showgrid=False)
             )
             fig.add_trace(go.Scatter(x=df.index, y=df[val],
@@ -84,4 +99,3 @@ def update_figure(value):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
