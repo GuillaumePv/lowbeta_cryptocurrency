@@ -43,7 +43,7 @@ df.to_csv('./data/processed/first_date_crypto_list_sorted.csv')
 # %%
 test_marketcap = c.market_cap #paper ruben
 
-list_market_1mio = []
+list_market = []
 list_crypto = []
 for f in tqdm(files[:]):
     try:
@@ -55,19 +55,17 @@ for f in tqdm(files[:]):
         index = df[df.Condition!=False].first_valid_index()
         if index is not None:
             date = datetime.date(df.index[0])
-            list_market_1mio.append(date)
+            list_market_10mio.append(date)
             list_crypto.append(f.split(".")[0])
-        
+
     except Exception:
         continue
 
 data = {
         "crypto_name":list_crypto,
-        "first_date_marketcap_1mio":list_market_1mio
+        "first_date_marketcap":list_market
 }
 
 df_market_cap = pd.DataFrame(data)
-df_market_cap = df_market_cap.sort_values('first_date_marketcap_1mio')
-df_market_cap.to_csv('./data/processed/crypto_date_marketcap_1mio_sorted.csv')
-
-
+df_market_cap = df_market_cap.sort_values('first_date_marketcap')
+df_market_cap.to_csv('./data/processed/crypto_date_marketcap_sorted.csv')
