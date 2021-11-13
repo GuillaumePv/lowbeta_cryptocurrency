@@ -18,18 +18,30 @@ EW = pd.read_csv(f"data/processed/EW_{number_cryptos}_price.csv", index_col=0)
 MV = pd.read_csv(f"data/processed/MV_{number_cryptos}_price.csv", index_col=0)
 Low_Vol = pd.read_csv(f"data/processed/Low_Vol_{number_cryptos}_price.csv", index_col=0)
 High_Vol = pd.read_csv(f"data/processed/High_Vol_{number_cryptos}_price.csv", index_col=0)
-Low_Vol = pd.read_csv(f"data/processed/MV_{number_cryptos}_price.csv", index_col=0)
+RP = pd.read_csv(f"data/processed/RP_{number_cryptos}_price.csv", index_col=0)
+Low_Beta = pd.read_csv(f"data/processed/Low_Beta_{number_cryptos}_price.csv", index_col=0)
+High_Beta = pd.read_csv(f"data/processed/High_Beta_{number_cryptos}_price.csv", index_col=0)
 
+df_list = [CW, EW, MV, Low_Vol, High_Vol, RP, Low_Beta, High_Beta]
 
-df_list = [CW, EW, MV, Low_Vol, High_Vol]
+print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(RP), len(Low_Beta), len(High_Beta))
 
+CW.drop(CW.index.difference(EW.index), inplace=True)
+CW.drop(CW.index.difference(Low_Beta.index), inplace=True)
+EW.drop(EW.index.difference(CW.index), inplace=True)
+MV.drop(MV.index.difference(CW.index), inplace=True)
+Low_Vol.drop(Low_Vol.index.difference(CW.index), inplace=True)
+High_Vol.drop(High_Vol.index.difference(CW.index), inplace=True)
+RP.drop(RP.index.difference(CW.index), inplace=True)
+High_Beta.drop(High_Beta.index.difference(CW.index), inplace=True)
+Low_Beta.drop(Low_Beta.index.difference(CW.index), inplace=True)
 
 #First some simple metrics
 ##########################
 
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'Turnover'],
-    index=['CW', 'EW'])
+    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'RP', 'Low Beta', 'High Beta'])
 
 #if rebalance == 'daily':
 for idx_metric,df in enumerate(df_list):
@@ -63,7 +75,9 @@ for idx_metric,df in enumerate(df_list):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    bench_returns = CW.cap_weighted_index.pct_change()
+    bench_returns = CW.iloc[:, 0].pct_change()
+    print(len(CW))
+    print(len(df))
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
     df_cov.dropna(inplace=True)
     cov = df_cov.cov().iloc[0,1]
@@ -86,4 +100,5 @@ for idx_metric,df in enumerate(df_list):
 
     #Turnover
 
-    df_metrics.to_csv(f"df_metrics_{number_cryptos}")
+    df_metrics.to_csv(f"data/processed/df_metrics_{number_cryptos}")
+print(df_metrics)

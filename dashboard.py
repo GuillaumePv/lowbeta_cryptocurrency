@@ -28,6 +28,8 @@ app.layout = html.Div([
                  {'label': 'High Volatility', 'value': 'HV'},
                  {'label': 'Low Volatility', 'value': 'LV'},
                  {'label': 'Risk parity', 'value': 'RP'},
+                 {'label': 'Low Beta', 'value': 'LB'},
+                 {'label': 'High Beta', 'value': 'HB'},
                  ],
         value=['cap_weighted_index', 'ponderated_index'],
         labelStyle={'display': 'block'}
