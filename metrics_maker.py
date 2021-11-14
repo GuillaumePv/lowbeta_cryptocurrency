@@ -43,15 +43,24 @@ print("DATE START", date_start)
 
 
 
+#create a df with all of the prices trunc
+list_df = ["cap_weighted_index", "ponderated_index", "MV", "LV", "HV", "RP", "LB", "HB"]
+
 #get df at same length & make them start at 100
 df_list_adj = []
-for df in df_list:
+for i,df in enumerate(df_list):
     df = df.loc[df.index >= date_start].copy()
     df = df.pct_change()
     df.iloc[0]=0
     df = df.add(1).cumprod()*100
     df_list_adj.append(df)
 
+    #all df creation
+    if i == 0:
+        df_all = pd.DataFrame(columns=list_df, index=df.index)
+    df_all[list_df[i]] = df.values
+
+df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #for i in df_list_adj:
 #    print(len(i))
