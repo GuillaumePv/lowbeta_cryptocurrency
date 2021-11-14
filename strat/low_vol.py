@@ -25,10 +25,10 @@ df_vol = df_returns.rolling(c.windows).std().fillna(0)[c.windows:]
 df_weights_low = df_vol.copy()
 df_weights_high = df_vol.copy()
 
-avg = pd.Series(df_vol.mean(axis=1), index=df_vol.index)
+avg = pd.Series(df_vol.median(axis=1), index=df_vol.index)
 
 for i in tqdm(df_vol.index):
-    df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: x if x < avg.loc[i] else 0)
+    df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: x if x <= avg.loc[i] else 0)
     df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: (x - df_weights_low.loc[i].min())/(df_weights_low.loc[i].max()-df_weights_low.loc[i].min()) if x != 0 else 0)
     df_weights_low.loc[i] = df_weights_low.loc[i]/df_weights_low.loc[i].sum()
 
