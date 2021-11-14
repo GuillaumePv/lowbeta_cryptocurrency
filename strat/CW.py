@@ -53,4 +53,5 @@ df_perf = df_returns_CW.sum(axis=1)
 df_perf[0] = 0
 df_price = df_perf.add(1).cumprod()*100
 
+print(df_price)
 df_price.to_csv(f"../data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
