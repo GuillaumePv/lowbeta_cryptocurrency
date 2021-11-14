@@ -2,6 +2,10 @@
 #This file is used to create metrics tables with price data of portfolios
 #it uses the cap-weighted as a market portfolio
 ############################################################################
+#message for makefile
+print(40*"=")
+print("CREATING METRICS")
+print(40*"=")
 
 import math
 import pandas as pd

@@ -20,6 +20,11 @@ from scipy.optimize import minimize
 import config as c
 marketcap = format(c.market_cap,'.0e')
 
+#message for makefile
+print(40*"=")
+print("STARTING STRATS")
+print(40*"=")
+
 #get first_date
 df_market_cap = pd.read_csv(f'../data/processed/crypto_date_marketcap_sorted_1e{marketcap[-1]}.csv', index_col=0)
 df_market_cap_first = df_market_cap.iloc[:c.number_cryptos]

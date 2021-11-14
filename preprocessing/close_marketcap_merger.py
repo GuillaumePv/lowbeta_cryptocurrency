@@ -3,6 +3,10 @@ from datetime import datetime
 from  tqdm import tqdm
 import os
 
+#message for makefile
+print(40*"=")
+print("STARTING PREPROCESSING")
+print(40*"=")
 
 df = pd.read_pickle(f"../data/raw/bitcoin.pkl")
 print(df.head(5))
