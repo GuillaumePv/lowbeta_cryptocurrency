@@ -25,5 +25,7 @@ df_close_adj = df_close_adj.loc[:, df_market_cap_first['crypto_name']]
 #print(df_close_adj.head(1).iloc[:, :6])
 
 df_returns = df_close_adj.pct_change().dropna()
+df_returns.replace(np.inf, 0, inplace=True)
+
 #print(df_returns)
 df_returns.to_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv")
