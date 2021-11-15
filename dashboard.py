@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 print(dcc.__version__)
 import config as c
 marketcap = format(c.market_cap,'.0e')
-
+print("EXAMPLE")
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
 app.layout = html.Div([
