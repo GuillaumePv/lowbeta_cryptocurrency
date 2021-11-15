@@ -48,9 +48,9 @@ df_weights=df_weights.iloc[1:]
 try:
     fig = px.scatter(df_weights['bitcoin'], x=df_weights['bitcoin'].index, y='bitcoin', title="Bitcoin (% of market cap)",labels={'bitcoin': "% of market cap"})
     fig.write_image(f"../plots/bitcoin_marketshare_{c.number_cryptos}_1e{marketcap[-1]}.png", format='png')
-except:
+except Exception:
     continue
-    
+
 #returns
 df_returns = pd.read_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 df_returns_CW = df_returns * df_weights
