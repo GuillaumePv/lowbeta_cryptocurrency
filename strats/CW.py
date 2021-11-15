@@ -45,9 +45,12 @@ for col in df_marketcap.iloc[:, :-1].columns:
 df_weights=df_weights.iloc[1:]
 
 #plot bitcoin marketcap
-fig = px.scatter(df_weights['bitcoin'], x=df_weights['bitcoin'].index, y='bitcoin', title="Bitcoin (% of market cap)",labels={'bitcoin': "% of market cap"})
-fig.write_image(f"../plots/bitcoin_marketshare_{c.number_cryptos}_1e{marketcap[-1]}.png", format='png')
-
+try:
+    fig = px.scatter(df_weights['bitcoin'], x=df_weights['bitcoin'].index, y='bitcoin', title="Bitcoin (% of market cap)",labels={'bitcoin': "% of market cap"})
+    fig.write_image(f"../plots/bitcoin_marketshare_{c.number_cryptos}_1e{marketcap[-1]}.png", format='png')
+except:
+    continue
+    
 #returns
 df_returns = pd.read_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 df_returns_CW = df_returns * df_weights
