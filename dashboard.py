@@ -66,7 +66,7 @@ app.layout = html.Div([
 )
 
 def update_figure(value):
-    df = pd.read_csv(f'data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv')
+    df = pd.read_csv(f'data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv', index_col=0)
     if len(value) > 0:
         fig = go.Figure()
         for val in value:
