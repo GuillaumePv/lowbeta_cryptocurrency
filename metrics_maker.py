@@ -2,37 +2,84 @@
 #This file is used to create metrics tables with price data of portfolios
 #it uses the cap-weighted as a market portfolio
 ############################################################################
+#message for makefile
+print(40*"=")
+print("CREATING METRICS")
+print(40*"=")
 
-# utilities
 import math
 import pandas as pd
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
 import numpy as np
 from dateutil.relativedelta import relativedelta
 from yahoo_fin.stock_info import get_data
-from config import windows, number_cryptos, rebalancing
 from matplotlib import pyplot as plt
+import config as c
+marketcap = format(c.market_cap,'.0e')
 
 #create the dataframes
-CW = pd.read_csv(f"data/processed/CW_{number_cryptos}_price.csv", index_col=0)
-EW = pd.read_csv(f"data/processed/EW_{number_cryptos}_price.csv", index_col=0)
-MV = pd.read_csv(f"data/processed/MV_{number_cryptos}_price.csv", index_col=0)
-Low_Vol = pd.read_csv(f"data/processed/Low_Vol_{number_cryptos}_price.csv", index_col=0)
-High_Vol = pd.read_csv(f"data/processed/High_Vol_{number_cryptos}_price.csv", index_col=0)
-Low_Vol = pd.read_csv(f"data/processed/MV_{number_cryptos}_price.csv", index_col=0)
+CW = pd.read_csv(f"data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+EW = pd.read_csv(f"data/strats/EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+MV = pd.read_csv(f"data/strats/MV_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+Low_Vol = pd.read_csv(f"data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+High_Vol = pd.read_csv(f"data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+RP = pd.read_csv(f"data/strats/ERC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+Low_Beta = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+High_Beta = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+
+df_list = [CW, EW, MV, Low_Vol, High_Vol, RP, Low_Beta, High_Beta]
+
+#print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(Low_Beta), len(High_Beta))
+
+#get first_date on every df
+date_start = '2009-01-01'
+for df in df_list:
+    first_date = df.head(1).index
+    first_date
+    first_date = first_date[0]
+    if pd.to_datetime(first_date).tz_convert(None) > pd.to_datetime(date_start).tz_localize(None):
+        date_start = first_date
+
+print("DATE START", date_start)
 
 
-df_list = [CW, EW, MV, Low_Vol, High_Vol]
 
+#create a df with all of the prices trunc
+list_df = ["cap_weighted_index", "ponderated_index", "MV", "LV", "HV", "RP", "LB", "HB"]
+
+#get df at same length & make them start at 100
+df_list_adj = []
+for i,df in enumerate(df_list):
+    df = df.loc[df.index >= date_start].copy()
+    df = df.pct_change()
+    df.iloc[0]=0
+    df = df.add(1).cumprod()*100
+    df_list_adj.append(df)
+
+    #all df creation
+    if i == 0:
+        df_all = pd.DataFrame(columns=list_df, index=df.index)
+    df_all[list_df[i]] = df.values
+
+df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#for i in df_list_adj:
+#    print(len(i))
+
+CW = df_list_adj[0] #because of truncated
 
 #First some simple metrics
 ##########################
 
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'Turnover'],
-    index=['CW', 'EW'])
+    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'RP', 'Low Beta', 'High Beta'])
 
 #if rebalance == 'daily':
-for idx_metric,df in enumerate(df_list):
+for idx_metric,df in enumerate(df_list_adj):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
     #Rolling Volatility
     df['volatility'] = df.pct_change().rolling(120).std()
@@ -63,7 +110,9 @@ for idx_metric,df in enumerate(df_list):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    bench_returns = CW.cap_weighted_index.pct_change()
+    bench_returns = CW.iloc[:, 0].pct_change()
+    #print(len(CW))
+    #print(len(df))
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
     df_cov.dropna(inplace=True)
     cov = df_cov.cov().iloc[0,1]
@@ -86,4 +135,5 @@ for idx_metric,df in enumerate(df_list):
 
     #Turnover
 
-    df_metrics.to_csv(f"df_metrics_{number_cryptos}")
+    df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.cs")
+print(df_metrics)

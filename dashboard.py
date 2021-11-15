@@ -7,6 +7,8 @@ import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
 print(dcc.__version__)
+import config as c
+marketcap = format(c.market_cap,'.0e')
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
@@ -28,6 +30,8 @@ app.layout = html.Div([
                  {'label': 'High Volatility', 'value': 'HV'},
                  {'label': 'Low Volatility', 'value': 'LV'},
                  {'label': 'Risk parity', 'value': 'RP'},
+                 {'label': 'Low Beta', 'value': 'LB'},
+                 {'label': 'High Beta', 'value': 'HB'},
                  ],
         value=['cap_weighted_index', 'ponderated_index'],
         labelStyle={'display': 'block'}
@@ -62,19 +66,7 @@ app.layout = html.Div([
 )
 
 def update_figure(value):
-    dfCW  = pd.read_csv(r'data/processed/CW_20_price.csv')
-    dfEW = pd.read_csv(r'data/processed/EW_20_price.csv')
-    df = dfCW.merge(dfEW, on='date')
-    dfMV = pd.read_csv(r'data/processed/MV_20_price.csv')
-    df = df.merge(dfMV, on='date')
-    dfLow_Vol = pd.read_csv(r'data/processed/Low_Vol_20_price.csv')
-    df = df.merge(dfLow_Vol, on='date')
-    dfHigh_Vol = pd.read_csv(r'data/processed/High_Vol_20_price.csv')
-    df = df.merge(dfHigh_Vol, on='date')
-    dfRP = pd.read_csv(r'data/processed/RP_20_price.csv')
-    df = df.merge(dfRP, on='date')
-    df.set_index('date', inplace=True)
-    df.columns = ("cap_weighted_index", "ponderated_index", "MV", "LV", "HV", "RP")
+    df = pd.read_csv(f'data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv')
     if len(value) > 0:
         fig = go.Figure()
         for val in value:
