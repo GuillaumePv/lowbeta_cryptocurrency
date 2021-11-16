@@ -36,3 +36,10 @@ df_returns.fillna(0, inplace=True)
 
 #print(df_returns.iloc[210:250])
 df_returns.to_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#metrics creation
+df_metrics = pd.DataFrame(
+    columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'Turnover'],
+    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta'])
+
+df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
