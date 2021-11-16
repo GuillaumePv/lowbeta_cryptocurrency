@@ -1,3 +1,7 @@
+print(40*"=")
+print("Risk Parity strat")
+print(40*"=")
+
 import pandas as pd
 from datetime import datetime
 from datetime import timedelta

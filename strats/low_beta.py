@@ -1,3 +1,7 @@
+print(40*"=")
+print("Low_Beta strat")
+print(40*"=")
+
 import pandas as pd
 pd.set_option('display.max_rows', 2000)
 from datetime import datetime

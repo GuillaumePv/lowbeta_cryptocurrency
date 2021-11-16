@@ -26,11 +26,11 @@ EW = pd.read_csv(f"data/strats/EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv
 MV = pd.read_csv(f"data/strats/MV_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Vol = pd.read_csv(f"data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 High_Vol = pd.read_csv(f"data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-RP = pd.read_csv(f"data/strats/ERC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+#RP = pd.read_csv(f"data/strats/ERC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Beta = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 High_Beta = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
-df_list = [CW, EW, MV, Low_Vol, High_Vol, RP, Low_Beta, High_Beta]
+df_list = [CW, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta]
 
 #print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(Low_Beta), len(High_Beta))
 
@@ -48,7 +48,7 @@ print("DATE START", date_start)
 
 
 #create a df with all of the prices trunc
-list_df = ["cap_weighted_index", "ponderated_index", "MV", "LV", "HV", "RP", "LB", "HB"]
+list_df = ["cap_weighted_index", "ponderated_index", "MV", "LV", "HV", "LB", "HB"]
 
 #get df at same length & make them start at 100
 df_list_adj = []
@@ -76,7 +76,7 @@ CW = df_list_adj[0] #because of truncated
 
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'Turnover'],
-    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'RP', 'Low Beta', 'High Beta'])
+    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta'])
 
 #if rebalance == 'daily':
 for idx_metric,df in enumerate(df_list_adj):
