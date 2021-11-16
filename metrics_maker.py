@@ -141,5 +141,5 @@ for idx_metric,df in enumerate(df_list_adj):
 
     #Turnover
 
-    df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.cs")
+    df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 print(df_metrics)

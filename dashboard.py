@@ -8,6 +8,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import dash_table
 from dash_table.Format import Format, Scheme
+import config as c
+marketcap = format(c.market_cap,'.0e')
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
@@ -138,19 +140,19 @@ def update_figure(value):
 )
 
 def update_output(val):
-    df3 = pd.read_csv(r'data/processed/df_metrics_20_1e6.cs')
-    df4 = pd.read_csv(r'data/processed/df_metrics_100_1e6.cs')
-    df5 = pd.read_csv(r'data/processed/df_metrics_20_1e6.cs')
+    df3 = pd.read_csv(f'data/processed/df_metrics_20_1e{marketcap[-1]}.csv')
+    df4 = pd.read_csv(f'data/processed/df_metrics_100_1e{marketcap[-1]}.csv')
+    df5 = pd.read_csv(f'data/processed/df_metrics_20_1e{marketcap[-1]}.csv')
     if val == "metrics1.csv":
-        columns = [{"name": i, "id": i, "format": Format(precision=2, scheme=Scheme.fixed), "type":'numeric'} for i in df3.columns]
+        columns = [{"name": i, "id": i, "format": Format(precision=3, scheme=Scheme.fixed), "type":'numeric'} for i in df3.columns]
         data=df3.to_dict('records')
         return columns, data
     elif val == "metrics2.csv":
-        columns = [{"name": i, "id": i, "format": Format(precision=2, scheme=Scheme.fixed), "type":'numeric'} for i in df4.columns]
+        columns = [{"name": i, "id": i, "format": Format(precision=3, scheme=Scheme.fixed), "type":'numeric'} for i in df4.columns]
         data=df4.to_dict('records')
         return columns, data
     elif val == "metrics3.csv":
-        columns = [{"name": i, "id": i, "format": Format(precision=2, scheme=Scheme.fixed), "type":'numeric'} for i in df5.columns]
+        columns = [{"name": i, "id": i, "format": Format(precision=3, scheme=Scheme.fixed), "type":'numeric'} for i in df5.columns]
         data=df5.to_dict('records')
         return columns, data
 
