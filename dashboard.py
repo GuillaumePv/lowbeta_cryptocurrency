@@ -109,8 +109,13 @@ app.layout = html.Div([
 )
 
 def update_figure(value):
-    df = pd.read_csv(f'data/strats/all_price_20_1e6.csv')
+    df = pd.read_csv(f'data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv')
+    #this part is to set the graph length
     df.set_index('datetime', inplace=True)
+    df = df.iloc[-365:].pct_change() #365 days from the last date are displayed here
+    df.iloc[0] = 0
+    df = df.add(1).cumprod()*100
+    #########################################
     if len(value) > 0:
         fig = go.Figure()
         for val in value:
