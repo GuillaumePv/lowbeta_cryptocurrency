@@ -6,9 +6,8 @@ from dash.dependencies import Output, Input
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
-print(dcc.__version__)
-import config as c
-marketcap = format(c.market_cap,'.0e')
+import dash_table
+
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
@@ -20,27 +19,25 @@ app.layout = html.Div([
         Interactive Dashboard
     ''', style={'fontFace': 'Arial', 'fontSize': 30}),
     html.Br(),
-
     html.Div([
     dcc.Checklist(
         id='check',
-        options=[{'label': 'Cap Weighted', 'value': 'cap_weighted_index'},
-                 {'label': 'Equal Weighted', 'value': 'ponderated_index'},
-                 {'label': 'Minimum variance', 'value': 'MV'},
-                 {'label': 'High Volatility', 'value': 'HV'},
-                 {'label': 'Low Volatility', 'value': 'LV'},
-                 {'label': 'Low Beta', 'value': 'LB'},
-                 {'label': 'High Beta', 'value': 'HB'},
+        options=[{'label': '  Cap Weighted', 'value': 'cap_weighted_index'},
+                 {'label': '  Equal Weighted', 'value': 'ponderated_index'},
+                 {'label': '  Minimum Variance', 'value': 'MV'},
+                 {'label': '  High Volatility', 'value': 'HV'},
+                 {'label': '  Low Volatility', 'value': 'LV'},
+                 {'label': '  Risk Parity', 'value': 'RP'},
+                 {'label': '  Low Beta', 'value': 'LB'},
+                 {'label': '  High Beta', 'value': 'HB'},
                  ],
-        value=['cap_weighted_index'],
+        value=['cap_weighted_index', 'ponderated_index'],
         labelStyle={'display': 'block'}
                   )],style={
-        'color': "White"
-    }),
+        'color': "White", 'fontSize':18}),
     html.Br(),
     html.Div([
         dcc.Graph(id='my-graph', figure={}, clickData=None, hoverData=None,
-                  # I assigned None for tutorial purposes. By defualt, these are None, unless you specify otherwise.
                   config={
                       'staticPlot': False,  # True, False
                       'scrollZoom': True,  # True, False
@@ -48,16 +45,60 @@ app.layout = html.Div([
                       'showTips': False,  # True, False
                       'displayModeBar': False,  # True, False, 'hover'
                       'watermark': False,
-                      # 'modeBarButtonsToRemove': ['pan2d','select2d'],
                   },
-                  className='six columns',
-                  )
-    ])
-], style={
+                  className='six columns',)
+    ]),
+    html.Br(),
+    html.Br(),
+    html.Br(),
+    html.Br(),
+    html.Div(children='''
+        Metrics Table
+    ''', style={'fontFace': 'Arial', 'fontSize': 30}),
+    html.Br(),
+    html.Div([
+        dcc.Dropdown(
+            id='dropdown',
+            options=[
+                {'label': 'Model 1', 'value': 'metrics1.csv'},
+                {'label': 'Model 2', 'value': 'metrics2.csv'},
+                {'label': 'Model 3', 'value': 'metrics3.csv'}
+            ],value='metrics1.csv',
+        )],style = {'margin-right': 1100, 'color':'black', 'backgroundColor':'black'}),
+    html.Br(),
+    html.Div([
+        dash_table.DataTable(
+            id='table',
+            columns=(),
+            data=[],
+    style_cell={'textAlign': 'right', 'fontSize':16, 'font-family':'arial', 'minWidth': '120px', 'width': '120px', 'maxWidth': '120px'},
+    style_header={
+        'backgroundColor': 'rgb(0, 0, 0, 0)',
+        'color': 'lime',
+        'border': '0px solid blue',
+        'fontSize':16
+    },
+    style_data={
+        'backgroundColor': 'rgb(0, 0, 0, 0)',
+        'color': 'turquoise',
+        'border': '0px solid blue',
+    },
+    style_data_conditional=[
+        {
+            'if': {
+                'column_id': 'Portfolio',
+            },
+            'textAlign': 'left',
+            'minWidth': '180px'
+        },],
 
+            sort_action='native')
+    ], style={
+        'margin-right': 100 , 'margin-left':10, 'margin-bottom':0, 'fontFace': 'Arial'
+    }),
+], style={
         'margin-left': 50 , 'margin-bottom':500
     })
-
 
 @app.callback(
     Output(component_id='my-graph', component_property='figure'),
@@ -65,7 +106,8 @@ app.layout = html.Div([
 )
 
 def update_figure(value):
-    df = pd.read_csv(f'data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv', index_col=0)
+    df = pd.read_csv(r'prices.csv')
+    df.set_index('date', inplace=True)
     if len(value) > 0:
         fig = go.Figure()
         for val in value:
@@ -87,6 +129,29 @@ def update_figure(value):
                           )
         return fig
 
+
+@app.callback(
+    Output(component_id='table', component_property='columns'),
+    Output(component_id='table', component_property='data'),
+    Input(component_id='dropdown', component_property='value'),
+)
+
+def update_output(val):
+    df3 = pd.read_csv(r'metrics1.csv')
+    df4 = pd.read_csv(r'metrics2.csv')
+    df5 = pd.read_csv(r'metrics3.csv')
+    if val == "metrics1.csv":
+        columns = [{"name": i, "id": i} for i in df3.columns]
+        data=df3.to_dict('records')
+        return columns, data
+    elif val == "metrics2.csv":
+        columns = [{"name": i, "id": i} for i in df4.columns]
+        data=df4.to_dict('records')
+        return columns, data
+    elif val == "metrics3.csv":
+        columns = [{"name": i, "id": i} for i in df5.columns]
+        data=df5.to_dict('records')
+        return columns, data
 
 if __name__ == '__main__':
     app.run_server(debug=True)
