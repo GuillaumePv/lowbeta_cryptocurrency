@@ -60,9 +60,9 @@ app.layout = html.Div([
         dcc.Dropdown(
             id='dropdown',
             options=[
-                {'label': 'Model 1', 'value': 'metrics1.csv'},
-                {'label': 'Model 2', 'value': 'metrics2.csv'},
-                {'label': 'Model 3', 'value': 'metrics3.csv'}
+                {'label': '20 Crypto Model', 'value': 'metrics1.csv'},
+                {'label': '100 Crypto Model', 'value': 'metrics2.csv'},
+                {'label': 'Third Crypto Model', 'value': 'metrics3.csv'}
             ],value='metrics1.csv',
         )],style = {'margin-right': 1100, 'color':'black', 'backgroundColor':'black'}),
     html.Br(),
@@ -106,8 +106,8 @@ app.layout = html.Div([
 )
 
 def update_figure(value):
-    df = pd.read_csv(r'prices.csv')
-    df.set_index('date', inplace=True)
+    df = pd.read_csv(f'data/strats/all_price_20_1e6.csv')
+    df.set_index('datetime', inplace=True)
     if len(value) > 0:
         fig = go.Figure()
         for val in value:
@@ -137,9 +137,9 @@ def update_figure(value):
 )
 
 def update_output(val):
-    df3 = pd.read_csv(r'metrics1.csv')
-    df4 = pd.read_csv(r'metrics2.csv')
-    df5 = pd.read_csv(r'metrics3.csv')
+    df3 = pd.read_csv(r'data/processed/df_metrics_20_1e6.cs')
+    df4 = pd.read_csv(r'data/processed/df_metrics_100_1e6.cs')
+    df5 = pd.read_csv(r'data/processed/df_metrics_20_1e6.cs')
     if val == "metrics1.csv":
         columns = [{"name": i, "id": i} for i in df3.columns]
         data=df3.to_dict('records')
