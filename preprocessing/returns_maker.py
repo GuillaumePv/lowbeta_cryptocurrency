@@ -1,3 +1,7 @@
+print(40*"=")
+print("returns_maker")
+print(40*"=")
+
 import pandas as pd
 from datetime import datetime
 from datetime import timedelta
@@ -24,8 +28,11 @@ df_close_adj = df_close_adj.loc[df_close_adj.index > first_date]
 df_close_adj = df_close_adj.loc[:, df_market_cap_first['crypto_name']]
 #print(df_close_adj.head(1).iloc[:, :6])
 
-df_returns = df_close_adj.pct_change().dropna()
+#print(len(df_close_adj))
+df_returns = df_close_adj.pct_change().iloc[1:]
 df_returns.replace(np.inf, 0, inplace=True)
+df_returns.fillna(0, inplace=True)
+#print(len(df_returns))
 
-#print(df_returns)
+#print(df_returns.iloc[210:250])
 df_returns.to_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv")

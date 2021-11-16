@@ -52,6 +52,8 @@ list_df = ["cap_weighted_index", "ponderated_index", "MV", "LV", "HV", "LB", "HB
 
 #get df at same length & make them start at 100
 df_list_adj = []
+df_test =pd.DataFrame()
+
 for i,df in enumerate(df_list):
     df = df.loc[df.index >= date_start].copy()
     df = df.pct_change()
@@ -59,10 +61,14 @@ for i,df in enumerate(df_list):
     df = df.add(1).cumprod()*100
     df_list_adj.append(df)
 
+
     #all df creation
     if i == 0:
         df_all = pd.DataFrame(columns=list_df, index=df.index)
+    print(df_test.index.difference(df.index))
+
     df_all[list_df[i]] = df.values
+    df_test = df
 
 df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 

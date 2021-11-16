@@ -32,13 +32,9 @@ df_weights_high = df_vol.copy()
 avg = pd.Series(df_vol.median(axis=1), index=df_vol.index)
 
 for i in tqdm(df_vol.index):
-    df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: x if x <= avg.loc[i] else 0)
-    df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: (x - df_weights_low.loc[i].min())/(df_weights_low.loc[i].max()-df_weights_low.loc[i].min()) if x != 0 else 0)
-    df_weights_low.loc[i] = df_weights_low.loc[i]/df_weights_low.loc[i].sum()
+    df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: 2/(c.number_cryptos) if x <= avg.loc[i] else 0)
+    df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: 2/(c.number_cryptos) if x > avg.loc[i] else 0)
 
-    df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: x if x > avg.loc[i] else 0)
-    df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: (x - df_weights_high.loc[i].min())/(df_weights_high.loc[i].max()-df_weights_high.loc[i].min()) if x != 0 else 0)
-    df_weights_high.loc[i] = df_weights_high.loc[i]/df_weights_high.loc[i].sum()
 
 #print(avg[:2])
 #print(df_vol.head(2).iloc[:, :10])

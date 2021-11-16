@@ -9,6 +9,10 @@ print(40*"=")
 print("STARTING PREPROCESSING")
 print(40*"=")
 
+print(40*"=")
+print("close_marketcap_merger")
+print(40*"=")
+
 df = pd.read_pickle(f"../data/raw/bitcoin.pkl")
 print(df.head(5))
 
