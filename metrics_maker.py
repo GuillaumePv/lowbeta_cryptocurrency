@@ -80,9 +80,7 @@ CW = df_list_adj[0] #because of truncated
 #First some simple metrics
 ##########################
 
-df_metrics = pd.DataFrame(
-    columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'Turnover'],
-    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta'])
+df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
 #if rebalance == 'daily':
 for idx_metric,df in enumerate(df_list_adj):
