@@ -1,6 +1,4 @@
-print(40*"=")
-print("Risk Parity strat")
-print(40*"=")
+
 
 import pandas as pd
 from datetime import datetime
@@ -13,10 +11,21 @@ from tqdm import tqdm
 import plotly.express as px
 import os
 import sys
-sys.path.insert(1, os.path.realpath(os.path.pardir))
+
 from scipy.optimize import minimize
+sys.path.insert(1, os.path.realpath(os.path.pardir))
 import config as c
 marketcap = format(c.market_cap,'.0e')
+
+print(40*"=")
+print("Risk Parity strat")
+print(40*"=")
+
+
+
+##############################################
+## useful functions fo risk parity strategy ##
+##############################################
 
 def MCR_calc(alloc, Returns):
     """
@@ -82,9 +91,12 @@ def optimizer_ERC(ERC_df):
     return res_ERC.x
 
 
+print("=== load return data ===")
 #get returns
 df_returns = pd.read_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
+
+print("=== launch algo ERC ===")
 #get weights
 weights_ERC = []
 for i in tqdm(range(df_returns.shape[0])):
@@ -100,4 +112,5 @@ df_perf = df_returns_ERC.sum(axis=1)
 df_perf[0] = 0
 df_price = df_perf.add(1).cumprod()*100
 print(df_price)
+print("=== save results ===")
 df_price.to_csv(f"../data/strats/ERC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")

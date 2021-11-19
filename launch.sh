@@ -5,6 +5,7 @@ python3 crypto_selector.py
 python3 returns_maker.py
 cd ..
 cd strats
+python3 show_parameters.py
 python3 CW.py
 python3 EW.py
 python3 MV.py

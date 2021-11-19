@@ -1,6 +1,6 @@
 # Presentation Project
 
-Low Beta / low vol strategies in crypto market
+
 
 ## Ideas
 - low beta => buy low beta and sell high beta
@@ -27,6 +27,118 @@ Examples of github:
 - Moreover, since it is possible to trade cryptos every day of the week, N
 amounts to 7.
 
+# Presentation of the project
+
+Low Beta / low vol strategies in crypto market
+
+## Abstract
+
+## Authors
+
+* Ruben Kempter : ruben.kempter@unil.ch
+* Dimitri André : dimitri.andre@unil.ch
+* Nicolas Eon Duval : nicolas.eonduval@unil.ch
+* Guillaume Pavé : guillaume.pave@unil.ch
+
+## Install libraries and run project
+
+1) Clone project
+
+```bash
+git clone 
+```
+
+2) Go into project folder
+
+```bash
+cd 
+```
+
+3) Create your virtual environment
+
+```bash
+python3 -m venv venv
+```
+
+4) Enter in your virtual environment
+
+* Mac OS / linux
+```bash
+source venv/bin/activate venv venv
+```
+
+* Windows
+```bash
+.\venv\Scripts\activate
+```
+
+5) Install libraries
+
+* Python 2
+```bash
+pip install -r requirements.txt
+```
+
+* Python 3
+```bash
+pip3 install -r requirements.txt
+```
+
+6) using our makefile to run our project
+
+* see helper of the makefile
+```bash
+make
+```
+# Project structure
+
+In construction
+```
+├── README.md          <- The top-level README for developers using this project.
+│
+├── data
+│   ├── processed      <- The final, canonical data sets for modeling.
+│   ├── strats         <- Data Results of our different strategies
+│   └── raw            <- The original, immutable data dump.
+│
+├── latex /            <- latex files                     
+│
+├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
+│                         the creator's initials, and a short `-` delimited description, e.g.
+│                         `1.0-jqp-initial-data-exploration`.
+│
+│
+│
+├── plots /            <- static files (images)
+│
+│
+├── preprocessing/   <- ML models used in the dasboard are stocked in this folder
+│   │
+│   ├── fetchScripts           <- Scripts to download or generate data
+│
+│  
+├── strats/   <- ML models used in the dasboard are stocked in this folder
+│   │
+│   ├── fetchScripts           <- Scripts to download or generate data
+│
+│  
+├── config.py   <- Main python file that manage all our different codes
+│   
+├── dashboard.py   <- Main python file that manage all our different codes
+│
+│
+├── metrics_maker.py   <- Main python file that manage all our different codes
+│
+├── scrapper.py   <- Main python file that manage all our different codes
+│
+│
+├── makefile   <- makefile to run project or each part of project
+│
+├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
+│                         generated with `pip freeze > requirements.txt`
+│
+```
+
 ## Bibliography
 
 - Li et Yi, Toward a Factor Structure in Crypto Asset Returns => seems to have a low vol anomaly
@@ -38,11 +150,6 @@ amounts to 7.
 - https://www.solactive.com/wp-content/uploads/2019/04/Solactive-Index-Guideline-CMC200.pdf
 - https://iranarze.ir/wp-content/uploads/2021/01/11310-English-IranArze.pdf
 
-## Questions
-
-- besoin d'un MRC, min variance ?
-- how to compute vol ? daily ? Monthly ? (14 day / Monthly / Annual) => depend on the universe
-
 ## Indicators
 - Beta
 - Max drawdown
@@ -51,3 +158,5 @@ amounts to 7.
 - Kurtosis
 - Sharpe Ratio
 - Excess return
+
+## Further works
