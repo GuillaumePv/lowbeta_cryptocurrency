@@ -17,6 +17,7 @@ sys.path.insert(1, os.path.realpath(os.path.pardir))
 import inspect
 
 import config as c
+from functions import getMonthlyTurnover
 marketcap = format(c.market_cap,'.0e')
 
 #get returns
@@ -48,11 +49,20 @@ df_returns_high = df_weights_high * df_returns[c.windows:]
 df_perf_low = df_returns_low.sum(axis=1)
 df_perf_low[0] = 0
 df_price_low = df_perf_low.add(1).cumprod()*100
-print(df_price_low.tail(3))
+#print(df_price_low.tail(3))
 df_price_low.to_csv(f"../data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
-print(df_price_high.tail(3))
+#print(df_price_high.tail(3))
 df_price_high.to_csv(f"../data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#turnover rate
+df_metrics = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+turnover_monthly = getMonthlyTurnover(df_weights_low)
+df_metrics.loc["Low Vol", "monthly_turnover"] = turnover_monthly
+turnover_monthly = getMonthlyTurnover(df_weights_high)
+df_metrics.loc["High Vol", "monthly_turnover"] = turnover_monthly
+print(df_metrics)
+df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")

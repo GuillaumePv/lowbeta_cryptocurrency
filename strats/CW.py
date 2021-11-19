@@ -68,5 +68,5 @@ df_price.to_csv(f"../data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}.c
 #turnover rate
 df_metrics = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 turnover_monthly = getMonthlyTurnover(df_weights)
-df_metrics.loc["CW", "Turnover"] = turnover_monthly
+df_metrics.loc["CW", "monthly_turnover"] = turnover_monthly
 df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
