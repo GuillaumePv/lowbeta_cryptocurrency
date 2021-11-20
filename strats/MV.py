@@ -16,6 +16,7 @@ import sys
 sys.path.insert(1, os.path.realpath(os.path.pardir))
 from scipy.optimize import minimize
 import config as c
+from functions import getMonthlyTurnover
 marketcap = format(c.market_cap,'.0e')
 
 #min variance opti
@@ -58,3 +59,10 @@ df_perf = df_returns_MV.sum(axis=1)
 df_perf[0] = 0
 df_price = df_perf.add(1).cumprod()*100
 df_price.to_csv(f"../data/strats/MV_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#turnover rate
+df_metrics = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+turnover_monthly = getMonthlyTurnover(df_weights)
+df_metrics.loc["MV", "monthly_turnover"] = turnover_monthly
+print(df_metrics)
+df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")

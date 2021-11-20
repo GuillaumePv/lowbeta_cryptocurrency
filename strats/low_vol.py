@@ -17,6 +17,7 @@ sys.path.insert(1, os.path.realpath(os.path.pardir))
 import inspect
 
 import config as c
+from functions import getMonthlyTurnover
 marketcap = format(c.market_cap,'.0e')
 
 #get returns
@@ -29,12 +30,36 @@ df_vol = df_returns.rolling(c.windows).std().fillna(0)[c.windows:]
 df_weights_low = df_vol.copy()
 df_weights_high = df_vol.copy()
 
+#low weights
+df_weights_low = df_weights_low.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
+for i in range(1,5):
+    df_weights_low.replace({i:10}, inplace=True)
+df_weights_low.replace({0:1}, inplace=True)
+df_weights_low.replace({10:0}, inplace=True)
+df_weights_low['sum'] = df_weights_low.sum(axis=1)
+for col in df_weights_low.iloc[:, :-1].columns:
+    df_weights_low[col] = df_weights_low[col]/df_weights_low['sum']
+del df_weights_low['sum']
+
+#high weights
+df_weights_high = df_weights_high.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
+for i in range(1,4):
+    df_weights_high.replace({i:0}, inplace=True)
+df_weights_high.replace({4:1}, inplace=True)
+df_weights_high['sum'] = df_weights_high.sum(axis=1)
+
+for col in df_weights_high.iloc[:, :-1].columns:
+    df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
+del df_weights_high['sum']
+
+
+"""
 avg = pd.Series(df_vol.median(axis=1), index=df_vol.index)
 
 for i in tqdm(df_vol.index):
     df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: 2/(c.number_cryptos) if x <= avg.loc[i] else 0)
     df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: 2/(c.number_cryptos) if x > avg.loc[i] else 0)
-
+"""
 
 #print(avg[:2])
 #print(df_vol.head(2).iloc[:, :10])
@@ -48,11 +73,20 @@ df_returns_high = df_weights_high * df_returns[c.windows:]
 df_perf_low = df_returns_low.sum(axis=1)
 df_perf_low[0] = 0
 df_price_low = df_perf_low.add(1).cumprod()*100
-print(df_price_low.tail(3))
+#print(df_price_low.tail(3))
 df_price_low.to_csv(f"../data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
-print(df_price_high.tail(3))
+#print(df_price_high.tail(3))
 df_price_high.to_csv(f"../data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#turnover rate
+df_metrics = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+turnover_monthly = getMonthlyTurnover(df_weights_low)
+df_metrics.loc["Low Vol", "monthly_turnover"] = turnover_monthly
+turnover_monthly = getMonthlyTurnover(df_weights_high)
+df_metrics.loc["High Vol", "monthly_turnover"] = turnover_monthly
+print(df_metrics)
+df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
