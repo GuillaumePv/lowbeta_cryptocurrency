@@ -9,4 +9,5 @@
 - [x] create a make file
 - [x] create tree structure
 - [ ] create relative path correctly
+- [ ] faire des regressions
 ≤<<< ## question prof

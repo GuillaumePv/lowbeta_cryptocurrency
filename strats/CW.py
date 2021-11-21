@@ -21,11 +21,9 @@ style.use('fivethirtyeight')
 
 import plotly.express as px
 
-import os
 import sys
-sys.path.insert(1, os.path.realpath(os.path.pardir))
+sys.path.append('..')
 
-from scipy.optimize import minimize
 import config as c
 from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30
 marketcap = format(c.market_cap,'.0e')
@@ -42,7 +40,6 @@ df_marketcap = pd.read_csv('../data/processed/market_cap_crypto.csv', index_col=
 df_marketcap = df_marketcap.loc[df_marketcap.index > first_date]
 df_marketcap = df_marketcap.loc[:, df_market_cap_first['crypto_name']]
 df_marketcap['sum'] = df_marketcap.sum(axis=1)
-print(df_marketcap.shape)
 
 #weigths
 df_weights = pd.DataFrame(index=df_marketcap.index, columns=df_marketcap.iloc[:, :-1].columns)
