@@ -40,19 +40,19 @@ df_returns.to_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{market
 #metrics creation
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover'],
-    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta'])
+    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW'])
 
 df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #metrics for rebalanced
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover'],
-    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta'])
+    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW'])
 
 df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover'],
-    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta'])
+    index=['CW', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW'])
 
 df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
