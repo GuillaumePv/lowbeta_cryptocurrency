@@ -26,6 +26,7 @@ app.layout = html.Div([
     dcc.Checklist(
         id='check',
         options=[{'label': '  Cap Weighted', 'value': 'cap_weighted_index'},
+                 {'label': '  Cap Weighted no BTC', 'value': 'cap_weighted_index_noBTC'},
                  {'label': '  Equal Weighted', 'value': 'ponderated_index'},
                  {'label': '  Minimum Variance', 'value': 'MV'},
                  {'label': '  High Volatility', 'value': 'HV'},
@@ -34,6 +35,8 @@ app.layout = html.Div([
                  {'label': '  High Beta', 'value': 'HB'},
                  {'label': '  Low Beta EW', 'value': 'LB_EW'},
                  {'label': '  High Beta EW', 'value': 'HB_EW'},
+                 {'label': '  Low Beta noBTC', 'value': 'LB_noBTC'},
+                 {'label': '  High Beta noBTC', 'value': 'HB_noBTC'},
                  ],
         value=['cap_weighted_index', 'ponderated_index'],
         labelStyle={'display': 'block'}

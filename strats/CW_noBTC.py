@@ -1,10 +1,6 @@
 #message for makefile
 print(40*"=")
-print("STARTING STRATS")
-print(40*"=")
-
-print(40*"=")
-print("CW strat")
+print("CW noBTC")
 print(40*"=")
 
 import pandas as pd
@@ -67,3 +63,15 @@ df_perf[0] = 0
 df_price = df_perf.add(1).cumprod()*100
 df_price.to_csv(f"../data/strats/CW_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 print(df_price.tail(3))
+
+#rebalance 7 days
+results_7 = createPortfolio7(df_weights, df_returns)
+df_price_7 = results_7[0]
+turnover_monthly_7 = results_7[1]
+df_price_7.to_csv(f"../data/strats/CW_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+
+#rebalance 30 days
+results_30 = createPortfolio30(df_weights, df_returns)
+df_price_30 = results_30[0]
+turnover_monthly_30 = results_30[1]
+df_price_30.to_csv(f"../data/strats/CW_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
