@@ -79,7 +79,8 @@ df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 #for i in df_list_adj:
 #    print(len(i))
 
-CW = df_list_adj[0] #because of truncated
+CW = df_list_adj[0]
+EW = df_list_adj[1] #because of truncated
 
 #First some simple metrics
 ##########################
@@ -118,7 +119,10 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    bench_returns = CW.iloc[:, 0].pct_change()
+    if idx_metric < 7:
+        bench_returns = CW.iloc[:, 0].pct_change()
+    elif 7 <= idx_metric < 9:
+        bench_returns = EW.iloc[:, 0].pct_change()
     #print(len(CW))
     #print(len(df))
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
@@ -207,7 +211,8 @@ df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.
 #for i in df_list_adj:
 #    print(len(i))
 
-CW = df_list_adj[0] #because of truncated
+CW = df_list_adj[0]
+EW = df_list_adj[1] #because of truncated
 
 #First some simple metrics
 ##########################
@@ -246,7 +251,10 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    bench_returns = CW.iloc[:, 0].pct_change()
+    if idx_metric < 7:
+        bench_returns = CW.iloc[:, 0].pct_change()
+    elif 7 <= idx_metric < 9:
+        bench_returns = EW.iloc[:, 0].pct_change()
     #print(len(CW))
     #print(len(df))
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
@@ -335,7 +343,8 @@ df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30
 #for i in df_list_adj:
 #    print(len(i))
 
-CW = df_list_adj[0] #because of truncated
+CW = df_list_adj[0]
+EW = df_list_adj[1] #because of truncated
 
 #First some simple metrics
 ##########################
@@ -374,7 +383,10 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    bench_returns = CW.iloc[:, 0].pct_change()
+    if idx_metric < 7:
+        bench_returns = CW.iloc[:, 0].pct_change()
+    elif 7 <= idx_metric < 9:
+        bench_returns = EW.iloc[:, 0].pct_change()
     #print(len(CW))
     #print(len(df))
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
