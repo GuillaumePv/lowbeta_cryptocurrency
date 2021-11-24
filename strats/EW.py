@@ -30,6 +30,7 @@ df_returns_EW = df_returns * df_weights
 
 #portfolio
 df_perf = df_returns_EW.sum(axis=1)
+df_perf.to_csv(f"../data/processed/EW_perf_{c.number_cryptos}_1e{marketcap[-1]}.csv") #for the low beta calc
 df_perf[0] = 0
 df_price = df_perf.add(1).cumprod()*100
 

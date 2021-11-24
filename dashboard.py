@@ -26,13 +26,17 @@ app.layout = html.Div([
     dcc.Checklist(
         id='check',
         options=[{'label': '  Cap Weighted', 'value': 'cap_weighted_index'},
+                 {'label': '  Cap Weighted no BTC', 'value': 'cap_weighted_index_noBTC'},
                  {'label': '  Equal Weighted', 'value': 'ponderated_index'},
                  {'label': '  Minimum Variance', 'value': 'MV'},
                  {'label': '  High Volatility', 'value': 'HV'},
                  {'label': '  Low Volatility', 'value': 'LV'},
-                 {'label': '  Risk Parity', 'value': 'RP'},
                  {'label': '  Low Beta', 'value': 'LB'},
                  {'label': '  High Beta', 'value': 'HB'},
+                 {'label': '  Low Beta EW', 'value': 'LB_EW'},
+                 {'label': '  High Beta EW', 'value': 'HB_EW'},
+                 {'label': '  Low Beta noBTC', 'value': 'LB_noBTC'},
+                 {'label': '  High Beta noBTC', 'value': 'HB_noBTC'},
                  ],
         value=['cap_weighted_index', 'ponderated_index'],
         labelStyle={'display': 'block'}
@@ -122,7 +126,7 @@ def update_figure(value):
             df = df[value]
             fig.update_layout(font_color="White",
                 margin=dict(l=50, r=20, t=20, b=20),
-                paper_bgcolor="rgb(0,0,0,0)", plot_bgcolor="rgb(0,0,0,0)", colorway=['#0AF047', '#0EEEF0','#ffbf00','#cd9575','#4b5320', '#0EEEF0'], xaxis=dict(showgrid=False),
+                paper_bgcolor="rgb(0,0,0,0)", plot_bgcolor="rgb(0,0,0,0)", colorway=['#0AF047', '#0EEEF0','#ffbf00','#cd9575','#4b5320', '#0EEEF0','#ffbf00','#cd9575'], xaxis=dict(showgrid=False),
      yaxis=dict(showgrid=False)
             )
             fig.add_trace(go.Scatter(x=df.index, y=df[val],
