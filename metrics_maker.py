@@ -127,21 +127,24 @@ for idx_metric,df in enumerate(df_list_adj):
     #beta
     if idx_metric < 8:
         bench_returns = CW.iloc[:, 0].pct_change()
-    elif 8 <= idx_metric < 10:
+    elif idx_metric < 11:
         bench_returns = EW.iloc[:, 0].pct_change()
-    elif 10 <= idx_metric < 12:
+    elif idx_metric < 13:
         bench_returns = CW_noBTC.iloc[:, 0].pct_change()
 
     #print(len(bench_returns))
     #print(len(df))
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
     df_cov.dropna(inplace=True)
-    cov = df_cov.cov().iloc[0,1]
-    beta = cov/pow(df.iloc[:, 0].pct_change().std(),2)
-    #print("---")
-    #print(idx_metric)
-    #print(cov)
-    #print(pow(df.iloc[:, 0].pct_change().std(),2))
+    cov_matrix = df_cov.cov()
+    cov = cov_matrix.iloc[0,1]
+    var = cov_matrix.iloc[0,0]
+    beta = cov/var
+    print("---")
+    print(idx_metric)
+    #print(df_cov.cov())
+    print(cov)
+    print(pow(bench_returns.std(),2))
     df_metrics.iloc[idx_metric, 4] = beta
 
     #Max drawdown
@@ -271,17 +274,19 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    if idx_metric < 8:
+    if idx_metric < 9:
         bench_returns = CW.iloc[:, 0].pct_change()
-    elif 8 <= idx_metric < 10:
+    elif idx_metric < 11:
         bench_returns = EW.iloc[:, 0].pct_change()
-    elif 10 <= idx_metric < 12:
+    elif idx_metric < 13:
         bench_returns = CW_noBTC.iloc[:, 0].pct_change()
 
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
     df_cov.dropna(inplace=True)
-    cov = df_cov.cov().iloc[0,1]
-    beta = cov/pow(df.iloc[:, 0].pct_change().std(),2)
+    cov_matrix = df_cov.cov()
+    cov = cov_matrix.iloc[0,1]
+    var = cov_matrix.iloc[0,0]
+    beta = cov/var
     df_metrics.iloc[idx_metric, 4] = beta
 
     #Max drawdown
@@ -300,7 +305,7 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
     df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-print(df_metrics)
+#print(df_metrics)
 
 #####################
 #REBALANCE 30 METRICS
@@ -410,19 +415,21 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    if idx_metric < 8:
+    if idx_metric < 9:
         bench_returns = CW.iloc[:, 0].pct_change()
-    elif 8 <= idx_metric < 10:
+    elif idx_metric < 11:
         bench_returns = EW.iloc[:, 0].pct_change()
-    elif 10 <= idx_metric < 12:
+    elif idx_metric < 13:
         bench_returns = CW_noBTC.iloc[:, 0].pct_change()
 
     #print(len(CW))
     #print(len(df))
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
     df_cov.dropna(inplace=True)
-    cov = df_cov.cov().iloc[0,1]
-    beta = cov/pow(df.iloc[:, 0].pct_change().std(),2)
+    cov_matrix = df_cov.cov()
+    cov = cov_matrix.iloc[0,1]
+    var = cov_matrix.iloc[0,0]
+    beta = cov/var
     df_metrics.iloc[idx_metric, 4] = beta
 
     #Max drawdown
@@ -441,4 +448,4 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
     df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-print(df_metrics)
+#print(df_metrics)
