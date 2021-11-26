@@ -31,7 +31,7 @@ df_beta = pd.DataFrame(index=df_returns.index, columns=df_returns.columns)
 for i, idx in enumerate(df_returns.index):
     if i > 0:
         cov = df_returns.loc[:idx, :].cov()
-        df_beta.loc[idx] = cov.iloc[:, -1].values / np.diag(cov)
+        df_beta.loc[idx] = cov.iloc[-1, :].values / cov.iloc[-1, -1]
 
 
 
