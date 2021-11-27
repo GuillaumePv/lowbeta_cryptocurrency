@@ -10,20 +10,32 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 style.use('fivethirtyeight')
 import plotly.express as px
+
+from pathlib import Path
+
+## Absolute path to use in all file
+path_original = Path(__file__).resolve().parents[0]
+
+path_data_processed = (path_original / "../data/processed/").resolve()
+
 import os
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+
 import sys
-sys.path.insert(1, os.path.realpath(os.path.pardir))
+sys.path.append(parentdir)
+
 import config as c
 
 marketcap = format(c.market_cap,'.0e')
-df_market_cap = pd.read_csv(f'../data/processed/crypto_date_marketcap_sorted_1e{marketcap[-1]}.csv', index_col=0)
+df_market_cap = pd.read_csv(f'{path_data_processed}/crypto_date_marketcap_sorted_1e{marketcap[-1]}.csv', index_col=0)
 df_market_cap_first = df_market_cap.iloc[:c.number_cryptos]
 
 first_date = df_market_cap_first['first_date_marketcap'].tail(1).values
 first_date = first_date[0]
 
 
-df_close_adj = pd.read_csv('../data/processed/close_price_crypto.csv', index_col=0)
+df_close_adj = pd.read_csv(f'{path_data_processed}/close_price_crypto.csv', index_col=0)
 df_close_adj = df_close_adj.loc[df_close_adj.index > first_date]
 df_close_adj = df_close_adj.loc[:, df_market_cap_first['crypto_name']]
 #print(df_close_adj.head(1).iloc[:, :6])
@@ -35,24 +47,24 @@ df_returns.fillna(0, inplace=True)
 #print(len(df_returns))
 
 #print(df_returns.iloc[210:250])
-df_returns.to_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_returns.to_csv(f"{path_data_processed}/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #metrics creation
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover'],
     index=['CW', 'CW_noBTC', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW', 'Low Beta noBTC', 'High Beta noBTC'])
 
-df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #metrics for rebalanced
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover'],
     index=['CW', 'CW_noBTC', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW', 'Low Beta noBTC', 'High Beta noBTC'])
 
-df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover'],
     index=['CW', 'CW_noBTC', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW', 'Low Beta noBTC', 'High Beta noBTC'])
 
-df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")

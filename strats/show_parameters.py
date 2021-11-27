@@ -1,6 +1,10 @@
 import os
+
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+
 import sys
-sys.path.insert(1, os.path.realpath(os.path.pardir))
+sys.path.append(parentdir)
 import config as c
 
 print("=== our parameters ===")

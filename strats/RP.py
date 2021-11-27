@@ -9,12 +9,26 @@ from matplotlib import style
 style.use('fivethirtyeight')
 from tqdm import tqdm
 import plotly.express as px
-import os
-import sys
 
 from scipy.optimize import minimize
-sys.path.insert(1, os.path.realpath(os.path.pardir))
+
+from pathlib import Path
+
+## Absolute path to use in all file
+path_original = Path(__file__).resolve().parents[0]
+
+path_data_processed = (path_original / "../data/processed/").resolve()
+path_data_strat = (path_original / "../data/strats/").resolve()
+
+import os
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+
+import sys
+sys.path.append(parentdir)
+
 import config as c
+
 from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30
 marketcap = format(c.market_cap,'.0e')
 
@@ -94,7 +108,7 @@ def optimizer_ERC(ERC_df):
 
 print("=== load return data ===")
 #get returns
-df_returns = pd.read_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+df_returns = pd.read_csv(f"{path_data_processed}/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
 
 print("=== launch algo ERC ===")
@@ -114,22 +128,22 @@ df_perf[0] = 0
 df_price = df_perf.add(1).cumprod()*100
 print(df_price)
 print("=== save results ===")
-df_price.to_csv(f"../data/strats/ERC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_price.to_csv(f"{path_data_strat}/ERC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #rebalance 7 days
 results_7 = createPortfolio7(df_weights, df_returns)
 df_price_7 = results_7[0]
 turnover_monthly_7 = results_7[1]
-df_metrics_7 = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
+df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 df_metrics_7.loc["CW", "monthly_turnover"] = turnover_monthly_7
-df_metrics_7.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-df_price_7.to_csv(f"../data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_price_7.to_csv(f"{path_data_strat}/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 #rebalance 30 days
 results_30 = createPortfolio30(df_weights, df_returns)
 df_price_30 = results_30[0]
 turnover_monthly_30 = results_30[1]
-df_metrics_30 = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
+df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 df_metrics_30.loc["CW", "monthly_turnover"] = turnover_monthly_30
-df_metrics_30.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-df_price_30.to_csv(f"../data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_price_30.to_csv(f"{path_data_strat}/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")

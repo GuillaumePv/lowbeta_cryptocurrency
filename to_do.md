@@ -1,13 +1,13 @@
 ## To-do
-- [ ] create % of reduction of portfolio compared to index
-- [ ] clean project
+- [x] clean project
 - [ ] add comments
-- [ ] create a arg parser for config file 
-- [ ] refaire strategy low vol
+- [x] refaire strategy low vol
 - [ ] create dynamic algo
-- [ ] finish turnover metric
+- [x] finish turnover metric
 - [x] create a make file
 - [x] create tree structure
 - [ ] create relative path correctly
 - [ ] faire des regressions
+- [ ] create graph (vol / return) => plot (https://www.robeco.com/fr/nos-points-forts/investissement-quantitatif/glossary/low-volatility-factor.html)
+- [ ] faire plot pour comparer index & strat
 ≤<<< ## question prof

@@ -8,22 +8,31 @@ from datetime import timedelta
 
 from tqdm import tqdm
 
+from pathlib import Path
+
+## Absolute path to use in all file
+path_original = Path(__file__).resolve().parents[0]
+path_data = (path_original / "../data/raw/").resolve()
+path_data_processed = (path_original / "../data/processed/").resolve()
+
 import os
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+
 import sys
-import inspect
-sys.path.insert(1, os.path.realpath(os.path.pardir))
+sys.path.append(parentdir)
 
 import config as c
 
 ## create file to know first date of crypto ##
 crypto = []
 first_dates = []
-files = os.listdir('../data/raw/')
+files = os.listdir(path_data)
 
 for f in tqdm(files[:]):
     try:
         #print(f.split(".")[0])
-        df = pd.read_pickle(f"../data/raw/{f}")
+        df = pd.read_pickle(f"{path_data}/{f}")
         #print(df.head(5))
         date = datetime.date(df.index[0])
         first_dates.append(date)
@@ -39,7 +48,7 @@ data = {
 df = pd.DataFrame(data)
 df = df.sort_values('first_date')
 df.reset_index(inplace=True, drop=True)
-df.to_csv('../data/processed/first_date_crypto_list_sorted.csv')
+df.to_csv(f'{path_data_processed}/first_date_crypto_list_sorted.csv')
 
 
 #get first date of appearence of the set market_cap
@@ -52,7 +61,7 @@ list_crypto = []
 for f in tqdm(files[:]):
     try:
         #print(f.split(".")[0])
-        df = pd.read_pickle(f"../data/raw/{f}")
+        df = pd.read_pickle(f"{path_data}/{f}")
         #print(df.head(5))
         df['Condition'] = df['marketcap'] >= test_marketcap
         index = df[df.Condition!=False].first_valid_index()
@@ -71,4 +80,4 @@ data = {
 df_market_cap = pd.DataFrame(data)
 df_market_cap = df_market_cap.sort_values('first_date_marketcap')
 marketcap = format(c.market_cap,'.0e')
-df_market_cap.to_csv(f'../data/processed/crypto_date_marketcap_sorted_1e{marketcap[-1]}.csv')
+df_market_cap.to_csv(f'{path_data_processed}/crypto_date_marketcap_sorted_1e{marketcap[-1]}.csv')

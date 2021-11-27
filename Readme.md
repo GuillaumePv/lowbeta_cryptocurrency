@@ -1,7 +1,3 @@
-# Presentation Project
-
-
-
 ## Ideas
 - low beta => buy low beta and sell high beta
 - low vol => buy low vol and sell high vol
@@ -149,6 +145,7 @@ In construction
 - https://www.econstor.eu/bitstream/10419/158007/1/887992064.pdf
 - https://www.solactive.com/wp-content/uploads/2019/04/Solactive-Index-Guideline-CMC200.pdf
 - https://iranarze.ir/wp-content/uploads/2021/01/11310-English-IranArze.pdf
+- https://www.sciencedirect.com/science/article/pii/S2405844021022714 (Factor investing: A stock selection methodology for the European equity market)
 
 ## Indicators
 - Beta
@@ -158,5 +155,3 @@ In construction
 - Kurtosis
 - Sharpe Ratio
 - Excess return
-
-## Further works

@@ -11,17 +11,26 @@ import matplotlib.pyplot as plt
 
 from tqdm import tqdm
 
+from pathlib import Path
+
+## Absolute path to use in all file
+path_original = Path(__file__).resolve().parents[0]
+path_data_processed = (path_original / "../data/processed/").resolve()
+path_data_strat = (path_original / "../data/strats/").resolve()
+
 import os
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+
 import sys
-sys.path.insert(1, os.path.realpath(os.path.pardir))
-import inspect
+sys.path.append(parentdir)
 
 import config as c
 from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30
 marketcap = format(c.market_cap,'.0e')
 
 #get returns
-df_returns = pd.read_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+df_returns = pd.read_csv(f"{path_data_processed}/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
 #get_vol
 df_vol = df_returns.rolling(c.windows).std().fillna(0)[c.windows:]
@@ -74,53 +83,53 @@ df_perf_low = df_returns_low.sum(axis=1)
 df_perf_low[0] = 0
 df_price_low = df_perf_low.add(1).cumprod()*100
 #print(df_price_low.tail(3))
-df_price_low.to_csv(f"../data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_price_low.to_csv(f"{path_data_processed}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
 #print(df_price_high.tail(3))
-df_price_high.to_csv(f"../data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_price_high.to_csv(f"{path_data_strat}/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #turnover rate
-df_metrics = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+df_metrics = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 turnover_monthly = getMonthlyTurnover(df_weights_low)
 df_metrics.loc["Low Vol", "monthly_turnover"] = turnover_monthly
 turnover_monthly = getMonthlyTurnover(df_weights_high)
 df_metrics.loc["High Vol", "monthly_turnover"] = turnover_monthly
 print(df_metrics)
-df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #rebalance 7 days
 results_7 = createPortfolio7(df_weights_low, df_returns)
 df_price_7 = results_7[0]
 turnover_monthly_7 = results_7[1]
-df_metrics_7 = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
+df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 df_metrics_7.loc["Low Vol", "monthly_turnover"] = turnover_monthly_7
-df_metrics_7.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-df_price_7.to_csv(f"../data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_price_7.to_csv(f"{path_data_strat}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 results_7 = createPortfolio7(df_weights_high, df_returns)
 df_price_7 = results_7[0]
 turnover_monthly_7 = results_7[1]
-df_metrics_7 = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
+df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 df_metrics_7.loc["High Vol", "monthly_turnover"] = turnover_monthly_7
-df_metrics_7.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-df_price_7.to_csv(f"../data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_price_7.to_csv(f"{path_data_strat}/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 #rebalance 30 days
 results_30 = createPortfolio30(df_weights_low, df_returns)
 df_price_30 = results_30[0]
 turnover_monthly_30 = results_30[1]
-df_metrics_30 = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
+df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 df_metrics_30.loc["Low Vol", "monthly_turnover"] = turnover_monthly_30
-df_metrics_30.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-df_price_30.to_csv(f"../data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_price_30.to_csv(f"{path_data_strat}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 
 results_30 = createPortfolio30(df_weights_high, df_returns)
 df_price_30 = results_30[0]
 turnover_monthly_30 = results_30[1]
-df_metrics_30 = pd.read_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
+df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 df_metrics_30.loc["High Vol", "monthly_turnover"] = turnover_monthly_30
-df_metrics_30.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-df_price_30.to_csv(f"../data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_price_30.to_csv(f"{path_data_strat}/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
