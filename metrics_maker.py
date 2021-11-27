@@ -127,9 +127,9 @@ for idx_metric,df in enumerate(df_list_adj):
     #beta
     if idx_metric < 8:
         bench_returns = CW.iloc[:, 0].pct_change()
-    elif idx_metric < 11:
+    elif idx_metric < 10:
         bench_returns = EW.iloc[:, 0].pct_change()
-    elif idx_metric < 13:
+    elif idx_metric < 12:
         bench_returns = CW_noBTC.iloc[:, 0].pct_change()
 
     #print(len(bench_returns))
@@ -274,11 +274,11 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    if idx_metric < 9:
+    if idx_metric < 8:
         bench_returns = CW.iloc[:, 0].pct_change()
-    elif idx_metric < 11:
+    elif idx_metric < 10:
         bench_returns = EW.iloc[:, 0].pct_change()
-    elif idx_metric < 13:
+    elif idx_metric < 12:
         bench_returns = CW_noBTC.iloc[:, 0].pct_change()
 
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
@@ -415,11 +415,11 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
 
     #beta
-    if idx_metric < 9:
+    if idx_metric < 8:
         bench_returns = CW.iloc[:, 0].pct_change()
-    elif idx_metric < 11:
+    elif idx_metric < 10:
         bench_returns = EW.iloc[:, 0].pct_change()
-    elif idx_metric < 13:
+    elif idx_metric < 12:
         bench_returns = CW_noBTC.iloc[:, 0].pct_change()
 
     #print(len(CW))
