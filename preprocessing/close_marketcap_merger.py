@@ -20,7 +20,7 @@ print("close_marketcap_merger")
 print(40*"=")
 
 df = pd.read_pickle(f"{path_data}/bitcoin.pkl")
-print(df.head(5))
+#print(df.head(5))
 
 files = os.listdir(f'{path_data}')
 

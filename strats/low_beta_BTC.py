@@ -1,5 +1,5 @@
 print(40*"=")
-print("Low_Beta no BTC strat")
+print("Low_Beta BTC strat")
 print(40*"=")
 
 import pandas as pd
@@ -33,10 +33,10 @@ marketcap = format(c.market_cap,'.0e')
 
 #get returns
 df_returns = pd.read_csv(f"{path_data_processed}/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-df_returns_noBTC = pd.read_csv(f"{path_data_processed}/CW_noBTC_perf_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+df_returns_BTC = pd.read_csv(f"{path_data_processed}/BTC_perf_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
 #beta calc
-df_returns['noBTC'] = df_returns_noBTC.iloc[:, 0] #add the market cap weighted returns
+df_returns['BTC'] = df_returns_BTC #add the market cap weighted returns
 df_beta = pd.DataFrame(index=df_returns.index, columns=df_returns.columns)
 
 for i, idx in enumerate(df_returns.index):
@@ -93,20 +93,20 @@ df_perf_low = df_returns_low.sum(axis=1)
 df_perf_low[0] = 0
 df_price_low = df_perf_low.add(1).cumprod()*100
 #print(df_price_low.tail(3))
-df_price_low.to_csv(f"{path_data_strat}/Low_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_price_low.to_csv(f"{path_data_strat}/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
 #print(df_price_high.tail(3))
-df_price_high.to_csv(f"{path_data_strat}/High_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_price_high.to_csv(f"{path_data_strat}/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #turnover rate
 df_metrics = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 turnover_monthly = getMonthlyTurnover(df_weights_low)
-df_metrics.loc["Low Beta noBTC", "monthly_turnover"] = turnover_monthly
+df_metrics.loc["Low Beta BTC", "monthly_turnover"] = turnover_monthly
 turnover_monthly = getMonthlyTurnover(df_weights_high)
-df_metrics.loc["High Beta noBTC", "monthly_turnover"] = turnover_monthly
+df_metrics.loc["High Beta BTC", "monthly_turnover"] = turnover_monthly
 #print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
@@ -115,31 +115,31 @@ results_7 = createPortfolio7(df_weights_low, df_returns)
 df_price_7 = results_7[0]
 turnover_monthly_7 = results_7[1]
 df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
-df_metrics_7.loc["Low Beta noBTC", "monthly_turnover"] = turnover_monthly_7
+df_metrics_7.loc["Low Beta BTC", "monthly_turnover"] = turnover_monthly_7
 df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-df_price_7.to_csv(f"{path_data_strat}/Low_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_price_7.to_csv(f"{path_data_strat}/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 results_7 = createPortfolio7(df_weights_high, df_returns)
 df_price_7 = results_7[0]
 turnover_monthly_7 = results_7[1]
 df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
-df_metrics_7.loc["High Beta noBTC", "monthly_turnover"] = turnover_monthly_7
+df_metrics_7.loc["High Beta BTC", "monthly_turnover"] = turnover_monthly_7
 df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-df_price_7.to_csv(f"{path_data_strat}/High_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_price_7.to_csv(f"{path_data_strat}/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 #rebalance 30 days
 results_30 = createPortfolio30(df_weights_low, df_returns)
 df_price_30 = results_30[0]
 turnover_monthly_30 = results_30[1]
 df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-df_metrics_30.loc["Low Beta noBTC", "monthly_turnover"] = turnover_monthly_30
+df_metrics_30.loc["Low Beta BTC", "monthly_turnover"] = turnover_monthly_30
 df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-df_price_30.to_csv(f"{path_data_strat}/Low_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_price_30.to_csv(f"{path_data_strat}/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 
 results_30 = createPortfolio30(df_weights_high, df_returns)
 df_price_30 = results_30[0]
 turnover_monthly_30 = results_30[1]
 df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-df_metrics_30.loc["High Beta noBTC", "monthly_turnover"] = turnover_monthly_30
+df_metrics_30.loc["High Beta BTC", "monthly_turnover"] = turnover_monthly_30
 df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-df_price_30.to_csv(f"{path_data_strat}/High_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_price_30.to_csv(f"{path_data_strat}/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")

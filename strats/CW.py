@@ -88,7 +88,7 @@ turnover_monthly_7 = results_7[1]
 df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 df_metrics_7.loc["CW", "monthly_turnover"] = turnover_monthly_7
 df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-df_price_7.to_csv(f"{path_data_processed}/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
+df_price_7.to_csv(f"{path_data_strat}/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 #rebalance 30 days
 results_30 = createPortfolio30(df_weights, df_returns)

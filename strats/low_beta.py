@@ -135,7 +135,7 @@ turnover_monthly_30 = results_30[1]
 df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 df_metrics_30.loc["Low Beta", "monthly_turnover"] = turnover_monthly_30
 df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-df_price_30.to_csv(f"{path_data_processed}/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_price_30.to_csv(f"{path_data_strat}/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 
 results_30 = createPortfolio30(df_weights_high, df_returns)
 df_price_30 = results_30[0]

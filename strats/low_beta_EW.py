@@ -142,4 +142,4 @@ turnover_monthly_30 = results_30[1]
 df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 df_metrics_30.loc["High Beta EW", "monthly_turnover"] = turnover_monthly_30
 df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-df_price_30.to_csv(f"{path_data_processed}/High_Beta_EW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
+df_price_30.to_csv(f"{path_data_strat}/High_Beta_EW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")

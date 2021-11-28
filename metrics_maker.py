@@ -22,7 +22,7 @@ marketcap = format(c.market_cap,'.0e')
 
 #create the dataframes
 CW = pd.read_csv(f"data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-CW_noBTC = pd.read_csv(f"data/strats/CW_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+BTC = pd.read_csv(f"data/strats/BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 EW = pd.read_csv(f"data/strats/EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 MV = pd.read_csv(f"data/strats/MV_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Vol = pd.read_csv(f"data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
@@ -32,10 +32,10 @@ Low_Beta = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{market
 High_Beta = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Beta_EW = pd.read_csv(f"data/strats/Low_Beta_EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 High_Beta_EW = pd.read_csv(f"data/strats/High_Beta_EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-Low_Beta_noBTC = pd.read_csv(f"data/strats/Low_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-High_Beta_noBTC = pd.read_csv(f"data/strats/High_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+Low_Beta_BTC = pd.read_csv(f"data/strats/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+High_Beta_BTC = pd.read_csv(f"data/strats/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
-df_list = [CW, CW_noBTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_noBTC, High_Beta_noBTC]
+df_list = [CW, BTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_BTC, High_Beta_BTC]
 
 #print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(Low_Beta), len(High_Beta))
 
@@ -53,7 +53,7 @@ print("DATE START", date_start)
 
 
 #create a df with all of the prices trunc
-list_df = ["cap_weighted_index", "CW_noBTC", "ponderated_index", "MV", "LV", "HV", "LB", "HB", "LB_EW", "HB_EW", "LB_noBTC", "HB_noBTC"]
+list_df = ["cap_weighted_index", "BTC", "ponderated_index", "MV", "LV", "HV", "LB", "HB", "LB_EW", "HB_EW", "LB_BTC", "HB_BTC"]
 
 #get df at same length & make them start at 100
 df_list_adj = []
@@ -83,7 +83,7 @@ df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 #    print(len(i))
 
 CW = df_list_adj[0]
-CW_noBTC = df_list_adj[1]
+BTC = df_list_adj[1]
 EW = df_list_adj[2] #because of truncated
 
 
@@ -130,7 +130,7 @@ for idx_metric,df in enumerate(df_list_adj):
     elif idx_metric < 10:
         bench_returns = EW.iloc[:, 0].pct_change()
     elif idx_metric < 12:
-        bench_returns = CW_noBTC.iloc[:, 0].pct_change()
+        bench_returns = BTC.iloc[:, 0].pct_change()
 
     #print(len(bench_returns))
     #print(len(df))
@@ -140,11 +140,11 @@ for idx_metric,df in enumerate(df_list_adj):
     cov = cov_matrix.iloc[0,1]
     var = cov_matrix.iloc[0,0]
     beta = cov/var
-    print("---")
-    print(idx_metric)
+    #print("---")
+    #print(idx_metric)
     #print(df_cov.cov())
-    print(cov)
-    print(pow(bench_returns.std(),2))
+    #print(cov)
+    #print(pow(bench_returns.std(),2))
     df_metrics.iloc[idx_metric, 4] = beta
 
     #Max drawdown
@@ -162,6 +162,7 @@ for idx_metric,df in enumerate(df_list_adj):
         df_metrics.iloc[idx_metric, 7] = df['excess_returns'].sum()/df_metrics.iloc[idx_metric, 6]
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+c
 print(df_metrics)
 
 
@@ -171,7 +172,7 @@ print(df_metrics)
 
 #create the dataframes
 CW = pd.read_csv(f"data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
-CW_noBTC = pd.read_csv(f"data/strats/CW_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
+BTC = pd.read_csv(f"data/strats/BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 EW = pd.read_csv(f"data/strats/EW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 MV = pd.read_csv(f"data/strats/MV_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 Low_Vol = pd.read_csv(f"data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
@@ -181,10 +182,10 @@ Low_Beta = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{market
 High_Beta = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 Low_Beta_EW = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 High_Beta_EW = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
-Low_Beta_noBTC = pd.read_csv(f"data/strats/Low_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
-High_Beta_noBTC = pd.read_csv(f"data/strats/High_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
+Low_Beta_BTC = pd.read_csv(f"data/strats/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
+High_Beta_BTC = pd.read_csv(f"data/strats/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 
-df_list = [CW,CW_noBTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_noBTC, High_Beta_noBTC]
+df_list = [CW,BTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_BTC, High_Beta_BTC]
 
 #print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(Low_Beta), len(High_Beta))
 
@@ -202,7 +203,7 @@ print("DATE START", date_start)
 
 
 #create a df with all of the prices trunc
-list_df = ["cap_weighted_index", "CW_noBTC", "ponderated_index", "MV", "LV", "HV", "LB", "HB", "LB_EW", "HB_EW", "LB_noBTC", "HB_noBTC"]
+list_df = ["cap_weighted_index", "BTC", "ponderated_index", "MV", "LV", "HV", "LB", "HB", "LB_EW", "HB_EW", "LB_BTC", "HB_BTC"]
 
 #get df at same length & make them start at 100
 df_list_adj = []
@@ -231,7 +232,7 @@ df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.
 #    print(len(i))
 
 CW = df_list_adj[0]
-CW_noBTC = df_list_adj[1]
+BTC = df_list_adj[1]
 EW = df_list_adj[2] #because of truncated
 
 
@@ -279,7 +280,7 @@ for idx_metric,df in enumerate(df_list_adj):
     elif idx_metric < 10:
         bench_returns = EW.iloc[:, 0].pct_change()
     elif idx_metric < 12:
-        bench_returns = CW_noBTC.iloc[:, 0].pct_change()
+        bench_returns = BTC.iloc[:, 0].pct_change()
 
     df_cov = pd.DataFrame({'CW':bench_returns.values, 'df_returns': df.iloc[:, 0].pct_change().values})
     df_cov.dropna(inplace=True)
@@ -305,7 +306,8 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
     df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-#print(df_metrics)
+print("REB 7")
+print(df_metrics)
 
 #####################
 #REBALANCE 30 METRICS
@@ -313,7 +315,7 @@ for idx_metric,df in enumerate(df_list_adj):
 
 #create the dataframes
 CW = pd.read_csv(f"data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-CW_noBTC = pd.read_csv(f"data/strats/CW_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
+BTC = pd.read_csv(f"data/strats/BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 EW = pd.read_csv(f"data/strats/EW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 MV = pd.read_csv(f"data/strats/MV_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 Low_Vol = pd.read_csv(f"data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
@@ -323,10 +325,10 @@ Low_Beta = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{market
 High_Beta = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 Low_Beta_EW = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 High_Beta_EW = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-Low_Beta_noBTC = pd.read_csv(f"data/strats/Low_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-High_Beta_noBTC = pd.read_csv(f"data/strats/High_Beta_noBTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
+Low_Beta_BTC = pd.read_csv(f"data/strats/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
+High_Beta_BTC = pd.read_csv(f"data/strats/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 
-df_list = [CW, CW_noBTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_noBTC, High_Beta_noBTC]
+df_list = [CW, BTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_BTC, High_Beta_BTC]
 
 #print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(Low_Beta), len(High_Beta))
 
@@ -344,7 +346,7 @@ print("DATE START", date_start)
 
 
 #create a df with all of the prices trunc
-list_df = ["cap_weighted_index", "CW_noBTC", "ponderated_index", "MV", "LV", "HV", "LB", "HB", "LB_EW", "HB_EW", "LB_noBTC", "HB_noBTC"]
+list_df = ["cap_weighted_index", "BTC", "ponderated_index", "MV", "LV", "HV", "LB", "HB", "LB_EW", "HB_EW", "LB_BTC", "HB_BTC"]
 
 #get df at same length & make them start at 100
 df_list_adj = []
@@ -373,7 +375,7 @@ df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30
 #    print(len(i))
 
 CW = df_list_adj[0]
-CW_noBTC = df_list_adj[1] #because of truncated
+BTC = df_list_adj[1] #because of truncated
 EW = df_list_adj[2]
 
 
@@ -420,7 +422,7 @@ for idx_metric,df in enumerate(df_list_adj):
     elif idx_metric < 10:
         bench_returns = EW.iloc[:, 0].pct_change()
     elif idx_metric < 12:
-        bench_returns = CW_noBTC.iloc[:, 0].pct_change()
+        bench_returns = BTC.iloc[:, 0].pct_change()
 
     #print(len(CW))
     #print(len(df))
@@ -448,4 +450,5 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
     df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-#print(df_metrics)
+print("REB 30")
+print(df_metrics)
