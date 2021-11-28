@@ -39,36 +39,37 @@ df_vol = df_returns.rolling(c.windows).std().fillna(0)[c.windows:]
 df_weights_low = df_vol.copy()
 df_weights_high = df_vol.copy()
 
-#low weights
-df_weights_low = df_weights_low.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
-for i in range(1,5):
-    df_weights_low.replace({i:10}, inplace=True)
-df_weights_low.replace({0:1}, inplace=True)
-df_weights_low.replace({10:0}, inplace=True)
-df_weights_low['sum'] = df_weights_low.sum(axis=1)
-for col in df_weights_low.iloc[:, :-1].columns:
-    df_weights_low[col] = df_weights_low[col]/df_weights_low['sum']
-del df_weights_low['sum']
+if c.number_cryptos > 20:
+    #low weights
+    df_weights_low = df_weights_low.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
+    for i in range(1,5):
+        df_weights_low.replace({i:10}, inplace=True)
+    df_weights_low.replace({0:1}, inplace=True)
+    df_weights_low.replace({10:0}, inplace=True)
+    df_weights_low['sum'] = df_weights_low.sum(axis=1)
+    for col in df_weights_low.iloc[:, :-1].columns:
+        df_weights_low[col] = df_weights_low[col]/df_weights_low['sum']
+    del df_weights_low['sum']
 
-#high weights
-df_weights_high = df_weights_high.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
-for i in range(1,4):
-    df_weights_high.replace({i:0}, inplace=True)
-df_weights_high.replace({4:1}, inplace=True)
-df_weights_high['sum'] = df_weights_high.sum(axis=1)
+    #high weights
+    df_weights_high = df_weights_high.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
+    for i in range(1,4):
+        df_weights_high.replace({i:0}, inplace=True)
+    df_weights_high.replace({4:1}, inplace=True)
+    df_weights_high['sum'] = df_weights_high.sum(axis=1)
 
-for col in df_weights_high.iloc[:, :-1].columns:
-    df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
-del df_weights_high['sum']
+    for col in df_weights_high.iloc[:, :-1].columns:
+        df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
+    del df_weights_high['sum']
 
 
-"""
-avg = pd.Series(df_vol.median(axis=1), index=df_vol.index)
+else:
+    avg = pd.Series(df_vol.median(axis=1), index=df_vol.index)
 
-for i in tqdm(df_vol.index):
-    df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: 2/(c.number_cryptos) if x <= avg.loc[i] else 0)
-    df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: 2/(c.number_cryptos) if x > avg.loc[i] else 0)
-"""
+    for i in tqdm(df_vol.index):
+        df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: 2/(c.number_cryptos) if x <= avg.loc[i] else 0)
+        df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: 2/(c.number_cryptos) if x > avg.loc[i] else 0)
+
 
 #print(avg[:2])
 #print(df_vol.head(2).iloc[:, :10])
