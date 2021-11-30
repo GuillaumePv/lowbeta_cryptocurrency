@@ -39,11 +39,15 @@ df_returns = pd.read_csv(f"{path_data_processed}/returns_first_{c.number_cryptos
 df_returns_before = df_returns.loc[df_returns.index <= cut_date].copy()
 df_returns_after = df_returns.loc[df_returns.index > cut_date].copy()
 
+df_CW = pd.read_csv(f"{path_data_strat}/CW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+df_CW_before = df_CW.loc[df_returns_before.index]
+df_CW_after = df_CW.loc[df_returns_after.index]
+
 df = [df_returns_before, df_returns_after]
 
 #create a metrics df
 df_metrics = pd.DataFrame(
-    columns=['monthly_returns', 'volatility', 'sharpe'],
+    columns=['monthly_returns', 'volatility', 'sharpe', 'excess_returns'],
     index=['Low Vol Before', 'High Vol Before','Low Vol After', 'High Vol After' ])
 
 views = 0
@@ -114,15 +118,29 @@ for df_returns in df:
         df_metrics.iloc[views, 1] = df['volatility'].mean() * math.sqrt(365/12)
 
         #Total return
-        first_date = df.index[0] + relativedelta(day=31)
-        df_trunc = df.loc[first_date:]
-        #print(type(df_trunc.index[-1]))
-        #print(df_trunc)
-        number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
-        last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
-        df_month = df_trunc.loc[last_day_months, :]
-        df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
-        df_metrics.iloc[views, 0] = df_month['returns'].mean()
+        print(df_CW_before.head(3))
+        print(df.head(3))
+        def monthly_returns(df):
+            df.set_index(pd.to_datetime(df.index), inplace=True)
+            first_date = df.index[0] + relativedelta(day=31)
+            df_trunc = df.loc[first_date:]
+            number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
+            last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
+            df_month = df_trunc.loc[last_day_months, :]
+            df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+            return df_month['returns'].mean()
+
+        df_metrics.iloc[views, 0] = monthly_returns(df)
+
+        #excess_returns
+        if views < 2:
+            bench_returns = monthly_returns(df_CW_before)
+            print(bench_returns)
+            df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
+        else:
+            bench_returns = monthly_returns(df_CW_after)
+            print(bench_returns)
+            df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
 
         #sharpe
         last_date=df.index[-1].strftime("%Y-%m-%d")
