@@ -12,7 +12,7 @@ https://github.com/plotly/dash-sample-apps/tree/main/apps
 
 https://fr.tradingview.com/markets/cryptocurrencies/global-charts/
 
-Examples of github: 
+Examples of github:
 - https://github.com/sakex/qarmII
 - https://github.com/maxrel95/QARMII_TrendFollowing/blob/master/TrendFollowing_Topic15.pdf
 
@@ -41,13 +41,13 @@ Low Beta / low vol strategies in crypto market
 1) Clone project
 
 ```bash
-git clone 
+git clone
 ```
 
 2) Go into project folder
 
 ```bash
-cd 
+cd
 ```
 
 3) Create your virtual environment
@@ -146,6 +146,9 @@ In construction
 - https://www.solactive.com/wp-content/uploads/2019/04/Solactive-Index-Guideline-CMC200.pdf
 - https://iranarze.ir/wp-content/uploads/2021/01/11310-English-IranArze.pdf
 - https://www.sciencedirect.com/science/article/pii/S2405844021022714 (Factor investing: A stock selection methodology for the European equity market)
+- https://dune.xyz/rchen8/defi-users-over-time, for choosing the low vol split
+- https://brightnode.io/history-of-makerdao-project/, history of makerdao
+- https://compound.finance/documents/Compound.Whitepaper.pdf, compound whitepaper
 
 ## Indicators
 - Beta
