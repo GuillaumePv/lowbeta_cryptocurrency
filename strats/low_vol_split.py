@@ -118,8 +118,8 @@ for df_returns in df:
         df_metrics.iloc[views, 1] = df['volatility'].mean() * math.sqrt(365/12)
 
         #Total return
-        print(df_CW_before.head(3))
-        print(df.head(3))
+        #print(df_CW_before.head(3))
+        #print(df.head(3))
         def monthly_returns(df):
             df.set_index(pd.to_datetime(df.index), inplace=True)
             first_date = df.index[0] + relativedelta(day=31)
@@ -135,11 +135,11 @@ for df_returns in df:
         #excess_returns
         if views < 2:
             bench_returns = monthly_returns(df_CW_before)
-            print(bench_returns)
+            #print(bench_returns)
             df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
         else:
             bench_returns = monthly_returns(df_CW_after)
-            print(bench_returns)
+            #print(bench_returns)
             df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
 
         #sharpe
