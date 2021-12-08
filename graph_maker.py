@@ -12,7 +12,6 @@ K = 365 #number of days between each xticks
 
 
 #Bitcoin prevalence on Cap-weighted
-"""
 CW_weights_20 = pd.read_csv(f"{path_data_processed}/CW_weights_20_1e{marketcap[-1]}.csv", index_col=0)
 CW_weights_100 = pd.read_csv(f"{path_data_processed}/CW_weights_100_1e{marketcap[-1]}.csv", index_col=0)
 
@@ -71,7 +70,7 @@ plt.ylabel('Log Portfolio Price Performance')
 plt.savefig('graphs/low_beta_comp.png', format="png")
 plt.show()
 plt.clf()
-"""
+
 
 #Table of Sharpe taking into account turnover at 0.3% per trans
 
