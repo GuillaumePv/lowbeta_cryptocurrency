@@ -163,7 +163,7 @@ In construction
 
 - [ ] Bitcoin prevalence on Cap-weighted
 - [ ] Tables of metrics for every rebalancement
-- [ ] Graph vola CW and ?
 - [ ] Graphs of perfs 20 and 100
 - [ ] leverage split table low vol high vol
 - [ ] Table of Sharpe taking into account turnover at 0.3% per trans
+- [ ] Graph vola CW and ?
