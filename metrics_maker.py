@@ -162,9 +162,9 @@ for idx_metric,df in enumerate(df_list_adj):
         df_metrics.iloc[idx_metric, 7] = df['excess_returns'].sum()/df_metrics.iloc[idx_metric, 6]
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
-c
-print(df_metrics)
 
+print(df_metrics)
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}")
 
 #####################
 #REBALANCE 7 METRICS
@@ -305,10 +305,9 @@ for idx_metric,df in enumerate(df_list_adj):
         df_metrics.iloc[idx_metric, 7] = df['excess_returns'].sum()/df_metrics.iloc[idx_metric, 6]
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
-    df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 print("REB 7")
 print(df_metrics)
-
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7")
 #####################
 #REBALANCE 30 METRICS
 #####################
@@ -449,6 +448,6 @@ for idx_metric,df in enumerate(df_list_adj):
         df_metrics.iloc[idx_metric, 7] = df['excess_returns'].sum()/df_metrics.iloc[idx_metric, 6]
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
-    df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 print("REB 30")
 print(df_metrics)
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30")
