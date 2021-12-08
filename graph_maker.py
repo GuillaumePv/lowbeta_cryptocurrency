@@ -10,9 +10,9 @@ marketcap = format(c.market_cap,'.0e')
 
 K = 365 #number of days between each xticks
 
-"""
-#Bitcoin prevalence on Cap-weighted
 
+#Bitcoin prevalence on Cap-weighted
+"""
 CW_weights_20 = pd.read_csv(f"{path_data_processed}/CW_weights_20_1e{marketcap[-1]}.csv", index_col=0)
 CW_weights_100 = pd.read_csv(f"{path_data_processed}/CW_weights_100_1e{marketcap[-1]}.csv", index_col=0)
 
@@ -35,7 +35,7 @@ plt.ylabel('Weight in the Cap-Weighted portfolio')
 plt.savefig('graphs/bitcoin_weight.png', format="png")
 #plt.show()
 plt.clf()
-"""
+
 #graphs of low beta perf for different benchmarks
 
 LB=pd.read_csv(f"{path_data_strat}/Low_Beta_price_100_1e{marketcap[-1]}.csv", index_col=0)
@@ -71,10 +71,51 @@ plt.ylabel('Log Portfolio Price Performance')
 plt.savefig('graphs/low_beta_comp.png', format="png")
 plt.show()
 plt.clf()
-
-
-#leverage split table low vol high vol
+"""
 
 #Table of Sharpe taking into account turnover at 0.3% per trans
+
+metrics_20 = pd.read_csv(f"{path_data_processed}/df_metrics_20_1e{marketcap[-1]}.csv", index_col=0)
+metrics_100 = pd.read_csv(f"{path_data_processed}/df_metrics_100_1e{marketcap[-1]}.csv", index_col=0)
+
+rf_monthly = metrics_20.iloc[0, 0] - metrics_20.iloc[0, 2] * metrics_20.iloc[0, 1] #reverse engineer rf from metrics sharpe
+
+metrics_20['sharpe_adj'] = (metrics_20.monthly_returns - metrics_20.monthly_turnover * 0.003 - rf_monthly) / metrics_20.volatility
+metrics_100['sharpe_adj'] = (metrics_100.monthly_returns - metrics_100.monthly_turnover * 0.003 - rf_monthly) / metrics_100.volatility
+
+df_sharpe = pd.DataFrame(columns = metrics_20.index)
+df_sharpe.loc['Sharpe 20 adjusted'] = metrics_20.sharpe_adj.values.round(3)
+df_sharpe.loc['Sharpe 100 adjusted'] = metrics_100.sharpe_adj.values.round(3)
+print(df_sharpe)
+df_sharpe.to_latex("latex/sharpe_adj")
+
+metrics_20 = pd.read_csv(f"{path_data_processed}/df_metrics_20_1e{marketcap[-1]}_reb7.csv", index_col=0)
+metrics_100 = pd.read_csv(f"{path_data_processed}/df_metrics_100_1e{marketcap[-1]}_reb7.csv", index_col=0)
+
+rf_monthly = metrics_20.iloc[0, 0] - metrics_20.iloc[0, 2] * metrics_20.iloc[0, 1] #reverse engineer rf from metrics sharpe
+
+metrics_20['sharpe_adj'] = (metrics_20.monthly_returns - metrics_20.monthly_turnover * 0.003 - rf_monthly) / metrics_20.volatility
+metrics_100['sharpe_adj'] = (metrics_100.monthly_returns - metrics_100.monthly_turnover * 0.003 - rf_monthly) / metrics_100.volatility
+
+df_sharpe = pd.DataFrame(columns = metrics_20.index)
+df_sharpe.loc['Sharpe 20 rebalanced 7 adjusted'] = metrics_20.sharpe_adj.values.round(3)
+df_sharpe.loc['Sharpe 100 rebalanced 7 adjusted'] = metrics_100.sharpe_adj.values.round(3)
+print(df_sharpe)
+df_sharpe.to_latex("latex/sharpe_adj_reb7")
+
+
+metrics_20 = pd.read_csv(f"{path_data_processed}/df_metrics_20_1e{marketcap[-1]}_reb30.csv", index_col=0)
+metrics_100 = pd.read_csv(f"{path_data_processed}/df_metrics_100_1e{marketcap[-1]}_reb30.csv", index_col=0)
+
+rf_monthly = metrics_20.iloc[0, 0] - metrics_20.iloc[0, 2] * metrics_20.iloc[0, 1] #reverse engineer rf from metrics sharpe
+
+metrics_20['sharpe_adj'] = (metrics_20.monthly_returns - metrics_20.monthly_turnover * 0.003 - rf_monthly) / metrics_20.volatility
+metrics_100['sharpe_adj'] = (metrics_100.monthly_returns - metrics_100.monthly_turnover * 0.003 - rf_monthly) / metrics_100.volatility
+
+df_sharpe = pd.DataFrame(columns = metrics_20.index)
+df_sharpe.loc['Sharpe 20 rebalanced 30 adjusted'] = metrics_20.sharpe_adj.values.round(3)
+df_sharpe.loc['Sharpe 100 rebalanced 30 adjusted'] = metrics_100.sharpe_adj.values.round(3)
+print(df_sharpe)
+df_sharpe.to_latex("latex/sharpe_adj_reb30")
 
 #Graph vola CW and ?
