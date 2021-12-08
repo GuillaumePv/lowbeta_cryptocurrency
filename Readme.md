@@ -16,7 +16,7 @@ Examples of github:
 - https://github.com/sakex/qarmII
 - https://github.com/maxrel95/QARMII_TrendFollowing/blob/master/TrendFollowing_Topic15.pdf
 
-## Data & Methodlogy
+## Data & Methodology
 
 - returns are computed with logarithmic first difference
 - we select cryptocurrencies based on their past 3, 6, 9, and 12 month volatility (voir avec le nombre de jour)
@@ -158,3 +158,12 @@ In construction
 - Kurtosis
 - Sharpe Ratio
 - Excess return
+
+## Graphs to do in latex
+
+- [ ] Bitcoin prevalence on Cap-weighted
+- [ ] Tables of metrics for every rebalancement
+- [ ] Graph vola CW and ?
+- [ ] Graphs of perfs 20 and 100
+- [ ] leverage split table low vol high vol
+- [ ] Table of Sharpe taking into account turnover at 0.3% per trans
