@@ -20,6 +20,8 @@ from pathlib import Path
 path_original = Path(__file__).resolve().parents[0]
 path_data_processed = (path_original / "../data/processed/").resolve()
 path_data_strat = (path_original / "../data/strats/").resolve()
+path_latex = (path_original / "../latex/").resolve()
+
 
 import os
 currentdir = os.path.dirname(os.path.realpath(__file__))
@@ -155,3 +157,4 @@ for df_returns in df:
 
 print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_metrics.to_latex(f"{path_latex}/metrics_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}")
