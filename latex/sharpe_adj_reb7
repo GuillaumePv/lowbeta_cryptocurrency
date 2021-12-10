@@ -1,0 +1,8 @@
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+{} &     CW &    BTC &     EW &     MV &  Low Vol &  High Vol &  Low Beta &  High Beta &  Low Beta EW &  High Beta EW &  Low Beta BTC &  High Beta BTC \\
+\midrule
+Sharpe 20 rebalanced 7 adjusted  &  0.139 &  0.141 &  0.308 &  0.267 &    0.172 &     0.296 &     0.259 &      0.233 &        0.262 &         0.235 &         0.257 &          0.233 \\
+Sharpe 100 rebalanced 7 adjusted &  0.049 &  0.058 &  0.431 &  0.148 &   -0.038 &     0.504 &     0.371 &      0.372 &        0.372 &         0.372 &         0.303 &          0.407 \\
+\bottomrule
+\end{tabular}

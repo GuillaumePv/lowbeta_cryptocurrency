@@ -1,0 +1,10 @@
+\begin{tabular}{lllll}
+\toprule
+{} & monthly\_returns & volatility &    sharpe & excess\_returns \\
+\midrule
+Low Vol Before  &        0.016167 &   0.216868 &  0.064544 &      -0.011882 \\
+High Vol Before &        0.110586 &   0.334584 &  0.324034 &       0.082536 \\
+Low Vol After   &        0.043316 &   0.217415 &  0.193225 &      -0.015941 \\
+High Vol After  &        0.126633 &   0.296329 &  0.422931 &       0.067376 \\
+\bottomrule
+\end{tabular}

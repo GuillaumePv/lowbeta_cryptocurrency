@@ -35,7 +35,6 @@ df_base = df_base[name_first_file]
 list_crypto = [name_first_file]
 for f in tqdm(files[1:]):
     try:
-
         crypto = f.split(".")[0]
         df = pd.read_pickle(f"{path_data}/{f}")
         date_index = df.index

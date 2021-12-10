@@ -64,7 +64,7 @@ df_weights=df_weights.iloc[1:]
 #returns
 df_returns = pd.read_csv(f"{path_data_processed}/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 df_returns_CW = df_returns * df_weights
-
+df_weights.to_csv(f"{path_data_processed}/CW_weights_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #portfolio
 df_perf = df_returns_CW.sum(axis=1)

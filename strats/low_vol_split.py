@@ -20,6 +20,8 @@ from pathlib import Path
 path_original = Path(__file__).resolve().parents[0]
 path_data_processed = (path_original / "../data/processed/").resolve()
 path_data_strat = (path_original / "../data/strats/").resolve()
+path_latex = (path_original / "../latex/").resolve()
+
 
 import os
 currentdir = os.path.dirname(os.path.realpath(__file__))
@@ -118,8 +120,8 @@ for df_returns in df:
         df_metrics.iloc[views, 1] = df['volatility'].mean() * math.sqrt(365/12)
 
         #Total return
-        print(df_CW_before.head(3))
-        print(df.head(3))
+        #print(df_CW_before.head(3))
+        #print(df.head(3))
         def monthly_returns(df):
             df.set_index(pd.to_datetime(df.index), inplace=True)
             first_date = df.index[0] + relativedelta(day=31)
@@ -135,11 +137,11 @@ for df_returns in df:
         #excess_returns
         if views < 2:
             bench_returns = monthly_returns(df_CW_before)
-            print(bench_returns)
+            #print(bench_returns)
             df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
         else:
             bench_returns = monthly_returns(df_CW_after)
-            print(bench_returns)
+            #print(bench_returns)
             df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
 
         #sharpe
@@ -155,3 +157,4 @@ for df_returns in df:
 
 print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+df_metrics.to_latex(f"{path_latex}/metrics_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}")
