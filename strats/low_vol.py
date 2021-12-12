@@ -26,7 +26,7 @@ import sys
 sys.path.append(parentdir)
 
 import config as c
-from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30
+from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30, getHerfindahl
 marketcap = format(c.market_cap,'.0e')
 
 #get returns
@@ -100,6 +100,15 @@ turnover_monthly = getMonthlyTurnover(df_weights_high)
 df_metrics.loc["High Vol", "monthly_turnover"] = turnover_monthly
 #print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#Herfindahl
+df_metrics = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+herfindahl = getHerfindahl(df_weights_low)
+df_metrics.loc["Low Vol", "HHI"] = herfindahl
+herfindahl = getHerfindahl(df_weights_high)
+df_metrics.loc["High Vol", "HHI"] = herfindahl
+df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
 
 #rebalance 7 days
 results_7 = createPortfolio7(df_weights_low, df_returns)

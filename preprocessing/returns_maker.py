@@ -39,7 +39,7 @@ df_returns.to_csv(f"../data/processed/returns_first_{c.number_cryptos}_1e{market
 
 #metrics creation
 df_metrics = pd.DataFrame(
-    columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover'],
+    columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover', 'HHI'],
     index=['CW', 'BTC', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW', 'Low Beta BTC', 'High Beta BTC'])
 
 df_metrics.to_csv(f"../data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
