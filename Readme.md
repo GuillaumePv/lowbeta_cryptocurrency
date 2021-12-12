@@ -161,7 +161,7 @@ In construction
 
 ## Graphs to do in latex
 
-- [ ] Bitcoin prevalence on Cap-weighted
+- [x] Bitcoin prevalence on Cap-weighted
 - [ ] Tables of metrics for every rebalancement
 - [ ] Graphs of perfs 20 and 100
 - [ ] leverage split table low vol high vol

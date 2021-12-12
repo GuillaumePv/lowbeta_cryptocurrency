@@ -249,6 +249,7 @@ for idx_metric,df in enumerate(df_list_adj):
     #Rolling Volatility
     df['volatility'] = df.pct_change().rolling(120).std()
     df.dropna(inplace=True)
+    # monthly volatility
     df_metrics.iloc[idx_metric, 1] = df['volatility'].mean() * math.sqrt(365/12)
 
     #Total return
