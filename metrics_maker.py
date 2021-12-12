@@ -20,6 +20,7 @@ from matplotlib import pyplot as plt
 import config as c
 marketcap = format(c.market_cap,'.0e')
 
+print("=== Computing metrics rebalancing each day ===")
 #create the dataframes
 CW = pd.read_csv(f"data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 BTC = pd.read_csv(f"data/strats/BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
@@ -82,18 +83,29 @@ df_all.to_csv(f"data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 #for i in df_list_adj:
 #    print(len(i))
 
+# Choose your benchmark
 CW = df_list_adj[0]
 BTC = df_list_adj[1]
 EW = df_list_adj[2] #because of truncated
 
-
+# process benchmark in order to create a t-stat
+df_CW = CW
+df_CW.index = pd.to_datetime(df_CW.index,format='%Y-%m-%d')
+df_CW.dropna(inplace=True)
+first_date = df_CW.index[0] + relativedelta(day=31)
+df_trunc_CW = df_CW.loc[first_date:]
+number_of_months = int((df_trunc_CW.index[-1] - first_date)/np.timedelta64(1,'M'))
+last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
+df_month_CW = df_trunc_CW.loc[last_day_months, :]
+df_month_CW['returns'] = (df_month_CW.iloc[:, 0] - df_month_CW.iloc[:, 0].shift())/df_month_CW.iloc[:, 0]
 
 #First some simple metrics
 ##########################
 
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-
+# print(df_list_adj)
 #if rebalance == 'daily':
+array_t_stat = []
 for idx_metric,df in enumerate(df_list_adj):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
     #Rolling Volatility
@@ -108,13 +120,27 @@ for idx_metric,df in enumerate(df_list_adj):
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
     df_month = df_trunc.loc[last_day_months, :]
     df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+    df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
+    # print(list_df[idx_metric])
+    std = np.std(df_month['Excess_return_monthly'])
+    mean = np.mean(df_month['Excess_return_monthly'])
+    number_observation = len(df_month['Excess_return_monthly'])
+    # print("std of excess return: ", std)
+    # print("mean of excess return: ", mean)
+    # print("Number of observation: ", number_observation)
     df_metrics.iloc[idx_metric, 0] = df_month['returns'].mean()
+    #df_month['return'] => monthly return for each strat
+    # print(df_month['returns'])
     #Excess returns over benchmark
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
+        # computing t-stat: https://www.ifa.com/articles/calculations_for_t_statistics/
+        t_stat = (mean*np.sqrt(number_observation))/std
+        # print('t-stat: ', t_stat)
+        array_t_stat.append(t_stat)
     else:
         df_metrics.iloc[idx_metric, 3] = 0
-
+        array_t_stat.append("None")
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
     rf = get_data("^TNX", start_date=last_date).adjclose.dropna()[0]
@@ -163,13 +189,16 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
-print(df_metrics)
+df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
+print(df_tstat)
+# print(df_metrics)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}")
 
 #####################
 #REBALANCE 7 METRICS
 #####################
 
+print("==== Computing metrics for rebalancing 7 days ====")
 #create the dataframes
 CW = pd.read_csv(f"data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 BTC = pd.read_csv(f"data/strats/BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
@@ -235,14 +264,22 @@ CW = df_list_adj[0]
 BTC = df_list_adj[1]
 EW = df_list_adj[2] #because of truncated
 
-
-
+# process benchmark in order to create a t-stat
+df_CW = CW
+df_CW.index = pd.to_datetime(df_CW.index,format='%Y-%m-%d')
+df_CW.dropna(inplace=True)
+first_date = df_CW.index[0] + relativedelta(day=31)
+df_trunc_CW = df_CW.loc[first_date:]
+number_of_months = int((df_trunc_CW.index[-1] - first_date)/np.timedelta64(1,'M'))
+last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
+df_month_CW = df_trunc_CW.loc[last_day_months, :]
+df_month_CW['returns'] = (df_month_CW.iloc[:, 0] - df_month_CW.iloc[:, 0].shift())/df_month_CW.iloc[:, 0]
 
 #First some simple metrics
 ##########################
 
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
-
+array_t_stat = []
 #if rebalance == 'daily':
 for idx_metric,df in enumerate(df_list_adj):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
@@ -259,12 +296,24 @@ for idx_metric,df in enumerate(df_list_adj):
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
     df_month = df_trunc.loc[last_day_months, :]
     df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+    df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
+    
+    std = np.std(df_month['Excess_return_monthly'])
+    mean = np.mean(df_month['Excess_return_monthly'])
+    number_observation = len(df_month['Excess_return_monthly'])
+    # print("std of excess return: ", std)
+    # print("mean of excess return: ", mean)
+    # print("number of observation: ", number_observation)
     df_metrics.iloc[idx_metric, 0] = df_month['returns'].mean()
     #Excess returns over benchmark
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
+        t_stat = (mean*np.sqrt(number_observation))/std
+        # print('t-stat: ', t_stat)
+        array_t_stat.append(t_stat)
     else:
         df_metrics.iloc[idx_metric, 3] = 0
+        array_t_stat.append("None")
 
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -307,12 +356,15 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 print("REB 7")
+df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
+print(df_tstat)
 print(df_metrics)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7")
 #####################
 #REBALANCE 30 METRICS
 #####################
 
+print("=== Computing Rebalancing 30 days ===")
 #create the dataframes
 CW = pd.read_csv(f"data/strats/CW_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 BTC = pd.read_csv(f"data/strats/BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
@@ -378,13 +430,22 @@ CW = df_list_adj[0]
 BTC = df_list_adj[1] #because of truncated
 EW = df_list_adj[2]
 
-
+# process benchmark in order to create a t-stat
+df_CW = CW
+df_CW.index = pd.to_datetime(df_CW.index,format='%Y-%m-%d')
+df_CW.dropna(inplace=True)
+first_date = df_CW.index[0] + relativedelta(day=31)
+df_trunc_CW = df_CW.loc[first_date:]
+number_of_months = int((df_trunc_CW.index[-1] - first_date)/np.timedelta64(1,'M'))
+last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
+df_month_CW = df_trunc_CW.loc[last_day_months, :]
+df_month_CW['returns'] = (df_month_CW.iloc[:, 0] - df_month_CW.iloc[:, 0].shift())/df_month_CW.iloc[:, 0]
 
 #First some simple metrics
 ##########################
 
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-
+array_t_stat = []
 #if rebalance == 'daily':
 for idx_metric,df in enumerate(df_list_adj):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
@@ -400,12 +461,24 @@ for idx_metric,df in enumerate(df_list_adj):
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
     df_month = df_trunc.loc[last_day_months, :]
     df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+    df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
+    
+    std = np.std(df_month['Excess_return_monthly'])
+    mean = np.mean(df_month['Excess_return_monthly'])
+    number_observation = len(df_month['Excess_return_monthly'])
+    # print("std of excess return: ", std)
+    # print("mean of excess return: ", mean)
+    # print("number of observation: ", number_observation)
     df_metrics.iloc[idx_metric, 0] = df_month['returns'].mean()
     #Excess returns over benchmark
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
+        t_stat = (mean*np.sqrt(number_observation))/std
+        # print('t-stat: ', t_stat)
+        array_t_stat.append(t_stat)
     else:
         df_metrics.iloc[idx_metric, 3] = 0
+        array_t_stat.append("None")
 
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -450,5 +523,7 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 print("REB 30")
+df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
+print(df_tstat)
 print(df_metrics)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30")
