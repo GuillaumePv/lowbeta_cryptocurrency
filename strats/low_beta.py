@@ -28,7 +28,7 @@ sys.path.append(parentdir)
 from tqdm import tqdm
 
 import config as c
-from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30
+from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30, getHerfindahl
 marketcap = format(c.market_cap,'.0e')
 
 #get returns
@@ -109,6 +109,14 @@ df_metrics.loc["Low Beta", "monthly_turnover"] = turnover_monthly
 turnover_monthly = getMonthlyTurnover(df_weights_high)
 df_metrics.loc["High Beta", "monthly_turnover"] = turnover_monthly
 #print(df_metrics)
+df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#Herfindahl
+df_metrics = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
+herfindahl = getHerfindahl(df_weights_low)
+df_metrics.loc["Low Beta", "HHI"] = herfindahl
+herfindahl = getHerfindahl(df_weights_high)
+df_metrics.loc["High Beta", "HHI"] = herfindahl
 df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #rebalance 7 days

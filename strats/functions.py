@@ -2,7 +2,10 @@ import pandas as pd
 import numpy as np
 from dateutil.relativedelta import relativedelta
 
+#These are functions to be used in the strategy scripts
+
 def getPrice(df_weights, df_returns):
+    #convenience function
     df_returns_weighted = df_returns * df_weights
     df_perf = df_returns_weighted.sum(axis=1)
     df_perf[0] = 0
@@ -18,6 +21,12 @@ def getMonthlyTurnover(df_weights):
 
     number_of_months = int((pd.to_datetime(df_weights.index[-1]) - pd.to_datetime(df_weights.index[0]))/np.timedelta64(1,'M'))
     return turnover/number_of_months
+
+def getHerfindahl(df_weights):
+    df_weights = df_weights.mul(100)
+    df_sq = df_weights.pow(2)
+    herfindahl = df_sq.sum(axis=1).mean()
+    return int(herfindahl)
 
 def createPortfolio7(df_weights, df_returns):
     idx = df_weights.index

@@ -29,7 +29,7 @@ sys.path.append(parentdir)
 
 import config as c
 
-from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30
+from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30, getHerfindahl
 marketcap = format(c.market_cap,'.0e')
 
 print(40*"=")
