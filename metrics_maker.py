@@ -192,7 +192,7 @@ for idx_metric,df in enumerate(df_list_adj):
 df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
 print(df_tstat)
 # print(df_metrics)
-df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}")
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.tex")
 
 #####################
 #REBALANCE 7 METRICS
@@ -297,7 +297,7 @@ for idx_metric,df in enumerate(df_list_adj):
     df_month = df_trunc.loc[last_day_months, :]
     df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
     df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
-    
+
     std = np.std(df_month['Excess_return_monthly'])
     mean = np.mean(df_month['Excess_return_monthly'])
     number_observation = len(df_month['Excess_return_monthly'])
@@ -359,7 +359,7 @@ print("REB 7")
 df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
 print(df_tstat)
 print(df_metrics)
-df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7")
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.tex")
 #####################
 #REBALANCE 30 METRICS
 #####################
@@ -462,7 +462,7 @@ for idx_metric,df in enumerate(df_list_adj):
     df_month = df_trunc.loc[last_day_months, :]
     df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
     df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
-    
+
     std = np.std(df_month['Excess_return_monthly'])
     mean = np.mean(df_month['Excess_return_monthly'])
     number_observation = len(df_month['Excess_return_monthly'])
@@ -526,4 +526,4 @@ print("REB 30")
 df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
 print(df_tstat)
 print(df_metrics)
-df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30")
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.tex")
