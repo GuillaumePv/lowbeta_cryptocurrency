@@ -129,7 +129,7 @@ for df_returns in df:
             number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
             last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
             df_month = df_trunc.loc[last_day_months, :]
-            df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+            df_month['returns'] = df_month.iloc[:, 0].pct_change()
             return df_month['returns'].mean()
 
         df_metrics.iloc[views, 0] = monthly_returns(df)

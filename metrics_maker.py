@@ -97,7 +97,7 @@ df_trunc_CW = df_CW.loc[first_date:]
 number_of_months = int((df_trunc_CW.index[-1] - first_date)/np.timedelta64(1,'M'))
 last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
 df_month_CW = df_trunc_CW.loc[last_day_months, :]
-df_month_CW['returns'] = (df_month_CW.iloc[:, 0] - df_month_CW.iloc[:, 0].shift())/df_month_CW.iloc[:, 0]
+df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 
 #First some simple metrics
 ##########################
@@ -119,7 +119,7 @@ for idx_metric,df in enumerate(df_list_adj):
     number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
     df_month = df_trunc.loc[last_day_months, :]
-    df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+    df_month['returns'] = df_month.iloc[:, 0].pct_change()
     df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
     # print(list_df[idx_metric])
     std = np.std(df_month['Excess_return_monthly'])
@@ -191,7 +191,7 @@ for idx_metric,df in enumerate(df_list_adj):
 
 df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
 print(df_tstat)
-# print(df_metrics)
+print(df_metrics)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies", label=f"metrics{c.number_cryptos}", float_format="%.2f" )
 
 #####################
@@ -273,7 +273,7 @@ df_trunc_CW = df_CW.loc[first_date:]
 number_of_months = int((df_trunc_CW.index[-1] - first_date)/np.timedelta64(1,'M'))
 last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
 df_month_CW = df_trunc_CW.loc[last_day_months, :]
-df_month_CW['returns'] = (df_month_CW.iloc[:, 0] - df_month_CW.iloc[:, 0].shift())/df_month_CW.iloc[:, 0]
+df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 
 #First some simple metrics
 ##########################
@@ -295,7 +295,8 @@ for idx_metric,df in enumerate(df_list_adj):
     number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
     df_month = df_trunc.loc[last_day_months, :]
-    df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+    print(df_month)
+    df_month['returns'] = df_month.iloc[:, 0].pct_change()
     df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
 
     std = np.std(df_month['Excess_return_monthly'])
@@ -342,6 +343,7 @@ for idx_metric,df in enumerate(df_list_adj):
 
     #Max drawdown
     max_drawdown=min(df_month['returns'].dropna().values)
+
     df_metrics.iloc[idx_metric, 5] = max_drawdown
 
     #Tracking error
@@ -439,7 +441,7 @@ df_trunc_CW = df_CW.loc[first_date:]
 number_of_months = int((df_trunc_CW.index[-1] - first_date)/np.timedelta64(1,'M'))
 last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
 df_month_CW = df_trunc_CW.loc[last_day_months, :]
-df_month_CW['returns'] = (df_month_CW.iloc[:, 0] - df_month_CW.iloc[:, 0].shift())/df_month_CW.iloc[:, 0]
+df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 
 #First some simple metrics
 ##########################
@@ -460,7 +462,7 @@ for idx_metric,df in enumerate(df_list_adj):
     number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
     df_month = df_trunc.loc[last_day_months, :]
-    df_month['returns'] = (df_month.iloc[:, 0] - df_month.iloc[:, 0].shift())/df_month.iloc[:, 0]
+    df_month['returns'] = df_month.iloc[:, 0].pct_change()
     df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
 
     std = np.std(df_month['Excess_return_monthly'])
