@@ -63,7 +63,6 @@ if c.number_cryptos > 20:
         df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
     del df_weights_high['sum']
 
-
 else:
     avg = pd.Series(df_vol.median(axis=1), index=df_vol.index)
 
