@@ -40,7 +40,7 @@ app.layout = html.Div([
                  {'label': '  High Beta BTC', 'value': 'HB_BTC'},
                  ],
         value=['cap_weighted_index', 'ponderated_index'],
-        labelStyle={'display': 'block'}
+        labelStyle={'display': 'inline-block', 'padding':'1em', 'background-color':'#0c1f4c'}
                   )],style={
         'color': "White", 'fontSize':18}),
     html.Br(),
@@ -124,7 +124,7 @@ def update_figure(value):
             df = df[value]
             fig.update_layout(font_color="White",
                 margin=dict(l=50, r=20, t=20, b=20),
-                paper_bgcolor="rgb(0,0,0,0)", plot_bgcolor="rgb(0,0,0,0)", colorway=['#0AF047', '#0EEEF0','#ffbf00','#cd9575','#4b5320', '#0EEEF0','#ffbf00','#cd9575'], xaxis=dict(showgrid=False),
+                paper_bgcolor="rgb(0,0,0,0)", plot_bgcolor="rgb(0,0,0,0)", colorway=['#0AF047', '#0EEEF0','#ffbf00','#cd9575','#4b5320', '#5D8AA8', '#F0F8FF', '#915C83', '#FF9966', '#007FFF', '#848482', '#EBCDFF'], xaxis=dict(showgrid=False),
      yaxis=dict(showgrid=False)
             )
             fig.add_trace(go.Scatter(x=df.index, y=df[val],
