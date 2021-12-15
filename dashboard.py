@@ -27,7 +27,7 @@ app.layout = html.Div([
     dcc.Checklist(
         id='check',
         options=[{'label': '  Cap Weighted', 'value': 'cap_weighted_index'},
-                 {'label': '  Cap Weighted no BTC', 'value': 'cap_weighted_index_noBTC'},
+                 {'label': '  BTC', 'value': 'BTC'},
                  {'label': '  Equal Weighted', 'value': 'ponderated_index'},
                  {'label': '  Minimum Variance', 'value': 'MV'},
                  {'label': '  High Volatility', 'value': 'HV'},
@@ -36,8 +36,8 @@ app.layout = html.Div([
                  {'label': '  High Beta', 'value': 'HB'},
                  {'label': '  Low Beta EW', 'value': 'LB_EW'},
                  {'label': '  High Beta EW', 'value': 'HB_EW'},
-                 {'label': '  Low Beta noBTC', 'value': 'LB_noBTC'},
-                 {'label': '  High Beta noBTC', 'value': 'HB_noBTC'},
+                 {'label': '  Low Beta BTC', 'value': 'LB_BTC'},
+                 {'label': '  High Beta BTC', 'value': 'HB_BTC'},
                  ],
         value=['cap_weighted_index', 'ponderated_index'],
         labelStyle={'display': 'block'}
@@ -69,8 +69,7 @@ app.layout = html.Div([
             id='dropdown',
             options=[
                 {'label': '20 Crypto Model', 'value': 'metrics1.csv'},
-                {'label': '100 Crypto Model', 'value': 'metrics2.csv'},
-                {'label': 'Third Crypto Model', 'value': 'metrics3.csv'}
+                {'label': '100 Crypto Model', 'value': 'metrics2.csv'}
             ],value='metrics1.csv',
         )],style = {'margin-right': 1100, 'color':'black', 'backgroundColor':'black'}),
     html.Br(),
