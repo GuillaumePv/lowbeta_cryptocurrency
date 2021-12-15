@@ -192,7 +192,7 @@ for idx_metric,df in enumerate(df_list_adj):
 df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
 print(df_tstat)
 # print(df_metrics)
-df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.tex")
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies", label=f"metrics{c.number_cryptos}", float_format="%.2f" )
 
 #####################
 #REBALANCE 7 METRICS
@@ -359,7 +359,7 @@ print("REB 7")
 df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
 print(df_tstat)
 print(df_metrics)
-df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.tex")
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies (Rebalanced 7 days)", label=f"metrics{c.number_cryptos}_7", float_format="%.2f" )
 #####################
 #REBALANCE 30 METRICS
 #####################
@@ -526,4 +526,4 @@ print("REB 30")
 df_tstat = pd.DataFrame([array_t_stat], columns=list_df)
 print(df_tstat)
 print(df_metrics)
-df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.tex")
+df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies (Rebalanced 30 days)", label=f"metrics{c.number_cryptos}_30", float_format="%.2f" )

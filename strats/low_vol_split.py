@@ -157,4 +157,4 @@ for df_returns in df:
 
 print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}.csv")
-df_metrics.to_latex(f"{path_latex}/metrics_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}.tex")
+df_metrics.to_latex(f"{path_latex}/metrics_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption="Low volatility metrics based on split on 2019-02-01", label="low_vol_split")

@@ -5,6 +5,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Output, Input
 import plotly.express as px
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
 import dash_table
 from dash_table.Format import Format, Scheme
@@ -116,9 +117,7 @@ def update_figure(value):
     df = pd.read_csv(f'data/strats/all_price_{c.number_cryptos}_1e{marketcap[-1]}.csv')
     #this part is to set the graph length
     df.set_index('datetime', inplace=True)
-    df = df.iloc[-365:].pct_change() #365 days from the last date are displayed here
-    df.iloc[0] = 0
-    df = df.add(1).cumprod()*100
+    df = np.log(df) #take logs of the data
     #########################################
     if len(value) > 0:
         fig = go.Figure()

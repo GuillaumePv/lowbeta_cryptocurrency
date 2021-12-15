@@ -86,7 +86,7 @@ df_sharpe = pd.DataFrame(columns = metrics_20.index)
 df_sharpe.loc['Sharpe 20 adjusted'] = metrics_20.sharpe_adj.values.round(3)
 df_sharpe.loc['Sharpe 100 adjusted'] = metrics_100.sharpe_adj.values.round(3)
 print(df_sharpe)
-df_sharpe.to_latex("latex/sharpe_adj.tex")
+df_sharpe.to_latex("latex/sharpe_adj.tex", caption="Sharpe Ratios of strategies adjusted for turnover", label="sharpe", float_format="%.2f" )
 
 metrics_20 = pd.read_csv(f"{path_data_processed}/df_metrics_20_1e{marketcap[-1]}_reb7.csv", index_col=0)
 metrics_100 = pd.read_csv(f"{path_data_processed}/df_metrics_100_1e{marketcap[-1]}_reb7.csv", index_col=0)
@@ -100,7 +100,7 @@ df_sharpe = pd.DataFrame(columns = metrics_20.index)
 df_sharpe.loc['Sharpe 20 rebalanced 7 adjusted'] = metrics_20.sharpe_adj.values.round(3)
 df_sharpe.loc['Sharpe 100 rebalanced 7 adjusted'] = metrics_100.sharpe_adj.values.round(3)
 print(df_sharpe)
-df_sharpe.to_latex("latex/sharpe_adj_reb7.tex")
+df_sharpe.to_latex("latex/sharpe_adj_reb7.tex", caption="Sharpe Ratio of strategies adjusted for turnover (Rebalanced 7 days)", label="sharpe7", float_format="%.2f" )
 
 
 metrics_20 = pd.read_csv(f"{path_data_processed}/df_metrics_20_1e{marketcap[-1]}_reb30.csv", index_col=0)
@@ -115,6 +115,6 @@ df_sharpe = pd.DataFrame(columns = metrics_20.index)
 df_sharpe.loc['Sharpe 20 rebalanced 30 adjusted'] = metrics_20.sharpe_adj.values.round(3)
 df_sharpe.loc['Sharpe 100 rebalanced 30 adjusted'] = metrics_100.sharpe_adj.values.round(3)
 print(df_sharpe)
-df_sharpe.to_latex("latex/sharpe_adj_reb30.tex")
+df_sharpe.to_latex("latex/sharpe_adj_reb30.tex", caption="Sharpe Ratio of strategies adjusted for turnover (Rebalanced 30 days)", label="sharpe30", float_format="%.2f" )
 
 #Graph vola CW and ?
