@@ -28,14 +28,14 @@ EW = pd.read_csv(f"data/strats/EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv
 MV = pd.read_csv(f"data/strats/MV_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Vol = pd.read_csv(f"data/strats/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 High_Vol = pd.read_csv(f"data/strats/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-#RP = pd.read_csv(f"data/strats/ERC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Beta = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 High_Beta = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Beta_EW = pd.read_csv(f"data/strats/Low_Beta_EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 High_Beta_EW = pd.read_csv(f"data/strats/High_Beta_EW_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 Low_Beta_BTC = pd.read_csv(f"data/strats/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 High_Beta_BTC = pd.read_csv(f"data/strats/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
-
+print(len(MV))
+print(len(Low_Vol))
 df_list = [CW, BTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_BTC, High_Beta_BTC]
 
 #print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(Low_Beta), len(High_Beta))
@@ -44,10 +44,10 @@ df_list = [CW, BTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW,
 date_start = '2009-01-01'
 for df in df_list:
     first_date = df.head(1).index
-    first_date
     first_date = first_date[0]
     if pd.to_datetime(first_date).tz_convert(None) > pd.to_datetime(date_start).tz_localize(None):
         date_start = first_date
+
 
 print("DATE START", date_start)
 
@@ -222,7 +222,6 @@ df_list = [CW,BTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, 
 date_start = '2009-01-01'
 for df in df_list:
     first_date = df.head(1).index
-    first_date
     first_date = first_date[0]
     if pd.to_datetime(first_date).tz_convert(None) > pd.to_datetime(date_start).tz_localize(None):
         date_start = first_date
@@ -281,6 +280,7 @@ df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 array_t_stat = []
 #if rebalance == 'daily':
+
 for idx_metric,df in enumerate(df_list_adj):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
     #Rolling Volatility
@@ -295,7 +295,6 @@ for idx_metric,df in enumerate(df_list_adj):
     number_of_months = int((df_trunc.index[-1] - first_date)/np.timedelta64(1,'M'))
     last_day_months = pd.date_range(start=first_date, periods=number_of_months, freq='M')
     df_month = df_trunc.loc[last_day_months, :]
-    print(df_month)
     df_month['returns'] = df_month.iloc[:, 0].pct_change()
     df_month['Excess_return_monthly'] = df_month['returns'] - df_month_CW['returns']
 
@@ -381,16 +380,17 @@ Low_Beta_EW = pd.read_csv(f"data/strats/Low_Beta_price_{c.number_cryptos}_1e{mar
 High_Beta_EW = pd.read_csv(f"data/strats/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 Low_Beta_BTC = pd.read_csv(f"data/strats/Low_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 High_Beta_BTC = pd.read_csv(f"data/strats/High_Beta_BTC_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-
+print(len(MV))
+print(len(Low_Vol))
 df_list = [CW, BTC, EW, MV, Low_Vol, High_Vol, Low_Beta, High_Beta, Low_Beta_EW, High_Beta_EW, Low_Beta_BTC, High_Beta_BTC]
 
 #print(len(CW), len(EW), len(MV), len(Low_Vol), len(High_Vol), len(Low_Beta), len(High_Beta))
 
 #get first_date on every df
 date_start = '2009-01-01'
+
 for df in df_list:
     first_date = df.head(1).index
-    first_date
     first_date = first_date[0]
     if pd.to_datetime(first_date).tz_convert(None) > pd.to_datetime(date_start).tz_localize(None):
         date_start = first_date
@@ -449,6 +449,7 @@ df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 array_t_stat = []
 #if rebalance == 'daily':
+
 for idx_metric,df in enumerate(df_list_adj):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
     #Rolling Volatility
@@ -490,7 +491,7 @@ for idx_metric,df in enumerate(df_list_adj):
         rf = get_data("^TNX", start_date=last_date).adjclose.dropna()[0]
     rf_monthly = pow(rf/100 + 1, 1/12) - 1
     df_metrics.iloc[idx_metric, 2] = (df_metrics.iloc[idx_metric, 0] - rf_monthly)/df_metrics.iloc[idx_metric, 1]
-
+    print
     #beta
     if idx_metric < 8:
         bench_returns = CW.iloc[:, 0].pct_change()

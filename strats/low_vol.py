@@ -75,9 +75,9 @@ else:
 #print(df_vol.head(2).iloc[:, :10])
 #print(df_weights_low.head(2).iloc[:, :10])
 #print(df_weights_high.head(2).iloc[:, :10])
-
-df_returns_low = df_weights_low * df_returns[c.windows:]
-df_returns_high = df_weights_high * df_returns[c.windows:]
+df_returns_adj = df_returns[c.windows:].copy()
+df_returns_low = df_weights_low * df_returns_adj
+df_returns_high = df_weights_high * df_returns_adj
 
 #portfolio
 df_perf_low = df_returns_low.sum(axis=1)
@@ -111,7 +111,7 @@ df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marke
 
 
 #rebalance 7 days
-results_7 = createPortfolio7(df_weights_low, df_returns)
+results_7 = createPortfolio7(df_weights_low, df_returns_adj)
 df_price_7 = results_7[0]
 turnover_monthly_7 = results_7[1]
 df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
@@ -119,7 +119,7 @@ df_metrics_7.loc["Low Vol", "monthly_turnover"] = turnover_monthly_7
 df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 df_price_7.to_csv(f"{path_data_strat}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
-results_7 = createPortfolio7(df_weights_high, df_returns)
+results_7 = createPortfolio7(df_weights_high, df_returns_adj)
 df_price_7 = results_7[0]
 turnover_monthly_7 = results_7[1]
 df_metrics_7 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
@@ -128,7 +128,7 @@ df_metrics_7.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{mar
 df_price_7.to_csv(f"{path_data_strat}/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 
 #rebalance 30 days
-results_30 = createPortfolio30(df_weights_low, df_returns)
+results_30 = createPortfolio30(df_weights_low, df_returns_adj)
 df_price_30 = results_30[0]
 turnover_monthly_30 = results_30[1]
 df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
@@ -136,7 +136,7 @@ df_metrics_30.loc["Low Vol", "monthly_turnover"] = turnover_monthly_30
 df_metrics_30.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 df_price_30.to_csv(f"{path_data_strat}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 
-results_30 = createPortfolio30(df_weights_high, df_returns)
+results_30 = createPortfolio30(df_weights_high, df_returns_adj)
 df_price_30 = results_30[0]
 turnover_monthly_30 = results_30[1]
 df_metrics_30 = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
