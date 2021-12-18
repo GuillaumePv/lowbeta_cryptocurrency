@@ -53,6 +53,8 @@ df_metrics = pd.DataFrame(
     index=['Low Vol Before', 'High Vol Before','Low Vol After', 'High Vol After' ])
 
 views = 0
+#significance for sharpe
+array_sign_stat = []
 
 for df_returns in df:
     #get_vol
@@ -139,10 +141,12 @@ for df_returns in df:
             bench_returns = monthly_returns(df_CW_before)
             #print(bench_returns)
             df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
+            number_observation=len(df_CW_before)
         else:
             bench_returns = monthly_returns(df_CW_after)
             #print(bench_returns)
             df_metrics.iloc[views, 3] = df_metrics.iloc[views, 0] - bench_returns
+            number_observation=len(df_CW_after) #for significance
 
         #sharpe
         last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -152,9 +156,21 @@ for df_returns in df:
             rf = get_data("^TNX", start_date=last_date).adjclose.dropna()[0]
         rf_monthly = pow(rf/100 + 1, 1/12) - 1
         df_metrics.iloc[views, 2] = (df_metrics.iloc[views, 0] - rf_monthly)/df_metrics.iloc[views, 1]
+        #check significance
+        sharpe=df_metrics.iloc[views, 2]
+        if sharpe > 0:
+            conf = sharpe - 1.96*np.sqrt((1+0.5*sharpe)/number_observation)
+            array_sign_stat.append(conf)
+        else:
+            conf = sharpe + 1.96*np.sqrt((1+0.5*sharpe)/number_observation)
+            array_sign_stat.append(conf)
 
         views += 1
 
 print(df_metrics)
+print(array_sign_stat)
+df_signif = pd.DataFrame([array_sign_stat], columns=df_metrics.index)
+print(df_signif)
+df_signif.to_csv(f"{path_data_processed}/df_low_vol_split_SIGNIFICANCE_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 df_metrics.to_csv(f"{path_data_processed}/df_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 df_metrics.to_latex(f"{path_latex}/metrics_low_vol_split_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption="Low volatility metrics based on split on 2019-02-01", label="low_vol_split")
