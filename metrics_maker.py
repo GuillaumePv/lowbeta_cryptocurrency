@@ -553,7 +553,7 @@ for idx_metric,df in enumerate(df_list_adj):
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 print("REB 30")
 df_signif = pd.DataFrame([array_sign_stat, array_sign_stat_reb7, array_sign_stat_reb30, array_t_stat, array_t_stat_reb7, array_t_stat_reb30],index=["Sharpe ratio p-value", "Sharpe ratio p-value reb7", "Sharpe ratio p-value reb30", "Excess returns t-test", "Excess returns t-test reb7", "Excess returns t-test reb30"], columns=list_df)
-df_signif.to_latex(f"latex/df_signif_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Excess returns t-stat and sharpe significance (Rebalanced 30 days)", label=f"signif{c.number_cryptos}_30")
+df_signif.to_latex(f"latex/df_signif_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Excess returns t-stat and sharpe significance {c.number_cryptos} cryptocurrencies", label=f"signif{c.number_cryptos}_30")
 print(df_metrics)
 print(df_signif)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies (Rebalanced 30 days)", label=f"metrics{c.number_cryptos}_30", float_format="%.2f" )
