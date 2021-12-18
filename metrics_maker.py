@@ -198,9 +198,6 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
-df_signif = pd.DataFrame([array_t_stat, array_sign_stat],index=["Excess returns t-test", "Sharpe ratio t-test at 97.5%"], columns=list_df)
-print(df_signif)
-df_signif.to_latex(f"latex/df_signif_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Excess returns t-stat and sharpe significance", label=f"signif{c.number_cryptos}")
 print(df_metrics)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies", label=f"metrics{c.number_cryptos}", float_format="%.2f" )
 
@@ -288,8 +285,8 @@ df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 ##########################
 
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
-array_t_stat = []
-array_sign_stat = []
+array_t_stat_reb7 = []
+array_sign_stat_reb7 = []
 #if rebalance == 'daily':
 
 for idx_metric,df in enumerate(df_list_adj):
@@ -321,10 +318,10 @@ for idx_metric,df in enumerate(df_list_adj):
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
         t_stat = (mean*np.sqrt(number_observation))/std
         # print('t-stat: ', t_stat)
-        array_t_stat.append(t_stat)
+        array_t_stat_reb7.append(t_stat)
     else:
         df_metrics.iloc[idx_metric, 3] = 0
-        array_t_stat.append("None")
+        array_t_stat_reb7.append("None")
 
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -338,10 +335,10 @@ for idx_metric,df in enumerate(df_list_adj):
     sharpe=df_metrics.iloc[idx_metric, 2]
     if sharpe > 0:
         conf = sharpe - 1.96*np.sqrt((1+0.5*sharpe)/number_observation)
-        array_sign_stat.append(conf)
+        array_sign_stat_reb7.append(conf)
     else:
         conf = sharpe + 1.96*np.sqrt((1+0.5*sharpe)/number_observation)
-        array_sign_stat.append(conf)
+        array_sign_stat_reb7.append(conf)
 
 
 
@@ -378,9 +375,6 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv")
 print("REB 7")
-df_signif = pd.DataFrame([array_t_stat, array_sign_stat],index=["Excess returns t-test", "Sharpe ratio t-test at 97.5%"], columns=list_df)
-print(df_signif)
-df_signif.to_latex(f"latex/df_signif_{c.number_cryptos}_1e{marketcap[-1]}_reb7.tex", caption=f"Excess returns t-stat and sharpe significance (Rebalanced 7 days)", label=f"signif{c.number_cryptos}_7")
 print(df_metrics)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies (Rebalanced 7 days)", label=f"metrics{c.number_cryptos}_7", float_format="%.2f" )
 
@@ -470,8 +464,8 @@ df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 ##########################
 
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
-array_t_stat = []
-array_sign_stat = []
+array_t_stat_reb30 = []
+array_sign_stat_reb30 = []
 #if rebalance == 'daily':
 
 for idx_metric,df in enumerate(df_list_adj):
@@ -502,10 +496,10 @@ for idx_metric,df in enumerate(df_list_adj):
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
         t_stat = (mean*np.sqrt(number_observation))/std
         # print('t-stat: ', t_stat)
-        array_t_stat.append(t_stat)
+        array_t_stat_reb30.append(t_stat)
     else:
         df_metrics.iloc[idx_metric, 3] = 0
-        array_t_stat.append("None")
+        array_t_stat_reb30.append("None")
 
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -519,10 +513,10 @@ for idx_metric,df in enumerate(df_list_adj):
     sharpe=df_metrics.iloc[idx_metric, 2]
     if sharpe > 0:
         conf = sharpe - 1.96*np.sqrt((1+0.5*sharpe)/number_observation)
-        array_sign_stat.append(conf)
+        array_sign_stat_reb30.append(conf)
     else:
         conf = sharpe + 1.96*np.sqrt((1+0.5*sharpe)/number_observation)
-        array_sign_stat.append(conf)
+        array_sign_stat_reb30.append(conf)
 
     #beta
     if idx_metric < 8:
@@ -558,8 +552,8 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 print("REB 30")
-df_signif = pd.DataFrame([array_t_stat, array_sign_stat],index=["Excess returns t-test", "Sharpe ratio t-test at 97.5%"], columns=list_df)
-print(df_signif)
-df_signif.to_latex(f"latex/df_signif_{c.number_cryptos}_1e{marketcap[-1]}_reb30.tex", caption=f"Excess returns t-stat and sharpe significance (Rebalanced 30 days)", label=f"signif{c.number_cryptos}_30")
+df_signif = pd.DataFrame([array_sign_stat, array_sign_stat_reb7, array_sign_stat_reb30, array_t_stat, array_t_stat_reb7, array_t_stat_reb30],index=["Sharpe ratio p-value", "Sharpe ratio p-value reb7", "Sharpe ratio p-value reb30", "Excess returns t-test", "Excess returns t-test reb7", "Excess returns t-test reb30"], columns=list_df)
+df_signif.to_latex(f"latex/df_signif_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Excess returns t-stat and sharpe significance (Rebalanced 30 days)", label=f"signif{c.number_cryptos}_30")
 print(df_metrics)
+print(df_signif)
 df_metrics.to_latex(f"latex/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.tex", caption=f"Metrics for each strategy with {c.number_cryptos} cryptocurrencies (Rebalanced 30 days)", label=f"metrics{c.number_cryptos}_30", float_format="%.2f" )

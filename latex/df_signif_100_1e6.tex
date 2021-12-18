@@ -1,13 +1,17 @@
 \begin{table}
 \centering
-\caption{Excess returns t-stat and sharpe significance}
-\label{signif100}
+\caption{Excess returns t-stat and sharpe significance (Rebalanced 30 days)}
+\label{signif100_30}
 \begin{tabular}{llrrrrrrrrrrr}
 \toprule
 {} & cap\_weighted\_index &       BTC &  ponderated\_index &        MV &        LV &        HV &        LB &        HB &     LB\_EW &     HB\_EW &    LB\_BTC &    HB\_BTC \\
 \midrule
-Excess returns t-test        &               None & -1.022331 &          3.531320 &  1.069940 & -2.641092 &  2.741750 &  2.363678 &  2.357393 &  0.710488 &  2.533980 &  2.086543 &  3.746360 \\
-Sharpe ratio t-test at 97.5\% &           -0.01334 & -0.048168 &          0.735923 &  0.198098 & -0.234971 &  3.784205 &  1.077981 &  1.210834 &  0.055064 &  2.630795 &  1.003744 &  1.070048 \\
+Sharpe ratio p-value        &           -0.01334 & -0.048168 &          0.735923 &  0.198098 & -0.234971 &  3.784205 &  1.077981 &  1.210834 &  0.055064 &  2.630795 &  1.003744 &  1.070048 \\
+Sharpe ratio p-value reb7   &          -0.072917 & -0.048168 &          0.735923 &  0.137997 & -0.098166 &  3.336129 &  1.146133 &  0.938531 &  1.146133 &  0.938531 &  0.937416 &  1.058216 \\
+Sharpe ratio p-value reb30  &           -0.08493 & -0.048168 &          0.735923 &  0.639097 & -0.058489 &  2.358403 &  0.956657 &  1.301731 &  0.956657 &  1.301731 &  1.022942 &  1.287215 \\
+Excess returns t-test       &               None & -1.022331 &          3.531320 &  1.069940 & -2.641092 &  2.741750 &  2.363678 &  2.357393 &  0.710488 &  2.533980 &  2.086543 &  3.746360 \\
+Excess returns t-test reb7  &               None &  0.383730 &          3.704719 &  1.199038 & -0.121508 &  2.745098 &  2.960038 &  3.239903 &  2.960038 &  3.239903 &  2.440247 &  3.251834 \\
+Excess returns t-test reb30 &               None &  0.693096 &          3.733743 &  1.235256 &  0.446787 &  3.295638 &  2.640434 &  2.089098 &  2.640434 &  2.089098 &  2.217724 &  2.351546 \\
 \bottomrule
 \end{tabular}
 \end{table}
