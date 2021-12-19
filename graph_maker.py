@@ -35,6 +35,24 @@ plt.savefig('graphs/bitcoin_weight.png', format="png")
 #plt.show()
 plt.clf()
 
+fig, ax = plt.subplots(figsize=(6.4 * 2, 4.8 * 1.2))
+ax.stackplot(y20.index, y20, alpha=0.8)
+ax.legend(loc='upper left')
+plt.xticks(Xs, xlabels)
+ax.set_title('Bitcoin weight in Cap-Weighted portfolio (20 Cryptos)')
+ax.set_xlabel('Date')
+ax.set_ylabel('Weight in the Cap-Weighted portfolio')
+plt.savefig('graphs/bitcoin_weight_stack_20.png', format="png")
+
+fig, ax = plt.subplots(figsize=(6.4 * 2, 4.8 * 1.2))
+ax.stackplot(y100.index, y100, alpha=0.8, color="red")
+ax.legend(loc='upper left')
+plt.xticks(Xs, xlabels)
+ax.set_title('Bitcoin weight in Cap-Weighted portfolio (100 Cryptos)')
+ax.set_xlabel('Date')
+ax.set_ylabel('Weight in the Cap-Weighted portfolio')
+plt.savefig('graphs/bitcoin_weight_stack_100.png', format="png")
+
 #graphs of low beta perf for different benchmarks
 
 LB=pd.read_csv(f"{path_data_strat}/Low_Beta_price_100_1e{marketcap[-1]}.csv", index_col=0)
@@ -68,7 +86,7 @@ plt.xticks(Xs, xlabels)
 plt.legend(loc='upper left')
 plt.ylabel('Log Portfolio Price Performance')
 plt.savefig('graphs/low_beta_comp.png', format="png")
-plt.show()
+# plt.show()
 plt.clf()
 
 
