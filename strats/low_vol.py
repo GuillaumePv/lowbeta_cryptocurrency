@@ -52,12 +52,14 @@ if c.number_cryptos > 20:
         df_weights_low[col] = df_weights_low[col]/df_weights_low['sum']
     del df_weights_low['sum']
 
-    #high weights
+    #high weights -> analyze see range and compare to high beta
     df_weights_high = df_weights_high.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
+    # print(df_weights_high)
     for i in range(1,4):
         df_weights_high.replace({i:0}, inplace=True)
     df_weights_high.replace({4:1}, inplace=True)
     df_weights_high['sum'] = df_weights_high.sum(axis=1)
+    print(df_weights_high['sum'])
 
     for col in df_weights_high.iloc[:, :-1].columns:
         df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
@@ -83,13 +85,28 @@ df_returns_high = df_weights_high * df_returns_adj
 df_perf_low = df_returns_low.sum(axis=1)
 df_perf_low[0] = 0
 df_price_low = df_perf_low.add(1).cumprod()*100
-#print(df_price_low.tail(3))
+# print(df_price_low.tail(3))
+# plt.plot(df_price_low)
+# plt.savefig('./graphs/low_vol_perf.png')
 df_price_low.to_csv(f"{path_data_strat}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
+print(df_returns_adj.tail(3))
+print(df_returns_high.tail(3).values)
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
-#print(df_price_high.tail(3))
+
+K = 365
+X = df_price_high.index
+Xs = X[::K]
+xlabels = pd.to_datetime(df_price_high.index).strftime("%Y-%m")
+xlabels = xlabels[::K]
+plt.ylim(0, 1)
+plt.xticks(Xs, xlabels)
+plt.plot(df_price_high)
+plt.show()
+# plt.savefig('./graphs/high_vol_perf.png')
+
 df_price_high.to_csv(f"{path_data_strat}/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #turnover rate
