@@ -59,7 +59,7 @@ if c.number_cryptos > 20:
         df_weights_high.replace({i:0}, inplace=True)
     df_weights_high.replace({4:1}, inplace=True)
     df_weights_high['sum'] = df_weights_high.sum(axis=1)
-    print(df_weights_high['sum'])
+    #print(df_weights_high['sum'])
 
     for col in df_weights_high.iloc[:, :-1].columns:
         df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
@@ -90,12 +90,11 @@ df_price_low = df_perf_low.add(1).cumprod()*100
 # plt.savefig('./graphs/low_vol_perf.png')
 df_price_low.to_csv(f"{path_data_strat}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
-print(df_returns_adj.tail(3))
-print(df_returns_high.tail(3).values)
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
 
+"""
 K = 365
 X = df_price_high.index
 Xs = X[::K]
@@ -105,6 +104,7 @@ plt.ylim(0, 1)
 plt.xticks(Xs, xlabels)
 plt.plot(df_price_high)
 plt.show()
+"""
 # plt.savefig('./graphs/high_vol_perf.png')
 
 df_price_high.to_csv(f"{path_data_strat}/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
