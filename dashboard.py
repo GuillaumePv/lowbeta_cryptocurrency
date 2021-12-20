@@ -17,10 +17,10 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.VAPOR])
 
 app.layout = html.Div([
     html.Br(),
-    html.H1(children='Low Beta in Cryptocurrencies'),
+    html.H1(children='Low Beta in Cryptocurrencies Interactive Dashboard'),
     html.Br(),
     html.Div(children='''
-        Interactive Dashboard
+         Log-Performance for 100-cryptocurrency portfolios
     ''', style={'fontFace': 'Arial', 'fontSize': 30}),
     html.Br(),
     html.Div([
