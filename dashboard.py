@@ -149,7 +149,9 @@ def update_figure(value):
 def update_output(val):
     df3 = pd.read_csv(f'data/processed/df_metrics_20_1e{marketcap[-1]}.csv')
     df4 = pd.read_csv(f'data/processed/df_metrics_100_1e{marketcap[-1]}.csv')
-    df5 = pd.read_csv(f'data/processed/df_metrics_20_1e{marketcap[-1]}.csv')
+    df3.rename(columns = {'Unnamed: 0':'Strategies'}, inplace = True)
+    df4.rename(columns = {'Unnamed: 0':'Strategies'}, inplace = True)
+
     if val == "metrics1.csv":
         columns = [{"name": i, "id": i, "format": Format(precision=3, scheme=Scheme.fixed), "type":'numeric'} for i in df3.columns]
         data=df3.to_dict('records')
