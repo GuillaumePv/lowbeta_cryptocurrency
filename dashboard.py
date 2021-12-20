@@ -162,7 +162,7 @@ def update_output(val):
         return columns, data
     elif val == "metrics3.csv":
         columns = [{"name": i, "id": i, "format": Format(precision=3, scheme=Scheme.fixed), "type":'numeric'} for i in df5.columns]
-        data=df5.to_dict('records')
+        data=df4.to_dict('records')
         return columns, data
 
 if __name__ == '__main__':
