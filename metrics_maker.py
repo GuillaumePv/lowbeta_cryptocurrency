@@ -16,7 +16,8 @@ pd.set_option('display.max_colwidth', None)
 import numpy as np
 from dateutil.relativedelta import relativedelta
 from yahoo_fin.stock_info import get_data
-from matplotlib import pyplot as plt
+from scipy.stats import t
+
 import config as c
 marketcap = format(c.market_cap,'.0e')
 
@@ -106,6 +107,7 @@ df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marke
 # print(df_list_adj)
 #if rebalance == 'daily':
 array_t_stat = []
+array_pval = []
 array_sign_stat = []
 for idx_metric,df in enumerate(df_list_adj):
     df.index = pd.to_datetime(df.index,format='%Y-%m-%d')
@@ -137,11 +139,15 @@ for idx_metric,df in enumerate(df_list_adj):
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
         # computing t-stat: https://www.ifa.com/articles/calculations_for_t_statistics/
         t_stat = (mean*np.sqrt(number_observation))/std
+        pval = t.sf(np.abs(t_stat), number_observation-1)*2
+        array_pval.append(pval)
         # print('t-stat: ', t_stat)
+        # print('p-value: ', pval)
         array_t_stat.append(t_stat)
     else:
         df_metrics.iloc[idx_metric, 3] = 0
         array_t_stat.append("None")
+        array_pval.append("None")
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
     rf = get_data("^TNX", start_date=last_date).adjclose.dropna()[0]
@@ -286,6 +292,7 @@ df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb7.csv", index_col=0)
 array_t_stat_reb7 = []
+array_pval_reb7 = []
 array_sign_stat_reb7 = []
 #if rebalance == 'daily':
 
@@ -317,11 +324,15 @@ for idx_metric,df in enumerate(df_list_adj):
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
         t_stat = (mean*np.sqrt(number_observation))/std
+        pval = t.sf(np.abs(t_stat), number_observation-1)*2
+        array_pval_reb7.append(pval)
         # print('t-stat: ', t_stat)
         array_t_stat_reb7.append(t_stat)
+        
     else:
         df_metrics.iloc[idx_metric, 3] = 0
         array_t_stat_reb7.append("None")
+        array_pval_reb7.append("None")
 
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -465,6 +476,7 @@ df_month_CW['returns'] = df_month_CW.iloc[:, 0].pct_change()
 
 df_metrics = pd.read_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv", index_col=0)
 array_t_stat_reb30 = []
+array_pval_reb30 = []
 array_sign_stat_reb30 = []
 #if rebalance == 'daily':
 
@@ -495,11 +507,14 @@ for idx_metric,df in enumerate(df_list_adj):
     if idx_metric != 0:
         df_metrics.iloc[idx_metric, 3] = df_metrics.iloc[idx_metric, 0] - df_metrics.iloc[0, 0]
         t_stat = (mean*np.sqrt(number_observation))/std
+        pval = t.sf(np.abs(t_stat), number_observation-1)*2
+        array_pval_reb30.append(pval)
         # print('t-stat: ', t_stat)
         array_t_stat_reb30.append(t_stat)
     else:
         df_metrics.iloc[idx_metric, 3] = 0
         array_t_stat_reb30.append("None")
+        array_pval_reb30.append("None")
 
     #sharpe
     last_date=df.index[-1].strftime("%Y-%m-%d")
@@ -552,7 +567,7 @@ for idx_metric,df in enumerate(df_list_adj):
 
     df_metrics.to_csv(f"data/processed/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}_reb30.csv")
 print("REB 30")
-df_signif = pd.DataFrame([array_sign_stat, array_sign_stat_reb7, array_sign_stat_reb30, array_t_stat, array_t_stat_reb7, array_t_stat_reb30],index=["Sharpe ratio p-value", "Sharpe ratio p-value reb7", "Sharpe ratio p-value reb30", "Excess returns t-test", "Excess returns t-test reb7", "Excess returns t-test reb30"], columns=list_df)
+df_signif = pd.DataFrame([array_sign_stat, array_sign_stat_reb7, array_sign_stat_reb30, array_pval, array_pval_reb7, array_pval_reb30],index=["Sharpe ratio p-value", "Sharpe ratio p-value reb7", "Sharpe ratio p-value reb30", "Excess returns p-value", "Excess returns p-value reb7", "Excess returns p-value reb30"], columns=list_df)
 df_signif.to_latex(f"latex/df_signif_{c.number_cryptos}_1e{marketcap[-1]}.tex", caption=f"Excess returns t-stat and sharpe significance {c.number_cryptos} cryptocurrencies", label=f"signif{c.number_cryptos}_30")
 print(df_metrics)
 print(df_signif)
