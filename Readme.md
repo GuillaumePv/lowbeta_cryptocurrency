@@ -1,42 +1,12 @@
-## Ideas
-- low beta => buy low beta and sell high beta
-- low vol => buy low vol and sell high vol
-- use volume to create index
-- dashboard: https://github.com/plotly/dash-sample-apps/tree/main/apps/dash-financial-report
-- https://stackoverflow.com/questions/58749930/low-volatility-portfolio-construction
-- rolling covariance: https://stackoverflow.com/questions/45062622/create-rolling-covariance-matrix-in-pandas
-- crete dataset to run regression in stata
-
-Examples of dashboard:
-https://github.com/plotly/dash-sample-apps/tree/main/apps
-
-https://fr.tradingview.com/markets/cryptocurrencies/global-charts/
-
-Examples of github:
-- https://github.com/sakex/qarmII
-- https://github.com/maxrel95/QARMII_TrendFollowing/blob/master/TrendFollowing_Topic15.pdf
-
-## Data & Methodology
-
-- returns are computed with logarithmic first difference
-- we select cryptocurrencies based on their past 3, 6, 9, and 12 month volatility (voir avec le nombre de jour)
-- Moreover, since it is possible to trade cryptos every day of the week, N
-amounts to 7.
-
 # Presentation of the project
 
-Low Beta / low vol strategies in crypto market
+This project has for goal to explore different quantitative strategies which have already been proved profitable in the equity market and apply them to the cryptocurrency industry. Our focus for this project is on the Low Beta Anomaly from the CAPM. This program includes a Dash dashboard which is launched with the
 
-## Abstract
 
-## Authors
 
-* Ruben Kempter : ruben.kempter@unil.ch
-* Dimitri André : dimitri.andre@unil.ch
-* Nicolas Eon Duval : nicolas.eonduval@unil.ch
-* Guillaume Pavé : guillaume.pave@unil.ch
 
-## Install libraries and run project
+
+## Instructions for running the project
 
 1) Clone project
 
@@ -80,67 +50,88 @@ pip install -r requirements.txt
 pip3 install -r requirements.txt
 ```
 
-6) using our makefile to run our project
+5) select the environment variable in the config.py file
 
-* see helper of the makefile
+6) run the project
+
 ```bash
-make
+./launch.sh
 ```
 # Project structure
 
 In construction
 ```
-├── README.md          <- The top-level README for developers using this project.
-│
 ├── data
-│   ├── processed      <- The final, canonical data sets for modeling.
+│   ├── processed      <- The final, canonical data sets for modelling.
 │   ├── strats         <- Data Results of our different strategies
 │   └── raw            <- The original, immutable data dump.
 │
-├── latex /            <- latex files                     
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
+├── graphs             <- All of the graphical files created by the graph_maker.py are stored here
 │
 │
+├── latex              <- latex tables and files for our report are stored here                    
 │
-├── plots /            <- static files (images)
+├── notebooks          <- Jupyter notebooks for data testing and visualization
+│
+├── old                <- Previous scripts which have been updated in the project
 │
 │
-├── preprocessing/   <- ML models used in the dasboard are stocked in this folder
+├── preprocessing/     <- Data cleaning and preprocessing scripts are here
 │   │
-│   ├── fetchScripts           <- Scripts to download or generate data
+│   ├── close_marketcap_merger.py    <- Merges individual crypto files to marketcap and close prices
+│   │
+│   ├── crypto_selector.py           <- Finds the first date of appearance of cryptos and marketcap threshold limit          
+│   │
+│   ├── returns_maker.py             <- Generates a cleaned dataframe of returns
 │
 │  
-├── strats/   <- ML models used in the dasboard are stocked in this folder
+├── strats/            <- Strategy implementations are done here
 │   │
-│   ├── fetchScripts           <- Scripts to download or generate data
-│
+│   ├── BTC.py                       <- Bitcoin performance script
+│   │
+│   ├── CW.py                        <- Capitalization Weighted portfolio performance script      
+│   │
+│   ├── EW.py                        <- Equally Weighted portfolio performance script
+│   │
+│   ├── functions.py                 <- Helper functions such as turnover and different rebalancement calculations        
+│   │
+│   ├── low_beta_BTC.py              <- Low Beta portfolio with Bitcoin as benchmark performance script
+│   │
+│   ├── low_beta_EW.py               <- Low Beta portfolio with Equally Weighted portfolio as benchmark performance script         
+│   │
+│   ├── low_beta.py                  <- Low Beta portfolio with Capitalization Weighted portfolio as benchmark performance script
+│   │
+│   ├── low_vol_split.py             <- Low Volatility portfolio performance script with data split for the existence of leverage
+│   │
+│   ├── low_vol.py                   <- Low Volatility portfolio performance script     
+│   │
+│   ├── MV.py                        <- Minimum Variance portfolio performance script   
+│   │
+│   ├── show_parameters.py           <- Script to show the configuration parameters when running the program
 │  
-├── config.py   <- Main python file that manage all our different codes
+├── config.py          <- Configuration files for environment variable selection
 │   
-├── dashboard.py   <- Main python file that manage all our different codes
+├── dashboard.py       <- Dashboard launch script
+│
+├── launch.sh          <- Shell file to launch the whole program at once
+│
+├── makefile.py        <- Makefile to launch different parts of the code separately
+│
+├── metrics_maker.py   <- Script for metrics creation
+│
+├── Readme.md          <- Readme file for information about the project
 │
 │
-├── metrics_maker.py   <- Main python file that manage all our different codes
+├── requirements.txt   <- List of all Python modules required to launch the program
 │
-├── scrapper.py   <- Main python file that manage all our different codes
-│
-│
-├── makefile   <- makefile to run project or each part of project
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
+├── scrapper.py        <- Raw file script fetching individual cryptocurrency data from Santiment
+│                         
 ```
 
-## Bibliography
+
+## Ideas
 
 - Li et Yi, Toward a Factor Structure in Crypto Asset Returns => seems to have a low vol anomaly
-
-## Articles
-
 - https://coinmarketexpert.com/how-we-developed-a-cryptocurrency-portfolio-that-beats-bitcoin/
 - https://www.econstor.eu/bitstream/10419/158007/1/887992064.pdf
 - https://www.solactive.com/wp-content/uploads/2019/04/Solactive-Index-Guideline-CMC200.pdf
@@ -150,20 +141,11 @@ In construction
 - https://brightnode.io/history-of-makerdao-project/, history of makerdao
 - https://compound.finance/documents/Compound.Whitepaper.pdf, compound whitepaper
 
-## Indicators
-- Beta
-- Max drawdown
-- Hit ratio
-- Skewness
-- Kurtosis
-- Sharpe Ratio
-- Excess return
 
-## Graphs to do in latex
 
-- [x] Bitcoin prevalence on Cap-weighted
-- [ ] Tables of metrics for every rebalancement
-- [ ] Graphs of perfs 20 and 100
-- [ ] leverage split table low vol high vol
-- [ ] Table of Sharpe taking into account turnover at 0.3% per trans
-- [ ] Graph vola CW and ?
+## Authors
+
+* Dimitri André : dimitri.andre@unil.ch
+* Ruben Kempter : ruben.kempter@unil.ch
+* Nicolas Eon Duval : nicolas.eonduval@unil.ch
+* Guillaume Pavé : guillaume.pave@unil.ch
