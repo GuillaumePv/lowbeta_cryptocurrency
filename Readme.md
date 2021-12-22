@@ -1,9 +1,8 @@
 # Presentation of the project
 
-This project has for goal to explore different quantitative strategies which have already been proved profitable in the equity market and apply them to the cryptocurrency industry. Our focus for this project is on the Low Beta Anomaly from the CAPM. This program includes a Dash dashboard which is launched with the
+This project has for goal to explore different quantitative strategies which have already been proved profitable in the equity market and apply them to the cryptocurrency industry. Our focus for this project is on the Low Beta Anomaly observed empirically on many asset classes. The program can be configured for a preferred number of cryptocurrencies in portfolios and different market capitalization thresholds.
 
-
-
+This program includes a Dash dashboard which is launched at the end of the ./launch.sh file. The dashboard can then be opened on the following port: http://127.0.0.1:8050/.
 
 
 ## Instructions for running the project
@@ -17,16 +16,16 @@ git clone
 2) Go into project folder
 
 ```bash
-cd
+cd path_you_saved_the_project_in/lowbeta_cryptocurrency
 ```
 
-3) Create your virtual environment
+3) Create your virtual environment (optional)
 
 ```bash
 python3 -m venv venv
 ```
 
-4) Enter in your virtual environment
+4) Enter in your virtual environment (optional)
 
 * Mac OS / linux
 ```bash
@@ -40,11 +39,6 @@ source venv/bin/activate venv venv
 
 5) Install libraries
 
-* Python 2
-```bash
-pip install -r requirements.txt
-```
-
 * Python 3
 ```bash
 pip3 install -r requirements.txt
@@ -57,9 +51,15 @@ pip3 install -r requirements.txt
 ```bash
 ./launch.sh
 ```
+
+### Run the dashboard only
+
+```bash
+python3 dashboard.py
+```
+
 # Project structure
 
-In construction
 ```
 ├── data
 │   ├── processed      <- The final, canonical data sets for modelling.
