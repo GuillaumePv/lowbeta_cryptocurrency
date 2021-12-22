@@ -10,7 +10,7 @@ This program includes a Dash dashboard which is launched at the end of the ./lau
 1) Clone project
 
 ```bash
-git clone
+git clone https://github.com/GuillaumePv/lowbeta_cryptocurrency.git
 ```
 
 2) Go into project folder
