@@ -27,8 +27,9 @@ files = os.listdir(f'{path_data}')
 df_base = pd.read_pickle(f"{path_data}/{files[0]}")
 name_first_file = files[0].split(".")[0]
 df_base[name_first_file] = df_base['marketcap']
-#print(df_base.head(5))
+# print(df_base.columns)
 df_base_price = df_base['closePriceUsd']
+df_base_volume = df_base['volume']
 df_base = df_base[name_first_file]
 
 #print(df_base.head(3))
@@ -43,6 +44,7 @@ for f in tqdm(files[1:]):
         close_price = df['closePriceUsd']
         df_base = pd.concat([df_base,df[crypto]], ignore_index=True, axis=1)
         df_base_price = pd.concat([df_base_price,df['closePriceUsd']], ignore_index=True, axis=1)
+        df_base_volume = pd.concat([df_base_volume,df['volume']], ignore_index=True, axis=1)
         list_crypto.append(crypto)
     except Exception as e:
         print(str(e))
@@ -56,5 +58,9 @@ df_base_price.columns = list_crypto
 df_base_price = df_base_price.fillna(0)
 # print(df_base.head(4))
 
+df_base_volume.columns = list_crypto
+df_base_volume = df_base_volume.fillna(0)
+
 df_base.to_csv(f'{path_data_processed}/market_cap_crypto.csv', index=True,)
 df_base_price.to_csv(f'{path_data_processed}/close_price_crypto.csv', index=True)
+df_base_volume.to_csv(f'{path_data_processed}/volume_price_crypto.csv', index=True)
