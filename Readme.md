@@ -16,7 +16,7 @@ git clone https://github.com/GuillaumePv/lowbeta_cryptocurrency.git
 2) Go into project folder
 
 ```bash
-cd path_you_saved_the_project_in/lowbeta_cryptocurrency
+cd lowbeta_cryptocurrency
 ```
 
 3) Create your virtual environment (optional)
