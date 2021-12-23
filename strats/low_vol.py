@@ -1,31 +1,32 @@
+#program message
 print(40*"=")
 print("Low_Vol strat")
 print(40*"=")
 
+#utilities
 import pandas as pd
-pd.set_option('display.max_rows', 2000)
+import math
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import sys
+from tqdm import tqdm
 from datetime import datetime
 from datetime import timedelta
-import math
-import numpy as np
-import matplotlib.pyplot as plt
-
-from tqdm import tqdm
-
 from pathlib import Path
+pd.set_option('display.max_rows', 2000)
 
 ## Absolute path to use in all file
 path_original = Path(__file__).resolve().parents[0]
 path_data_processed = (path_original / "../data/processed/").resolve()
 path_data_strat = (path_original / "../data/strats/").resolve()
 
-import os
+#adding directory to path
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
-
-import sys
 sys.path.append(parentdir)
 
+#set up env variables + helper functions
 import config as c
 from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30, getHerfindahl
 marketcap = format(c.market_cap,'.0e')
@@ -40,7 +41,7 @@ df_vol = df_returns.rolling(c.windows).std().fillna(0)[c.windows:]
 df_weights_low = df_vol.copy()
 df_weights_high = df_vol.copy()
 
-if c.number_cryptos > 20:
+if c.number_cryptos > 20: #use first and last quintile if >20
     #low weights
     df_weights_low = df_weights_low.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
     for i in range(1,5):
@@ -52,20 +53,18 @@ if c.number_cryptos > 20:
         df_weights_low[col] = df_weights_low[col]/df_weights_low['sum']
     del df_weights_low['sum']
 
-    #high weights -> analyze see range and compare to high beta
+    #high weights
     df_weights_high = df_weights_high.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
-    # print(df_weights_high)
     for i in range(1,4):
         df_weights_high.replace({i:0}, inplace=True)
     df_weights_high.replace({4:1}, inplace=True)
     df_weights_high['sum'] = df_weights_high.sum(axis=1)
-    #print(df_weights_high['sum'])
 
     for col in df_weights_high.iloc[:, :-1].columns:
         df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
     del df_weights_high['sum']
 
-else:
+else: #use median if <20
     avg = pd.Series(df_vol.median(axis=1), index=df_vol.index)
 
     for i in tqdm(df_vol.index):
@@ -73,40 +72,19 @@ else:
         df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: 2/(c.number_cryptos) if x > avg.loc[i] else 0)
 
 
-#print(avg[:2])
-#print(df_vol.head(2).iloc[:, :10])
-#print(df_weights_low.head(2).iloc[:, :10])
-#print(df_weights_high.head(2).iloc[:, :10])
+#performance
 df_returns_adj = df_returns[c.windows:].copy()
 df_returns_low = df_weights_low * df_returns_adj
 df_returns_high = df_weights_high * df_returns_adj
 
-#portfolio
 df_perf_low = df_returns_low.sum(axis=1)
 df_perf_low[0] = 0
 df_price_low = df_perf_low.add(1).cumprod()*100
-# print(df_price_low.tail(3))
-# plt.plot(df_price_low)
-# plt.savefig('./graphs/low_vol_perf.png')
 df_price_low.to_csv(f"{path_data_strat}/Low_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
-
-"""
-K = 365
-X = df_price_high.index
-Xs = X[::K]
-xlabels = pd.to_datetime(df_price_high.index).strftime("%Y-%m")
-xlabels = xlabels[::K]
-plt.ylim(0, 1)
-plt.xticks(Xs, xlabels)
-plt.plot(df_price_high)
-plt.show()
-"""
-# plt.savefig('./graphs/high_vol_perf.png')
-
 df_price_high.to_csv(f"{path_data_strat}/High_Vol_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #turnover rate
@@ -115,7 +93,6 @@ turnover_monthly = getMonthlyTurnover(df_weights_low)
 df_metrics.loc["Low Vol", "monthly_turnover"] = turnover_monthly
 turnover_monthly = getMonthlyTurnover(df_weights_high)
 df_metrics.loc["High Vol", "monthly_turnover"] = turnover_monthly
-#print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #Herfindahl
