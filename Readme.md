@@ -44,9 +44,9 @@ source venv/bin/activate venv venv
 pip3 install -r requirements.txt
 ```
 
-5) Go to config.py in the project folder with your IDE and modify the environment variables (optional)
+6) Go to config.py in the project folder with your IDE and modify the environment variables (optional)
 
-6) Run the project from the terminal
+7) Run the project from the terminal
 
 Go into the project folder and run the following command
 
