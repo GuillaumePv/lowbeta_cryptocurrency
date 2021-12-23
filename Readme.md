@@ -53,6 +53,7 @@ Go into the project folder and run the following command
 ```bash
 ./launch.sh
 ```
+Open your browser and go to http://127.0.0.1:8050/
 
 ### Run the dashboard only
 
@@ -61,6 +62,8 @@ Go into the project folder and run the following command
 ```bash
 python3 dashboard.py
 ```
+
+Open your browser and go to http://127.0.0.1:8050/
 
 # Project structure
 
