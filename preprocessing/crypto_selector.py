@@ -1,13 +1,19 @@
+###############################################
+# Finds first data of appearence of each
+# crypto + first time they get to threshold
+###############################################
+
 print(40*"=")
 print("crypto_selector")
 print(40*"=")
 
+#utilities
 import pandas as pd
+import os
+import sys
 from datetime import datetime
 from datetime import timedelta
-
 from tqdm import tqdm
-
 from pathlib import Path
 
 ## Absolute path to use in all file
@@ -15,25 +21,24 @@ path_original = Path(__file__).resolve().parents[0]
 path_data = (path_original / "../data/raw/").resolve()
 path_data_processed = (path_original / "../data/processed/").resolve()
 
-import os
+# set up paths
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
-
-import sys
 sys.path.append(parentdir)
-
 import config as c
 
-## create file to know first date of crypto ##
+
+
+#create file to know first date of crypto appearence
+####################################################
+
 crypto = []
 first_dates = []
 files = os.listdir(path_data)
 
 for f in tqdm(files[:]):
     try:
-        #print(f.split(".")[0])
         df = pd.read_pickle(f"{path_data}/{f}")
-        #print(df.head(5))
         date = datetime.date(df.index[0])
         first_dates.append(date)
         crypto.append(f.split(".")[0])
@@ -51,8 +56,8 @@ df.reset_index(inplace=True, drop=True)
 df.to_csv(f'{path_data_processed}/first_date_crypto_list_sorted.csv')
 
 
-#get first date of appearence of the set market_cap
-####################################################
+#get first date of appearence of crypto for the set market_cap
+##############################################################
 
 test_marketcap = c.market_cap #paper ruben
 
@@ -60,9 +65,7 @@ list_market = []
 list_crypto = []
 for f in tqdm(files[:]):
     try:
-        #print(f.split(".")[0])
         df = pd.read_pickle(f"{path_data}/{f}")
-        #print(df.head(5))
         df['Condition'] = df['marketcap'] >= test_marketcap
         index = df[df.Condition!=False].first_valid_index()
         if index is not None:

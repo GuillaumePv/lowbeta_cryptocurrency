@@ -1,30 +1,32 @@
+#program message
 print(40*"=")
 print("EW strat")
 print(40*"=")
+
+#utlities
 import pandas as pd
-from datetime import datetime
-from datetime import timedelta
+import plotly.express as px
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import sys
+from pathlib import Path
+from datetime import datetime
+from datetime import timedelta
 from matplotlib import style
 style.use('fivethirtyeight')
-
-import plotly.express as px
-
-from pathlib import Path
 
 ## Absolute path to use in all file
 path_original = Path(__file__).resolve().parents[0]
 path_data_processed = (path_original / "../data/processed/").resolve()
 path_data_strat = (path_original / "../data/strats/").resolve()
 
-import os
+# adding directory to path
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
-
-import sys
 sys.path.append(parentdir)
 
+# set up env variables + helper functions
 import config as c
 from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30, getHerfindahl
 marketcap = format(c.market_cap,'.0e')
@@ -49,7 +51,6 @@ df_price.to_csv(f"{path_data_strat}/EW_price_{c.number_cryptos}_1e{marketcap[-1]
 df_metrics = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 turnover_monthly = getMonthlyTurnover(df_weights)
 df_metrics.loc["EW", "monthly_turnover"] = turnover_monthly
-#print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #Herfindahl

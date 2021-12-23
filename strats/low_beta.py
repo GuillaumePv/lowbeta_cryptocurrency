@@ -1,32 +1,33 @@
+# program message
 print(40*"=")
 print("Low_Beta strat")
 print(40*"=")
 
+#utilities
 import pandas as pd
-pd.set_option('display.max_rows', 2000)
-from datetime import datetime
-from datetime import timedelta
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import sys
+from tqdm import tqdm
+from datetime import datetime
+from datetime import timedelta
+from pathlib import Path
 from matplotlib import style
 style.use('fivethirtyeight')
-
-from pathlib import Path
+pd.set_option('display.max_rows', 2000)
 
 ## Absolute path to use in all file
 path_original = Path(__file__).resolve().parents[0]
 path_data_processed = (path_original / "../data/processed/").resolve()
 path_data_strat = (path_original / "../data/strats/").resolve()
 
-import os
+#adding directory to path
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
-
-import sys
 sys.path.append(parentdir)
 
-from tqdm import tqdm
-
+#set up env variables + helper functions
 import config as c
 from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30, getHerfindahl
 marketcap = format(c.market_cap,'.0e')
@@ -35,7 +36,7 @@ marketcap = format(c.market_cap,'.0e')
 df_returns = pd.read_csv(f"{path_data_processed}/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 df_returns_CW = pd.read_csv(f"{path_data_processed}/CW_perf_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 
-#beta calc
+#beta calculation
 df_returns['CW'] = df_returns_CW.iloc[:, 0] #add the market cap weighted returns
 df_beta = pd.DataFrame(index=df_returns.index, columns=df_returns.columns)
 
@@ -51,7 +52,7 @@ df_beta_adj = df_beta.iloc[1:, :-1].copy() #remove the CW portfolio
 df_weights_low = df_beta_adj.copy()
 df_weights_high = df_beta_adj.copy()
 
-if c.number_cryptos > 20:
+if c.number_cryptos > 20: #use first and last quintile if >20
     #low weights
     df_weights_low = df_weights_low.apply(lambda x: pd.qcut(x, 5, labels=False), axis=1)
     for i in range(1,5):
@@ -74,18 +75,15 @@ if c.number_cryptos > 20:
         df_weights_high[col] = df_weights_high[col]/df_weights_high['sum']
     del df_weights_high['sum']
 
-else:
+else: #use median if <20
     avg = pd.Series(df_beta_adj.median(axis=1), index = df_beta_adj.index)
 
     for i in tqdm(df_beta_adj.index):
         df_weights_low.loc[i] = df_weights_low.loc[i].apply(lambda x: 2/(c.number_cryptos) if x <= avg.loc[i] else 0)
         df_weights_high.loc[i] = df_weights_high.loc[i].apply(lambda x: 2/(c.number_cryptos) if x > avg.loc[i] else 0)
 
-#print(df_weights_low.head(1).iloc[:, :6])
-#print(df_weights_high.head(1).iloc[:, :6])
 
-#portfolio
-##########
+#performance
 df_returns_adjusted = df_returns.iloc[1:, ].copy()
 df_returns_low = df_weights_low * df_returns_adjusted
 df_returns_high = df_weights_high * df_returns_adjusted
@@ -93,13 +91,11 @@ df_returns_high = df_weights_high * df_returns_adjusted
 df_perf_low = df_returns_low.sum(axis=1)
 df_perf_low[0] = 0
 df_price_low = df_perf_low.add(1).cumprod()*100
-#print(df_price_low.tail(3))
 df_price_low.to_csv(f"{path_data_strat}/Low_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 df_perf_high = df_returns_high.sum(axis=1)
 df_perf_high[0] = 0
 df_price_high = df_perf_high.add(1).cumprod()*100
-#print(df_price_high.tail(3))
 df_price_high.to_csv(f"{path_data_strat}/High_Beta_price_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #turnover rate
@@ -108,7 +104,6 @@ turnover_monthly = getMonthlyTurnover(df_weights_low)
 df_metrics.loc["Low Beta", "monthly_turnover"] = turnover_monthly
 turnover_monthly = getMonthlyTurnover(df_weights_high)
 df_metrics.loc["High Beta", "monthly_turnover"] = turnover_monthly
-#print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #Herfindahl
