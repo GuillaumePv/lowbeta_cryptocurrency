@@ -147,11 +147,14 @@ plt.plot(yHV, "r--", alpha=0.8, label = "High Volatility")
 Xs = X[::K]
 xlabels = pd.to_datetime(X).strftime("%Y-%m")
 xlabels = xlabels[::K]
-plt.title("Performance of Low volatility strategy (100 Cryptocurrencies)")
+plt.title("Performance of Low volatility strategy (20 Cryptocurrencies)")
 plt.xticks(Xs, xlabels)
 plt.legend(loc='upper left')
 plt.ylabel('Log Portfolio Price Performance')
 plt.savefig('graphs/low_vol_20.png', format="png")
+
+## Low / High Volatility graphs ##
+
 
 ## Minimum Variance ##
 

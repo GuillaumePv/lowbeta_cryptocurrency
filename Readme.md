@@ -128,21 +128,6 @@ python3 dashboard.py
 │                         
 ```
 
-
-## Ideas
-
-- Li et Yi, Toward a Factor Structure in Crypto Asset Returns => seems to have a low vol anomaly
-- https://coinmarketexpert.com/how-we-developed-a-cryptocurrency-portfolio-that-beats-bitcoin/
-- https://www.econstor.eu/bitstream/10419/158007/1/887992064.pdf
-- https://www.solactive.com/wp-content/uploads/2019/04/Solactive-Index-Guideline-CMC200.pdf
-- https://iranarze.ir/wp-content/uploads/2021/01/11310-English-IranArze.pdf
-- https://www.sciencedirect.com/science/article/pii/S2405844021022714 (Factor investing: A stock selection methodology for the European equity market)
-- https://dune.xyz/rchen8/defi-users-over-time, for choosing the low vol split
-- https://brightnode.io/history-of-makerdao-project/, history of makerdao
-- https://compound.finance/documents/Compound.Whitepaper.pdf, compound whitepaper
-
-
-
 ## Authors
 
 * Dimitri André : dimitri.andre@unil.ch
