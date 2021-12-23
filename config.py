@@ -3,5 +3,5 @@ Config File => In this file, we choose our different parameters to generate our 
 """
 
 market_cap = 1e6 # in scientific notation only
-number_cryptos = 100 # integer only
+number_cryptos = 20 # integer only
 windows = 120 # rolling window for volatility (integer only)

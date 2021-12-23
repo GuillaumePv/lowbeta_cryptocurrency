@@ -1,14 +1,28 @@
 import dash  # use Dash version 1.16.0 or higher for this app to work
-from dash import dcc
-from dash import html
+import os
+import sys
 import dash_bootstrap_components as dbc
-from dash.dependencies import Output, Input
 import plotly.express as px
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import dash_table
 from dash_table.Format import Format, Scheme
+from dash import dcc
+from dash import html
+from dash.dependencies import Output, Input
+from pathlib import Path
+
+## Absolute path to use in all file
+path_original = Path(__file__).resolve().parents[0]
+path_data_processed = (path_original / "../data/processed/").resolve()
+path_data_strat = (path_original / "../data/strats/").resolve()
+
+# set up path variable
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
 import config as c
 marketcap = format(c.market_cap,'.0e')
 
