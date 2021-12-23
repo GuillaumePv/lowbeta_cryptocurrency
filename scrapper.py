@@ -1,3 +1,8 @@
+###############################################
+# Raw data fetcher
+###############################################
+
+
 #Basic Utilities
 import pandas as pd
 from datetime import date, timedelta
@@ -11,9 +16,10 @@ import glob
 #Data fetchers
 import san
 
-#################
+
 #Functions
 ################
+
 def getDf(crypto, start, end):
     try:
         df = san.get(
@@ -26,7 +32,7 @@ def getDf(crypto, start, end):
     except Exception as e:
         print(e)
 
-#get dates
+#dates management
 def init_date(days_delta=0):
     today = date.today()
     stop_date_raw = today - timedelta(days=days_delta)
@@ -36,7 +42,7 @@ def init_date(days_delta=0):
     return (start_date,stop_date)
 
 
-#################
+
 #Script
 #################
 print(40*"=")
@@ -59,6 +65,7 @@ list_crypto = []
 length = 0
 start_date, stop_date = init_date()
 
+#Stablecoins data:
 #https://app.santiment.net/stablecoins#top-exchanges
 #https://api.santiment.net/graphiql?query=%7B%0A%20%20allProjects%20%7B%0A%20%20%20%20slug%0A%20%20%20%20name%0A%20%20%20%20ticker%0A%20%20%20%20infrastructure%0A%20%20%20%20mainContractAddress%0A%20%20%7D%0A%7D%0A
 
@@ -110,6 +117,7 @@ stablecoins = ['tether',
 
 total_length = len(cryptoName) - len(stablecoins)
 
+#fetching each cryptocurrency
 for crypto in cryptoName:
     if crypto not in stablecoins:
         print(f"{length} out of {total_length}")
@@ -120,6 +128,7 @@ for crypto in cryptoName:
         dfAll = pd.DataFrame()
         lenDf = 1000
 
+        #bypass limit
         while(1000 == lenDf):
             start_date_mod, stop_date_mod = init_date(days_delta = loop_number*1000)
             df = getDf(f'{crypto}', start_date_mod, stop_date_mod)
@@ -132,7 +141,6 @@ for crypto in cryptoName:
         dfAll.sort_index(inplace=True)
         if len(dfAll) > 0:
             dfAll.to_pickle(f"data/raw/{crypto}.pkl")
-            print(dfAll.tail())
             print(f"Successfully stored {crypto}")
 
 

@@ -16,7 +16,7 @@ git clone https://github.com/GuillaumePv/lowbeta_cryptocurrency.git
 2) Go into project folder
 
 ```bash
-cd path_you_saved_the_project_in/lowbeta_cryptocurrency
+cd lowbeta_cryptocurrency
 ```
 
 3) Create your virtual environment (optional)
@@ -44,15 +44,19 @@ source venv/bin/activate venv venv
 pip3 install -r requirements.txt
 ```
 
-5) select the environment variable in the config.py file
+6) Go to config.py in the project folder with your IDE and modify the environment variables (optional)
 
-6) run the project
+7) Run the project from the terminal
+
+Go into the project folder and run the following command
 
 ```bash
 ./launch.sh
 ```
 
 ### Run the dashboard only
+
+Go into the project folder and run the following command
 
 ```bash
 python3 dashboard.py

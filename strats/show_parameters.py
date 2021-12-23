@@ -7,7 +7,7 @@ import sys
 sys.path.append(parentdir)
 import config as c
 
-print("=== our parameters ===")
+print("=== CONFIGURATION PARAMETERS ===")
 print(f"Market cap: {c.market_cap}")
 print(f"Expanding Windows: {c.windows}")
 print(f"Number of cryptos: {c.number_cryptos}")

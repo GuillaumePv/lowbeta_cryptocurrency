@@ -1,37 +1,39 @@
+#program message
 print(40*"=")
 print("Min Var strat")
 print(40*"=")
 
+#utlities
 import pandas as pd
-from datetime import datetime
-from datetime import timedelta
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import sys
+from datetime import datetime
+from datetime import timedelta
+from tqdm import tqdm
+from pathlib import Path
+from scipy.optimize import minimize
 from matplotlib import style
 style.use('fivethirtyeight')
-from tqdm import tqdm
 
-from pathlib import Path
 
 ## Absolute path to use in all file
 path_original = Path(__file__).resolve().parents[0]
-
 path_data_processed = (path_original / "../data/processed/").resolve()
 path_data_strat = (path_original / "../data/strats/").resolve()
 
-import os
+# adding directory to path
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
-
-import sys
 sys.path.append(parentdir)
 
-from scipy.optimize import minimize
+# set up env variables + helper functions
 import config as c
 from functions import getMonthlyTurnover, createPortfolio7, createPortfolio30, getHerfindahl
 marketcap = format(c.market_cap,'.0e')
 
-#min variance opti
+#min variance optimization functions
 def Min_variance(alloc, return_cov_matrix):
     matrix_one = np.ones(len(return_cov_matrix))
     criterion = 0.5*np.dot(np.transpose(alloc).dot(return_cov_matrix),alloc)
@@ -39,14 +41,10 @@ def Min_variance(alloc, return_cov_matrix):
 
 def optimizer(cov_matrix_test):
     length = len(cov_matrix_test)
-
     x0 = np.zeros(length) + 0.001
-
     Bounds= [(0 , 1) for i in range(0,length)] #Long only positions
     cons=({'type':'eq', 'fun': lambda x:sum(x)-1}) #Sum of weights is equal to 1
 
-
-    #Optimisation
     res_MIN_VAR = minimize(Min_variance, x0, method='SLSQP', args=(cov_matrix_test),bounds=Bounds,constraints=cons,options={'disp': False})
     return res_MIN_VAR.x
 
@@ -76,7 +74,6 @@ df_price.to_csv(f"{path_data_strat}/MV_price_{c.number_cryptos}_1e{marketcap[-1]
 df_metrics = pd.read_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv", index_col=0)
 turnover_monthly = getMonthlyTurnover(df_weights)
 df_metrics.loc["MV", "monthly_turnover"] = turnover_monthly
-#print(df_metrics)
 df_metrics.to_csv(f"{path_data_processed}/df_metrics_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #Herfindahl

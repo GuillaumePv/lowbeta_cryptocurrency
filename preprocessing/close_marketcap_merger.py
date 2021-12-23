@@ -1,4 +1,11 @@
+###############################################
+# Creates aggregate close and market
+# capitalization files for cryptocurrencies
+###############################################
+
+#utilities
 import pandas as pd
+import os
 from datetime import datetime
 from  tqdm import tqdm
 from pathlib import Path
@@ -7,8 +14,6 @@ from pathlib import Path
 path_original = Path(__file__).resolve().parents[0]
 path_data = (path_original / "../data/raw/").resolve()
 path_data_processed = (path_original / "../data/processed/").resolve()
-
-import os
 
 #message for makefile
 print(40*"=")
@@ -20,19 +25,19 @@ print("close_marketcap_merger")
 print(40*"=")
 
 df = pd.read_pickle(f"{path_data}/bitcoin.pkl")
-#print(df.head(5))
 
 files = os.listdir(f'{path_data}')
 
+#create file shell with first raw file
 df_base = pd.read_pickle(f"{path_data}/{files[0]}")
 name_first_file = files[0].split(".")[0]
 df_base[name_first_file] = df_base['marketcap']
-# print(df_base.columns)
+
 df_base_price = df_base['closePriceUsd']
 df_base_volume = df_base['volume']
 df_base = df_base[name_first_file]
 
-#print(df_base.head(3))
+#add all cryptos
 list_crypto = [name_first_file]
 for f in tqdm(files[1:]):
     try:
@@ -40,7 +45,6 @@ for f in tqdm(files[1:]):
         df = pd.read_pickle(f"{path_data}/{f}")
         date_index = df.index
         df[crypto] = df['marketcap']
-        #market_cap = df['marketcap']
         close_price = df['closePriceUsd']
         df_base = pd.concat([df_base,df[crypto]], ignore_index=True, axis=1)
         df_base_price = pd.concat([df_base_price,df['closePriceUsd']], ignore_index=True, axis=1)
@@ -50,14 +54,14 @@ for f in tqdm(files[1:]):
         print(str(e))
         continue
 
-#fill na => see impact on
+#data cleaning
 df_base.columns = list_crypto
 df_base = df_base.fillna(0)
-# df_base['total_market_cap'] = df_base.sum(axis=1)
 df_base_price.columns = list_crypto
 df_base_price = df_base_price.fillna(0)
-# print(df_base.head(4))
 
+
+#store the data
 df_base_volume.columns = list_crypto
 df_base_volume = df_base_volume.fillna(0)
 
