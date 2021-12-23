@@ -4,6 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 import plotly.express as px
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+import statsmodels.api as sm
 
 path_original = Path(__file__).resolve()
 path_data_processed = (path_original / "../data/processed/").resolve()
@@ -66,7 +69,7 @@ ax.set_title('Bitcoin weight in Cap-Weighted portfolio (100 Cryptos)')
 ax.set_xlabel('Date')
 ax.set_ylabel('Weight in the Cap-Weighted portfolio')
 plt.savefig('graphs/bitcoin_weight_stack_100.png', format="png")
-print(y100.index)
+# print(y100.index)
 
 #graphs of low beta perf for different benchmarks
 
@@ -198,6 +201,60 @@ plt.xticks(Xs, xlabels)
 plt.legend(loc='upper left')
 plt.ylabel('Log Portfolio Price Performance')
 plt.savefig('graphs/min_var_vs_cap_weigthed_100.png', format="png")
+
+## Volatility vs Liquidity graph ##
+## 20 Cryptocurrencies ##
+
+
+## 100 Cryptocurrencies ##
+df_return_100 = pd.read_csv(f"{path_data_processed}/returns_first_100_1e{marketcap[-1]}.csv", index_col=0)
+df_volume_100 = pd.read_csv(f"{path_data_processed}/volume_first_100_1e{marketcap[-1]}.csv", index_col=0)
+df_volume_100 = df_volume_100.iloc[1:,:]
+
+df_vol_100 = df_return_100.rolling(c.windows).std().fillna(0)[c.windows:]
+df_volume_100 = df_volume_100.rolling(c.windows).mean()[c.windows:]
+del df_vol_100['global-currency-reserve']
+del df_volume_100['global-currency-reserve']
+
+
+
+df_vol_volume = pd.concat([np.mean(np.log(df_volume_100)),np.mean(df_vol_100)],axis=1)
+df_vol_volume.columns = ["average_log_volume","average_volatility"]
+df_vol_volume = df_vol_volume.sort_values(by=['average_log_volume'],ascending=True)
+df_vol_volume.to_csv(f"{path_data_processed}/volume_vs_volatilty_100_1e{marketcap[-1]}.csv")
+
+x = np.mean(np.log(df_volume_100))
+print(x.shape)
+x = np.array(x).reshape(-1,1)
+
+
+poly = PolynomialFeatures(1, include_bias=False)
+poly = poly.fit_transform(x)
+
+print(poly)
+y = np.mean(df_vol_100)
+y = np.array(y).reshape(-1,1)
+print(y.shape)
+model = LinearRegression()
+model.fit(poly, y)
+
+coef = model.coef_ # coef = -0.02
+intercept = model.intercept_ # intercept = 0.37
+model_test = sm.OLS(y, x).fit()
+print(model_test.summary())
+r_sq = model.score(poly, y)
+print('coefficient of determination:', r_sq)
+y_pred = model.predict(poly)
+plt.figure(figsize=(6.4 * 2, 4.8 * 1.2))
+# plt.scatter(np.mean(np.log(df_volume_100)),np.mean(df_vol_100))
+plt.scatter(np.mean(np.log(df_volume_100)),np.mean(df_vol_100), label="value")
+plt.plot(x,y_pred,color='red', label=r"avg_rol_volatility = $0.37$ $-0.02$*avg_log_volume")
+plt.ylabel("Rolling Volatility (120 days)")
+plt.xlabel("Log Volume")
+plt.title("Relationship between volatilty and Volume")
+plt.legend()
+plt.grid(True)
+plt.savefig('graphs/relationship_liquidity_volatility.png', format="png")
 ###########
 ## Table ##
 ###########
@@ -215,7 +272,7 @@ metrics_100['sharpe_adj'] = (metrics_100.monthly_returns - metrics_100.monthly_t
 df_sharpe = pd.DataFrame(columns = metrics_20.index)
 df_sharpe.loc['Sharpe 20 adjusted'] = metrics_20.sharpe_adj.values.round(3)
 df_sharpe.loc['Sharpe 100 adjusted'] = metrics_100.sharpe_adj.values.round(3)
-print(df_sharpe)
+# print(df_sharpe)
 df_sharpe.to_latex("latex/sharpe_adj.tex", caption="Sharpe Ratios of strategies adjusted for turnover", label="sharpe", float_format="%.2f" )
 
 metrics_20 = pd.read_csv(f"{path_data_processed}/df_metrics_20_1e{marketcap[-1]}_reb7.csv", index_col=0)

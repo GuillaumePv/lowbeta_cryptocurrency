@@ -46,13 +46,22 @@ df_close_adj = pd.read_csv(f'{path_data_processed}/close_price_crypto.csv', inde
 df_close_adj = df_close_adj.loc[df_close_adj.index > first_date]
 df_close_adj = df_close_adj.loc[:, df_market_cap_first['crypto_name']]
 
+
 #returns set up & save
+df_volume_adj = pd.read_csv(f'{path_data_processed}/volume_price_crypto.csv', index_col=0)
+df_volume_adj = df_volume_adj.loc[df_volume_adj.index > first_date]
+df_volume_adj = df_volume_adj.loc[:, df_market_cap_first['crypto_name']]
+
 df_returns = df_close_adj.pct_change().iloc[1:]
 df_returns.replace(np.inf, 0, inplace=True)
 df_returns.fillna(0, inplace=True)
 df_returns.to_csv(f"{path_data_processed}/returns_first_{c.number_cryptos}_1e{marketcap[-1]}.csv")
 
 #metrics set up
+df_volume_adj.to_csv(f"{path_data_processed}/volume_first_{c.number_cryptos}_1e{marketcap[-1]}.csv")
+
+#metrics creation
+
 df_metrics = pd.DataFrame(
     columns=['monthly_returns', 'volatility', 'sharpe', 'excReturns', 'beta', 'max_drawdown', 'TE', 'IR', 'monthly_turnover', 'HHI'],
     index=['CW', 'BTC', 'EW', 'MV', 'Low Vol', 'High Vol', 'Low Beta', 'High Beta', 'Low Beta EW', 'High Beta EW', 'Low Beta BTC', 'High Beta BTC'])
