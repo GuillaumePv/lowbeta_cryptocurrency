@@ -44,15 +44,19 @@ source venv/bin/activate venv venv
 pip3 install -r requirements.txt
 ```
 
-5) select the environment variable in the config.py file
+5) Go to config.py in the project folder with your IDE and modify the environment variables (optional)
 
-6) run the project
+6) Run the project from the terminal
+
+Go into the project folder and run the following command
 
 ```bash
 ./launch.sh
 ```
 
 ### Run the dashboard only
+
+Go into the project folder and run the following command
 
 ```bash
 python3 dashboard.py
